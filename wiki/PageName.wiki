@@ -10,3 +10,5 @@ This wiki will describe the menu hierarchy.
 *Main* menu will have _Options_, _2 Player_, _3 Player_, and _Exit_.
 
 *Options* menu will have _Controls_, _Sound_, and _Back_.
+
+Clicking on _2 Player_ or _3 Player_ goes to the *Botonoids Select Screen*, complete with 3-d rotating botonoids.
