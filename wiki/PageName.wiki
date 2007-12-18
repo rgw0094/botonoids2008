@@ -7,5 +7,6 @@ This wiki will describe the menu hierarchy.
 
 = Details =
 
-*Main* menu will have _Options_, _2 Player_, _3 Player_, and _Exit_
+*Main* menu will have _Options_, _2 Player_, _3 Player_, and _Exit_.
+
 *Options* menu will have _Controls_, _Items_, _Sound_, and _Back_
