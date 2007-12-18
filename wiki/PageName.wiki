@@ -13,4 +13,4 @@ This wiki will describe the menu hierarchy.
 
 Clicking on *2 Player* or *3 Player* goes to the *Botonoids Select Screen*, complete with 3-d rotating botonoids. This page will have _Back_ and _Next_ buttons.
 
-The *Next* screen has items selections and play are size selection.
+The *Next* screen has items selection and playfield size selection.
