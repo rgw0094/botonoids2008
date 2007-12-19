@@ -68,3 +68,15 @@ void setMusic(char *music) {
 	hge->Music_SetPos(resources->GetMusic(music),0,0);
 	musicChannel = hge->Music_Play(resources->GetMusic(music),true,musicVolume);
 }
+
+/**
+ * Draw a collision box with the specified RGB values.
+ */
+void drawCollisionBox(hgeRect *box, int r, int g, int b) {
+
+	hge->Gfx_RenderLine(box->x1, box->y1, box->x2, box->y1, ARGB(255,r,g,b));
+	hge->Gfx_RenderLine(box->x2, box->y1, box->x2, box->y2, ARGB(255,r,g,b));
+	hge->Gfx_RenderLine(box->x2, box->y2, box->x1, box->y2, ARGB(255,r,g,b));
+	hge->Gfx_RenderLine(box->x1, box->y2, box->x1, box->y1, ARGB(255,r,g,b));
+
+}

@@ -7,6 +7,9 @@ extern int mode;
 Menu::Menu() {
 	mouseX = mouseY = 400.0f;
 	whichScreen = TITLE_SCREEN;
+
+	//Setup main menu buttons
+
 }
 
 Menu::~Menu() {

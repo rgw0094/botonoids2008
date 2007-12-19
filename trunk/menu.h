@@ -2,9 +2,11 @@
 #define _MENU_H_
 
 #include "game.h"
+#include "titlescreen.h"
 
 //Menu pages
 #define TITLE_SCREEN 0
+
 
 class Menu {
 
