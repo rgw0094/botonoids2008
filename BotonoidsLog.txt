@@ -1,11 +1,11 @@
 HGE Started..
 
 HGE version: 1.70
-Date: 18.12.2007, 20:04:12
+Date: 18.12.2007, 20:45:08
 
 Application: Botonoids 2008
 OS: Windows 5.1.2600
-Memory: 523496K total, 111212K free
+Memory: 523496K total, 104552K free
 
 D3D Driver: nv4_disp.dll
 Description: NVIDIA GeForce FX Go5200 

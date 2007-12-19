@@ -130,6 +130,9 @@
 			<File
 				RelativePath=".\Player.cpp">
 			</File>
+			<File
+				RelativePath=".\TitleScreen.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -148,10 +151,16 @@
 				RelativePath=".\menu.h">
 			</File>
 			<File
+				RelativePath=".\MenuScreen.h">
+			</File>
+			<File
 				RelativePath=".\minimenu.h">
 			</File>
 			<File
 				RelativePath=".\Player.h">
+			</File>
+			<File
+				RelativePath=".\TitleScreen.h">
 			</File>
 		</Filter>
 		<Filter
