@@ -22,7 +22,6 @@ hgeSprite *specialTiles[3*4], *tileSprites[NUM_COLORS];
 
 //Variables
 GameInfo gameInfo;
-controls playerControls[3];
 int debug;
 float timer;
 int mode = MENU_MODE;
@@ -152,7 +151,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//Load shit
 		loadResources();
-		loadControls();
 		
 		//Defaults
 		gameInfo.timeLimit = 300.0f;
@@ -170,9 +168,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		hge->System_Start();
 
 		//Free shit
+		input->saveInputs();
 		deleteResources();
 		delete input;
-		saveControls();
 
 	}
 	else MessageBox(NULL, hge->System_GetErrorMessage(), "Error", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);

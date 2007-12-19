@@ -40,10 +40,6 @@
 #define BLUE 3
 #define PURPLE 4
 
-struct controls {
-	int moveLeft, moveRight, moveUp, moveDown, changeColor;
-};
-
 struct GameInfo {
 	int numPlayers;
 	int musicVolume;
@@ -53,8 +49,6 @@ struct GameInfo {
 
 
 //Global functions
-void loadControls();
-void saveControls();
 int nextColor(int currentColor);
 void setMusic(char *music);
 void drawCollisionBox(hgeRect *box, int r, int g, int b);
