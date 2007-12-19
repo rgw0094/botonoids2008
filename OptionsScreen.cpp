@@ -1,39 +1,39 @@
 #include "Game.h"
-#include "BotonoidSelectScreen.h"
+#include "OptionsScreen.h"
 
 extern HGE *hge;
 extern hgeResourceManager *resources;
 extern Menu *menu;
 extern int mode;
 
-#define BACK_BUTTON 0
-#define NEXT_BUTTON 1
+#define CANCEL_BUTTON 0
+#define SAVE_BUTTON 1
 
 /**
  * Constructor.
  */
-BotonoidSelectScreen::BotonoidSelectScreen() {
+OptionsScreen::OptionsScreen() {
 
 	//Create back button
-	buttons[BACK_BUTTON].x = 100.0f;
-	buttons[BACK_BUTTON].y = 650.0f;
-	buttons[BACK_BUTTON].collisionBox = new hgeRect(buttons[BACK_BUTTON].x, buttons[BACK_BUTTON].y, buttons[BACK_BUTTON].x + BUTTON_WIDTH, buttons[BACK_BUTTON].y + BUTTON_HEIGHT);
-	buttons[BACK_BUTTON].highlighted = false;
-	strcpy(buttons[BACK_BUTTON].text, "Main Menu");
+	buttons[CANCEL_BUTTON].x = 100.0f;
+	buttons[CANCEL_BUTTON].y = 650.0f;
+	buttons[CANCEL_BUTTON].collisionBox = new hgeRect(buttons[CANCEL_BUTTON].x, buttons[CANCEL_BUTTON].y, buttons[CANCEL_BUTTON].x + BUTTON_WIDTH, buttons[CANCEL_BUTTON].y + BUTTON_HEIGHT);
+	buttons[CANCEL_BUTTON].highlighted = false;
+	strcpy(buttons[CANCEL_BUTTON].text, "Cancel");
 
 	//Create next button
-	buttons[NEXT_BUTTON].x = 1024.0f - 100.0f - BUTTON_WIDTH;
-	buttons[NEXT_BUTTON].y = 650.0f;
-	buttons[NEXT_BUTTON].collisionBox = new hgeRect(buttons[NEXT_BUTTON].x, buttons[NEXT_BUTTON].y, buttons[NEXT_BUTTON].x + BUTTON_WIDTH, buttons[NEXT_BUTTON].y + BUTTON_HEIGHT);
-	buttons[NEXT_BUTTON].highlighted = false;
-	strcpy(buttons[NEXT_BUTTON].text, "Continue");
+	buttons[SAVE_BUTTON].x = 1024.0f - 100.0f - BUTTON_WIDTH;
+	buttons[SAVE_BUTTON].y = 650.0f;
+	buttons[SAVE_BUTTON].collisionBox = new hgeRect(buttons[SAVE_BUTTON].x, buttons[SAVE_BUTTON].y, buttons[SAVE_BUTTON].x + BUTTON_WIDTH, buttons[SAVE_BUTTON].y + BUTTON_HEIGHT);
+	buttons[SAVE_BUTTON].highlighted = false;
+	strcpy(buttons[SAVE_BUTTON].text, "Save");
 
 }
 
 /**
  * Destructor.
  */
-BotonoidSelectScreen::~BotonoidSelectScreen() {
+OptionsScreen::~OptionsScreen() {
 	for (int i = 0; i < 2; i++) {
 		delete buttons[i].collisionBox;
 	}
@@ -42,13 +42,13 @@ BotonoidSelectScreen::~BotonoidSelectScreen() {
 /**
  * Draw the botonoid select screen.
  */
-void BotonoidSelectScreen::draw(float dt) {
+void OptionsScreen::draw(float dt) {
 
 	//Draw background
 	resources->GetSprite("titlescreen")->Render(0,0);
 
 	//Draw header graphic
-	resources->GetFont("timer")->printf(512,50,HGETEXT_CENTER, "Select Your Botonoid");
+	resources->GetFont("timer")->printf(512,50,HGETEXT_CENTER, "Customize Game");
 
 	//Draw buttons
 	for (int i = 0; i < 2; i++) {
@@ -70,7 +70,7 @@ void BotonoidSelectScreen::draw(float dt) {
 /**
  * Update the botonoid select screen.
  */
-bool BotonoidSelectScreen::update(float dt, float mouseX, float mouseY) {
+bool OptionsScreen::update(float dt, float mouseX, float mouseY) {
 
 	//Determine whether each button is highlighted
 	for (int i = 0; i < 2; i++) {
@@ -80,14 +80,14 @@ bool BotonoidSelectScreen::update(float dt, float mouseX, float mouseY) {
 	//Mouse click
 	if (hge->Input_KeyDown(HGEK_LBUTTON)) {
 
-		//Back Button
-		if (buttons[BACK_BUTTON].highlighted) {
+		//Cancel Button
+		if (buttons[CANCEL_BUTTON].highlighted) {
 			menu->currentScreen = TITLE_SCREEN;
 		}
 
-		//Next Button
-		if (buttons[NEXT_BUTTON].highlighted) {
-			menu->currentScreen = CUSTOMIZE_SCREEN;
+		//Save Button
+		if (buttons[SAVE_BUTTON].highlighted) {
+			//save
 		}
 
 	}

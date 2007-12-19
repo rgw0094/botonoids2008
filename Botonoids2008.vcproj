@@ -113,6 +113,9 @@
 				RelativePath=".\BotonoidSelectScreen.cpp">
 			</File>
 			<File
+				RelativePath=".\CustomizeScreen.cpp">
+			</File>
+			<File
 				RelativePath=".\Game.cpp">
 			</File>
 			<File
@@ -131,6 +134,9 @@
 				RelativePath=".\minimenu.cpp">
 			</File>
 			<File
+				RelativePath=".\OptionsScreen.cpp">
+			</File>
+			<File
 				RelativePath=".\Player.cpp">
 			</File>
 			<File
@@ -143,6 +149,9 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
 				RelativePath=".\BotonoidSelectScreen.h">
+			</File>
+			<File
+				RelativePath=".\CustomizeScreen.h">
 			</File>
 			<File
 				RelativePath=".\Game.h">
@@ -161,6 +170,9 @@
 			</File>
 			<File
 				RelativePath=".\minimenu.h">
+			</File>
+			<File
+				RelativePath=".\OptionsScreen.h">
 			</File>
 			<File
 				RelativePath=".\Player.h">

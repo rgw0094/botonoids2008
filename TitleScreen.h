@@ -11,9 +11,9 @@
 #define TITLE_QUIT 3
 
 struct TitleButton {
-	float x, y;
 	hgeRect *collisionBox;
 	bool highlighted;
+	char text[25];
 };
 
 class TitleScreen : public MenuScreen {
