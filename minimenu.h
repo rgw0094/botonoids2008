@@ -2,9 +2,20 @@
 #define _MINIMENU_H_
 
 #include "game.h"
+#include <list>
 
-//Menu pages
-#define TITLE_SCREEN 0
+#define BUTTON_HEIGHT 71.0f
+#define BUTTON_WIDTH 248.0f
+#define NUM_BUTTONS 2
+#define QUIT_BUTTON 0
+#define CONTINUE_BUTTON 1
+
+struct Button {
+	float x, y;
+	hgeRect *collisionBox;
+	bool highlighted;
+	char text[50];
+};
 
 class MiniMenu {
 
@@ -14,10 +25,12 @@ public:
 	~MiniMenu();
 
 	//Draw methods
+	void addButton(int num, char* text);
 	void draw(float dt);
 	void update(float dt);
 
 	//Variables
+	Button buttons[NUM_BUTTONS];
 	float mouseX, mouseY;
 	bool active;
 

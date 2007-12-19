@@ -13,6 +13,9 @@ Menu::~Menu() {
 
 }
 
+/** 
+ * Main draw method. Calls the draw method for whichever screen is currently active.
+ */
 void Menu::draw(float dt) {
 	
 	if (whichScreen == TITLE_SCREEN) {
@@ -24,6 +27,9 @@ void Menu::draw(float dt) {
 
 }
 
+/**
+ * Main update method. Calls the update method for whichever screen is currently active.
+ */
 void Menu::update(float dt) {
 
 	//Update mouse position
@@ -35,14 +41,15 @@ void Menu::update(float dt) {
 
 }
 
+/********************************************************
+ * TITLE SCREEN											*
+ ********************************************************/ 
 void Menu::drawTitleScreen(float dt) {
 	resources->GetSprite("titlescreen")->Render(0,0);
 }
 
 void Menu::updateTitleScreen(float dt) {
-
-	if (hge->Input_GetKeyState(HGEK_LBUTTON)) {
+	if (hge->Input_KeyDown(HGEK_LBUTTON)) {
 		mode = GAME_MODE;
 	}	
-
 }
