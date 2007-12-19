@@ -1,0 +1,14 @@
+= Introduction =
+
+When the game is over a screen will display that says who won and shows leet stats collected during gameply.
+
+
+= Stats Collected =
+
+  * Walls Built
+  * Gardens Built
+  * Max score
+  * Time in first place
+  * Items used
+  * Damage dealt
+  * Damage taken
