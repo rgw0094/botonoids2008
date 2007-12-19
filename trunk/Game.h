@@ -29,6 +29,9 @@
 #define COLOR_CHANGE_REFRESH 3.0f	//Time it takes for color change ability to refresh
 #define COLOR_CHANGE_TIME 2.0f		//Time it takes a square to change colors
 
+#define BUTTON_HEIGHT 71.0f
+#define BUTTON_WIDTH 248.0f
+
 //Colors
 #define NUM_COLORS 5
 #define RED 0
@@ -41,11 +44,19 @@ struct controls {
 	int moveLeft, moveRight, moveUp, moveDown, changeColor;
 };
 
+struct GameInfo {
+	int numPlayers;
+	int musicVolume;
+	int soundVolume;
+	float timeLimit;
+};
+
 //Global functions
 void loadControls();
 void saveControls();
 int nextColor(int currentColor);
 void setMusic(char *music);
 void drawCollisionBox(hgeRect *box, int r, int g, int b);
+void startGame();
 
 #endif

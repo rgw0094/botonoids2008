@@ -4,8 +4,6 @@
 #include "game.h"
 #include <list>
 
-#define BUTTON_HEIGHT 71.0f
-#define BUTTON_WIDTH 248.0f
 #define NUM_BUTTONS 2
 #define QUIT_BUTTON 0
 #define CONTINUE_BUTTON 1

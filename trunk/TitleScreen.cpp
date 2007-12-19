@@ -5,6 +5,8 @@
 extern HGE *hge;
 extern hgeResourceManager *resources;
 extern int mode;
+extern GameInfo gameInfo;
+extern Menu *menu;
 
 /**
  * Constructor
@@ -72,17 +74,19 @@ bool TitleScreen::update(float dt, float mouseX, float mouseY) {
 
 		//Options button
 		if (buttons[TITLE_OPTIONS].highlighted) {
-
+			
 		}
 
 		//2 Player button
 		if (buttons[TITLE_2P].highlighted) {
-			mode = GAME_MODE;
+			menu->currentScreen = SELECT_SCREEN;
+			gameInfo.numPlayers = 2;
 		}
 
 		//3 Player button
 		if (buttons[TITLE_3P].highlighted) {
-			mode = GAME_MODE;
+			menu->currentScreen = SELECT_SCREEN;
+			gameInfo.numPlayers = 3;
 		}
 
 		//Quit

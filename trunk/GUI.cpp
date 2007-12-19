@@ -3,7 +3,7 @@
 
 extern hgeResourceManager *resources;
 extern Player *players[3];
-extern int numPlayers;
+extern GameInfo gameInfo;
 extern hgeFont *debugFont;
 extern float timer;
 
@@ -41,19 +41,19 @@ void GUI::draw(float dt) {
 	//Calculate score related shit
 	int maxScore = 0;
 	bool allZero = true;
-	for (int i = 0; i < numPlayers; i++) {
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
 		if (players[i]->score > maxScore) maxScore = players[i]->score;
 		if (players[i]->score > 0.0f) allZero = false;
 	}
 
 	//Set yOffset that will center the scores vertically
 	int yOffset;
-	if (numPlayers == 3) yOffset = 154;
-	else if (numPlayers == 2) yOffset = 165;
+	if (gameInfo.numPlayers == 3) yOffset = 154;
+	else if (gameInfo.numPlayers == 2) yOffset = 165;
 
 	//Draw each player's shit
 	float barLength = 0.0f;
-	for (int i = 0; i < numPlayers; i++) {
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
 
 			//Player scores
 			if (allZero) {

@@ -3,10 +3,12 @@
 
 #include "game.h"
 #include "titlescreen.h"
+#include "BotonoidSelectScreen.h"
 
 //Menu pages
-#define NUM_SCREENS 1
+#define NUM_SCREENS 2
 #define TITLE_SCREEN 0
+#define SELECT_SCREEN 1
 
 class Menu {
 
