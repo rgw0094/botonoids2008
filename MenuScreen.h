@@ -7,10 +7,8 @@ class MenuScreen {
 
 public:
 
-	//Draw methods
 	virtual void draw(float dt) { };
-	virtual void update(float dt) { };
-	virtual void clickMouse(float x, float y) { };
+	virtual bool update(float dt, float mouseX, float mouseY) { return false; };
 
 };
 
