@@ -125,6 +125,9 @@
 				RelativePath=".\GUI.cpp">
 			</File>
 			<File
+				RelativePath=".\Input.cpp">
+			</File>
+			<File
 				RelativePath=".\main.cpp">
 			</File>
 			<File
@@ -161,6 +164,9 @@
 			</File>
 			<File
 				RelativePath=".\GUI.h">
+			</File>
+			<File
+				RelativePath=".\Input.h">
 			</File>
 			<File
 				RelativePath=".\menu.h">
