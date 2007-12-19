@@ -65,6 +65,20 @@ Sprite mouse {
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
+Sprite menuItem {
+ texture="Data/Graphics/menuitems.png"
+ rect=0,0,248,71
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite menuItemHighlighted {
+ texture="Data/Graphics/menuitems.png"
+ rect=248,0,248,71
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
 
 ;//**********************
 ;//******** FONTS *******
