@@ -15,20 +15,27 @@
 #define AXIS_MINCLICK -700		//when axis is below this value, it takes action for that direction
 #define AXIS_MAXCLICK 700		//when axis is above this value, it takes action for that direction
 
+//Codes for joystick
+#define JOYSTICK_LEFT -5
+#define JOYSTICK_UP -4
+#define JOYSTICK_RIGHT -3
+#define JOYSTICK_DOWN -2
+
 //Inputs
 #define NUM_INPUTS 8
 #define INPUT_LEFT 0
 #define INPUT_RIGHT 1
 #define INPUT_UP 2
 #define INPUT_DOWN 3
-#define INPUT_ATTACK 4
-#define INPUT_ABILITY 5
-#define INPUT_PREVIOUS_ABILITY 6
-#define INPUT_NEXT_ABILITY 7
+#define INPUT_ACTION 4				//Change color or build foundation
+#define INPUT_ITEM 5				//Use item
+#define INPUT_LAST_ITEM 6
+#define INPUT_NEXT_ITEM 7
 
 struct InputStruct {
 	bool pressed, prevPressed, editMode;
-	int keyCode, padCode;
+	bool keyboard;
+	int code;
 	char name[30];
 };
 
@@ -43,18 +50,18 @@ public:
 	HRESULT InitDirectInput( HWND hDlg );
 	VOID FreeDirectInput();
 	void UpdateInput();
-	bool keyDown(int key);
-	bool keyPressed(int key);
+	bool buttonDown(int key, int player);
+	bool buttonPressed(int key, int player);
 	void toggleGamePad();
 	void saveInputs();
 	void loadInputs();
-	void setEditMode(int whichInput);
+	void setEditMode(int whichInput, int player);
 
 	//Variables
-	InputStruct inputs[NUM_INPUTS];
-	bool gamePadButtonPressed[128];
+	InputStruct inputs[3][NUM_INPUTS];
 	bool useGamePad;
 	bool acquiredJoystick;
+	bool deviceConnected;	//Whether or not there is an extra input device connected.
 
 };
 

@@ -4,9 +4,9 @@ extern HGE *hge;
 extern Grid *grid;
 extern GUI *gui;
 extern hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
-extern controls playerControls[3];
 extern hgeResourceManager *resources;
 extern hgeFont *debugFont;
+extern Input *input;
 
 /**
  * Constructor
@@ -72,25 +72,25 @@ void Player::update(float dt) {
 		int oldDir = facing;
 
 		//Left
-		if (hge->Input_GetKeyState(playerControls[playerNum].moveLeft)) {
+		if (input->buttonDown(INPUT_LEFT, playerNum)) {
 			facing = movingDirection = LEFT;
 			if (gridX > 0 && !(grid->walls[gridX-1][gridY] != -1 && grid->walls[gridX-1][gridY] != playerNum)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		//Right
-		} else if (hge->Input_GetKeyState(playerControls[playerNum].moveRight)) {
+		} else if (input->buttonDown(INPUT_RIGHT, playerNum)) {
 			facing = movingDirection =  RIGHT;
 			if (gridX < grid->width-1 && !(grid->walls[gridX+1][gridY] != -1 && grid->walls[gridX+1][gridY] != playerNum)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		//Down
-		} else if (hge->Input_GetKeyState(playerControls[playerNum].moveDown)) {
+		} else if (input->buttonDown(INPUT_DOWN, playerNum)) {
 			facing = movingDirection =  DOWN;
 			if (gridY < grid->height-1 && !(grid->walls[gridX][gridY+1] != -1 && grid->walls[gridX][gridY+1] != playerNum)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		//Up
-		} else if (hge->Input_GetKeyState(playerControls[playerNum].moveUp)) {
+		} else if (input->buttonDown(INPUT_UP, playerNum)) {
 			facing = movingDirection =  UP;
 			if (gridY > 0 && !(grid->walls[gridX][gridY-1] != -1 && grid->walls[gridX][gridY-1] != playerNum)) {
 				startedMoving = hge->Timer_GetTime();
@@ -129,10 +129,9 @@ void Player::update(float dt) {
 		if (oldDir != facing) botonoidGraphics[whichBotonoid]->SetFrame(oldDir*4);
 
 	}
-
 	
 	//Action key
-	if (hge->Input_GetKeyState(playerControls[playerNum].changeColor)) {
+	if (input->buttonDown(INPUT_ACTION, playerNum)) {
 
 		//Start color change mode
 		if (!colorChangeMode && !foundationMode) {

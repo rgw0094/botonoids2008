@@ -8,6 +8,7 @@ GUI *gui;
 hgeFont *debugFont;
 Menu *menu;
 MiniMenu *minimenu;
+Input *input;
 
 //Sounds
 HCHANNEL musicChannel;
@@ -69,6 +70,8 @@ void deleteResources() {
 bool FrameFunc() {
 
 	float dt=hge->Timer_GetDelta();
+
+	input->UpdateInput();
 
 	//Update menu
 	if (mode == MENU_MODE) {
@@ -156,9 +159,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		gameInfo.musicVolume = 100.0f;
 		gameInfo.soundVolume = 100.0f;
 
-		//Create the menu
+		//Create Game Objects
 		menu = new Menu();
 		minimenu = new MiniMenu();	
+		input = new Input();
 
 		debugFont = new hgeFont("Data/Fonts/debug.fnt");
 
@@ -167,6 +171,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//Free shit
 		deleteResources();
+		delete input;
 		saveControls();
 
 	}
