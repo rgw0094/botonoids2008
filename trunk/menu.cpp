@@ -4,16 +4,26 @@ extern hgeResourceManager *resources;
 extern HGE *hge;
 extern int mode;
 
+/**
+ * Constructor
+ */
 Menu::Menu() {
+	
 	mouseX = mouseY = 400.0f;
-	whichScreen = TITLE_SCREEN;
+	currentScreen = TITLE_SCREEN;
 
-	//Setup main menu buttons
+	//Create menu screen objects
+	screens[TITLE_SCREEN] = new TitleScreen();
 
 }
 
+/**
+ * Destructor
+ */
 Menu::~Menu() {
-
+	for (int i = 0; i < NUM_SCREENS; i++) {
+		delete screens[i];
+	}
 }
 
 /** 
@@ -21,9 +31,8 @@ Menu::~Menu() {
  */
 void Menu::draw(float dt) {
 	
-	if (whichScreen == TITLE_SCREEN) {
-		drawTitleScreen(dt);
-	}
+	//Draw current screen
+	screens[currentScreen]->draw(dt);
 
 	//Draw the mouse
 	resources->GetSprite("mouse")->Render(mouseX, mouseY);
@@ -33,26 +42,12 @@ void Menu::draw(float dt) {
 /**
  * Main update method. Calls the update method for whichever screen is currently active.
  */
-void Menu::update(float dt) {
+bool Menu::update(float dt) {
 
 	//Update mouse position
 	hge->Input_GetMousePos(&mouseX, &mouseY);
 
-	if (whichScreen == TITLE_SCREEN) {
-		updateTitleScreen(dt);
-	}
+	//Update current screen
+	return screens[currentScreen]->update(dt, mouseX, mouseY);
 
-}
-
-/********************************************************
- * TITLE SCREEN											*
- ********************************************************/ 
-void Menu::drawTitleScreen(float dt) {
-	resources->GetSprite("titlescreen")->Render(0,0);
-}
-
-void Menu::updateTitleScreen(float dt) {
-	if (hge->Input_KeyDown(HGEK_LBUTTON)) {
-		mode = GAME_MODE;
-	}	
 }

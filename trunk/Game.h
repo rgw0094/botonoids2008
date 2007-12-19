@@ -46,5 +46,6 @@ void loadControls();
 void saveControls();
 int nextColor(int currentColor);
 void setMusic(char *music);
+void drawCollisionBox(hgeRect *box, int r, int g, int b);
 
 #endif

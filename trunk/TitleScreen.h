@@ -4,6 +4,18 @@
 #include "game.h"
 #include "MenuScreen.h"
 
+//Title screen buttons
+#define TITLE_OPTIONS 0
+#define TITLE_2P 1
+#define TITLE_3P 2
+#define TITLE_QUIT 3
+
+struct TitleButton {
+	float x, y;
+	hgeRect *collisionBox;
+	bool highlighted;
+};
+
 class TitleScreen : public MenuScreen {
 
 public:
@@ -13,8 +25,9 @@ public:
 
 	//Draw methods
 	void draw(float dt);
-	void update(float dt);
-	void clickMouse(float x, float y);
+	bool update(float dt, float mouseX, float mouseY);
+
+	TitleButton buttons[4];
 
 };
 

@@ -25,7 +25,8 @@ controls playerControls[3];
 int debug;
 int musicVolume = 100;
 float timer = 300.0f;
-int mode = GAME_MODE;
+int mode = MENU_MODE;
+//int mode = GAME_MODE;
 
 void loadResources() {
 
@@ -72,7 +73,8 @@ bool FrameFunc() {
 
 	//Update menu
 	if (mode == MENU_MODE) {
-		menu->update(dt);	
+		
+		if (menu->update(dt)) return true;	
 
 		//Press ESC to exit
 		if (hge->Input_KeyDown(HGEK_ESCAPE)) return true;
