@@ -20,11 +20,10 @@ hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
 hgeSprite *specialTiles[3*4], *tileSprites[NUM_COLORS];
 
 //Variables
-int numPlayers = 3;
+GameInfo gameInfo;
 controls playerControls[3];
 int debug;
-int musicVolume = 100;
-float timer = 300.0f;
+float timer;
 int mode = MENU_MODE;
 //int mode = GAME_MODE;
 
@@ -87,7 +86,7 @@ bool FrameFunc() {
 			minimenu->update(dt);
 		} else {
 			grid->update(dt);
-			for (int i = 0; i < numPlayers; i++) players[i]->update(dt);
+			for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->update(dt);
 			gui->update(dt);
 
 			//Press ESC to open exit/continue menu
@@ -117,7 +116,7 @@ bool RenderFunc() {
 	} else if (mode == GAME_MODE) {
 
 		grid->draw(dt);
-		for (int i = 0; i < numPlayers; i++) players[i]->draw(dt);
+		for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->draw(dt);
 		gui->draw(dt);
 		minimenu->draw(dt);
 
@@ -151,17 +150,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Load shit
 		loadResources();
 		loadControls();
+		
+		//Defaults
+		gameInfo.timeLimit = 300.0f;
+		gameInfo.musicVolume = 100.0f;
+		gameInfo.soundVolume = 100.0f;
 
-		setMusic("song3");
-
-		//Make objects
-		grid = new Grid(25,22);
-		players[0] = new Player(5,5,0,0);
-		players[1] = new Player(15,5,1,1);
-		if (numPlayers == 3) players[2] = new Player(10,15,2,2);
-		gui = new GUI();
+		//Create the menu
 		menu = new Menu();
-		minimenu = new MiniMenu();
+		minimenu = new MiniMenu();	
 
 		debugFont = new hgeFont("Data/Fonts/debug.fnt");
 

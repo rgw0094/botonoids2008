@@ -14,6 +14,7 @@ Menu::Menu() {
 
 	//Create menu screen objects
 	screens[TITLE_SCREEN] = new TitleScreen();
+	screens[SELECT_SCREEN] = new BotonoidSelectScreen();
 
 }
 
