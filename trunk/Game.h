@@ -51,6 +51,7 @@ struct GameInfo {
 	float timeLimit;
 };
 
+
 //Global functions
 void loadControls();
 void saveControls();
