@@ -18,6 +18,10 @@ BotonoidSelectScreen::BotonoidSelectScreen() {
 	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "Main Menu");
 	buttons[NEXT_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "Continue");
 
+	botonoids[0] = resources->GetSprite("selectGold");
+	botonoids[1] = resources->GetSprite("selectBlack");
+	botonoids[2] = resources->GetSprite("selectWhite");
+
 }
 
 /**
@@ -39,6 +43,10 @@ void BotonoidSelectScreen::draw(float dt) {
 
 	//Draw header graphic
 	resources->GetFont("timer")->printf(512,50,HGETEXT_CENTER, "Select Your Botonoid");
+
+	for (int i = 0; i < 3; i++) {
+		botonoids[i]->Render(30.0f + 350.0f*i, 175.0f);
+	}
 
 	//Draw buttons
 	for (int i = 0; i < 2; i++) {

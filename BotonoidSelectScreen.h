@@ -3,6 +3,11 @@
 
 #include "MenuScreen.h"
 #include "button.h"
+#include "game.h"
+
+struct Selecter {
+	
+};
 
 class BotonoidSelectScreen : public MenuScreen {
 
@@ -16,6 +21,8 @@ public:
 	bool update(float dt, float mouseX, float mouseY);
 
 	Button *buttons[2];
+	hgeSprite *botonoids[3];
+	hgeSprite *highlightedBotonoids[3];
 
 };
 
