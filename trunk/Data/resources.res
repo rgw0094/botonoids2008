@@ -41,6 +41,52 @@ Animation silverBotonoid {
 }
 
 
+Sprite selectGold {
+ texture="Data/Graphics/botonoidSelect.png"
+ rect=0,0,281,322
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite selectGoldHighlighted {
+ texture="Data/Graphics/botonoidSelect.png"
+ rect=281,0,281,322
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+
+Sprite selectBlack {
+ texture="Data/Graphics/botonoidSelect.png"
+ rect=0,322,243,378
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite selectBlackHighlighted {
+ texture="Data/Graphics/botonoidSelect.png"
+ rect=243,322s,243,378
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+
+Sprite selectWhite {
+ texture="Data/Graphics/botonoidSelect.png"
+ rect=0,700,255,381
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite selectWhiteHighlighted {
+ texture="Data/Graphics/botonoidSelect.png"
+ rect=255,700,255,381
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+
+
 ;//*********************
 ;//******** MENU *******
 ;//*********************
