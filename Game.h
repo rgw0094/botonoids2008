@@ -11,6 +11,7 @@
 #include "gui.h"
 #include "menu.h"
 #include "minimenu.h"
+#include "statspage.h"
 #include <string>
 
 //Game modes
@@ -44,6 +45,7 @@ struct GameInfo {
 	int numPlayers;
 	int musicVolume;
 	int soundVolume;
+	int winner;
 	float timeLimit;
 };
 
@@ -53,5 +55,6 @@ int nextColor(int currentColor);
 void setMusic(char *music);
 void drawCollisionBox(hgeRect *box, int r, int g, int b);
 void startGame();
+void endGame();
 
 #endif

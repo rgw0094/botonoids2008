@@ -90,6 +90,7 @@ void MiniMenu::update(float dt) {
 	//Listen for ESC to close mini menu and return to main menu
 	if (hge->Input_KeyDown(HGEK_ESCAPE)) {
 		mode = MENU_MODE;
+		menu->currentScreen = TITLE_SCREEN;
 		active = false;
 	}
 

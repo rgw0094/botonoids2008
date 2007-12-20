@@ -7,6 +7,7 @@ extern hgeSprite *specialTiles[3*4];
 extern Player *players[3];
 extern hgeResourceManager *resources;
 extern hgeFont *debugFont;
+extern StatsPage *statsPage;
 
 /**
  * Constructor
@@ -339,7 +340,6 @@ bool Grid::buildWall(int x, int y, int player) {
 		walls[x][y] = player;
 		foundations[x][y] = -1;
 		wallBuilt = true;
-		players[player]->score += 1;
 
 		//Dust cloud!
 		dustClouds->SpawnPS(&resources->GetParticleSystem("dust")->info, 
@@ -442,7 +442,6 @@ void Grid::fillGarden(int x, int y, int player) {
 	foundations[x][y] = -1;
     startedColorChange[x][y] = 0.0f;
     visited[x][y] = true;
-	players[player]->score += 2;
 
     //gardenSound.play(); 
             

@@ -7,6 +7,8 @@ extern hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
 extern hgeResourceManager *resources;
 extern hgeFont *debugFont;
 extern Input *input;
+extern StatsPage *statsPage;
+extern GameInfo gameInfo;
 
 /**
  * Constructor
@@ -156,6 +158,9 @@ void Player::update(float dt) {
 		}
 	}
 
+	//Update stats
+	doStats(dt);
+
 	//temp
 	if (hge->Input_KeyDown(HGEK_G)) {
 		grid->foundations[gridX][gridY] = playerNum;
@@ -221,5 +226,37 @@ void Player::startFoundationMode(int _numWalls) {
 	//Stop color change mode and start foundation mode
 	foundationMode = true;
 	numWallsLeft = _numWalls;
+
+}
+
+
+void Player::doStats(float dt) {
+
+	//Count score and walls/gardens
+	score = 0;
+	statsPage->stats[playerNum].wallsBuilt = 0;
+	statsPage->stats[playerNum].gardensBuilt = 0;
+	for (int i = 0; i < grid->width; i++) {
+		for (int j = 0; j < grid->height; j++) {
+			if (grid->walls[i][j] == playerNum) {
+				score += 1;
+				statsPage->stats[playerNum].wallsBuilt++;
+			}
+			if (grid->gardens[i][j] == playerNum) {
+				score += 2;
+				statsPage->stats[playerNum].gardensBuilt++;
+			}
+		}
+	}
+
+	//Max score
+	if (score > statsPage->stats[playerNum].maxScore) {
+		statsPage->stats[playerNum].maxScore = score;
+	}
+
+	//Time winning
+	if (gameInfo.winner == playerNum) {
+		statsPage->stats[playerNum].timeWinning += dt;
+	}
 
 }

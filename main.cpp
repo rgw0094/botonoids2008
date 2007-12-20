@@ -9,6 +9,8 @@ hgeFont *debugFont;
 Menu *menu;
 MiniMenu *minimenu;
 Input *input;
+StatsPage *statsPage;
+std::string botonoidNames[3];
 
 //Sounds
 HCHANNEL musicChannel;
@@ -25,13 +27,17 @@ GameInfo gameInfo;
 int debug;
 float timer;
 int mode = MENU_MODE;
-//int mode = GAME_MODE;
 
 void loadResources() {
 
 	//Create resource manager from resource script
 	resources = new hgeResourceManager("Data/resources.res");
 	hge->Resource_AttachPack("Data/Sounds.dat");
+
+	//Botonoid names
+	botonoidNames[0] = "Botonoid";
+	botonoidNames[1] = "Barvinoid";
+	botonoidNames[2] = "Flowernoid";
 
 	//Load textures
 	botonoidsTexture = resources->GetTexture("botonoids");
@@ -70,6 +76,10 @@ bool FrameFunc() {
 
 	float dt=hge->Timer_GetDelta();
 
+	//Temp
+	if (hge->Input_KeyDown(HGEK_T)) timer = 1.0f;
+
+	//Always update input
 	input->UpdateInput();
 
 	//Update menu
@@ -86,7 +96,13 @@ bool FrameFunc() {
 		//If the mini menu is active, only update it
 		if (minimenu->active) {
 			minimenu->update(dt);
+			
+		//If the stats page is active only update it
+		} else if (statsPage->active) {
+			statsPage->update(dt);
+
 		} else {
+
 			grid->update(dt);
 			for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->update(dt);
 			gui->update(dt);
@@ -121,6 +137,7 @@ bool RenderFunc() {
 		for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->draw(dt);
 		gui->draw(dt);
 		minimenu->draw(dt);
+		statsPage->draw(dt);
 
 	}
 

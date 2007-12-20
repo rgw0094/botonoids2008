@@ -9,6 +9,7 @@ extern GUI *gui;
 extern Menu *menu;
 extern MiniMenu *minimenu;
 extern Player *players[3];
+extern StatsPage *statsPage;
 extern int mode;
 extern float timer;
 
@@ -52,17 +53,46 @@ void startGame() {
 	//Set selected music
 	setMusic("song3");
 
-	//Reset timer
+	//Reset game info
 	timer = gameInfo.timeLimit;
+	gameInfo.winner = -1;
 
 	//Create new game objects
 	if (grid) delete grid;
 	grid = new Grid(25,22);
 	if (gui) delete gui;
 	gui = new GUI();
+	if (statsPage) delete statsPage;
+	statsPage = new StatsPage();
 
 	players[0] = new Player(5,5,0,0);
 	players[1] = new Player(15,5,1,1);
 	if (gameInfo.numPlayers == 3) players[2] = new Player(10,15,2,2);
+
+}
+
+/**
+ * Called when the timer reaches 0.
+ */
+void endGame() {
+
+	timer = 0.0f;
+	statsPage->active = true;
+
+	//Determine winner
+	int maxScore = -1;
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
+		if (players[i]->score > maxScore) {
+			//Player i is the winner
+			gameInfo.winner = i;
+			maxScore = players[i]->score;
+		} else if (players[i]->score == maxScore) {
+			//Tie
+			gameInfo.winner = -1;
+		}
+	}
+
+	//Play victory music
+	//...
 
 }
