@@ -140,31 +140,31 @@ void StatsPage::draw(float dt) {
 		if (stats[player].maxScore == maxInt(stats[0].maxScore, stats[1].maxScore, stats[2].maxScore))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, y + 200.0f, HGETEXT_CENTER, "%d", stats[player].maxScore);
+		f->printf(x + 100.0f + player*75.0f, icons[MAX_SCORE_ICON].y, HGETEXT_CENTER, "%d", stats[player].maxScore);
 
-		//Time in lead
+		//Time in first
 		if ((int)stats[player].timeWinning == maxInt((int)stats[0].timeWinning, (int)stats[1].timeWinning, (int)stats[2].timeWinning))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, y + 250.0f, HGETEXT_CENTER, "%s", formatTime((int)stats[player].timeWinning).c_str());
+		f->printf(x + 100.0f + player*75.0f, icons[TIME_IN_FIRST_ICON].y, HGETEXT_CENTER, "%s", formatTime((int)stats[player].timeWinning).c_str());
 		
 		//Items used
 		if (stats[player].numItemsUsed == maxInt(stats[0].numItemsUsed, stats[1].numItemsUsed, stats[2].numItemsUsed))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, y + 300.0f, HGETEXT_CENTER, "%d", (int)stats[player].numItemsUsed);
+		f->printf(x + 100.0f + player*75.0f,icons[ITEMS_USED_ICON].y, HGETEXT_CENTER, "%d", (int)stats[player].numItemsUsed);
 		
 		//Damage Dealt
 		if (stats[player].damageDealt == maxInt(stats[0].damageDealt, stats[1].damageDealt, stats[2].damageDealt))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, y + 350.0f, HGETEXT_CENTER, "%d", (int)stats[player].damageDealt);
+		f->printf(x + 100.0f + player*75.0f, icons[DAMAGE_DEALT_ICON].y, HGETEXT_CENTER, "%d", (int)stats[player].damageDealt);
 		
 		//Damage Taken
 		if (stats[player].damageTaken == minInt(stats[0].damageTaken, stats[1].damageTaken, stats[2].damageTaken))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, y + 400.0f, HGETEXT_CENTER, "%d", (int)stats[player].damageTaken);
+		f->printf(x + 100.0f + player*75.0f, icons[DAMAGE_TAKEN_ICON].y, HGETEXT_CENTER, "%d", (int)stats[player].damageTaken);
 
 	}
 	f->SetColor(ARGB(255,255,255,255));
