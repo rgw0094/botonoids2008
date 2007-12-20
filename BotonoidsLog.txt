@@ -1,11 +1,11 @@
 HGE Started..
 
 HGE version: 1.70
-Date: 20.12.2007, 17:43:21
+Date: 20.12.2007, 18:30:16
 
 Application: Botonoids 2008
 OS: Windows 5.1.2600
-Memory: 523496K total, 80752K free
+Memory: 523496K total, 90784K free
 
 D3D Driver: nv4_disp.dll
 Description: NVIDIA GeForce FX Go5200 
@@ -17,7 +17,7 @@ Sample rate: 44100
 
 Init done.
 
-Data/resources.res, line 68: Unsupported resource parameter '378'.
+Data/resources.res, line 68: Unsupported resource parameter '354'.
 
 Finishing..
 The End.

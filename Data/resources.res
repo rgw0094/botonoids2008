@@ -58,14 +58,14 @@ Sprite selectGoldHighlighted {
 
 Sprite selectBlack {
  texture="Data/Graphics/botonoidSelect.png"
- rect=0,322,243,378
+ rect=0,322,282,354
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
 Sprite selectBlackHighlighted {
  texture="Data/Graphics/botonoidSelect.png"
- rect=243,322s,243,378
+ rect=282,322s,243,354
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
@@ -73,14 +73,22 @@ Sprite selectBlackHighlighted {
 
 Sprite selectWhite {
  texture="Data/Graphics/botonoidSelect.png"
- rect=0,700,255,381
+ rect=0,676,255,381
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
 Sprite selectWhiteHighlighted {
  texture="Data/Graphics/botonoidSelect.png"
- rect=255,700,255,381
+ rect=255,676,255,381
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+
+Sprite selecter {
+ texture="Data/Graphics/selecter.png"
+ rect=0,0,75,75
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
