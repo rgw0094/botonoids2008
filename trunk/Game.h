@@ -48,6 +48,7 @@ struct GameInfo {
 	int soundVolume;
 	int winner;
 	float timeLimit;
+	int selectedBotonoid[3];
 };
 
 

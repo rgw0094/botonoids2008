@@ -76,10 +76,14 @@ void BotonoidSelectScreen::draw(float dt) {
 	}
 
 	//Draw selecters
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
 		float x = points[i][selecters[i].selection].x;
 		float y = points[i][selecters[i].selection].y;
-		resources->GetSprite("selecter")->Render(x,y);
+		if (selecters[i].selected) {
+			resources->GetSprite("lockedSelecter")->Render(x,y);
+		} else {
+			resources->GetSprite("selecter")->Render(x,y);
+		}
 		resources->GetFont("button")->printf(x+32.5f, y + 10.0f, HGETEXT_CENTER, "%dP", i+1);
 	}
 
@@ -107,32 +111,60 @@ bool BotonoidSelectScreen::update(float dt, float mouseX, float mouseY) {
 	
 	//Click Next Button
 	if (buttons[NEXT_BUTTON]->isClicked()) {
-		menu->currentScreen = CUSTOMIZE_SCREEN;
+		if (allSelected()) {
+
+			//Assign selected botonoids
+			for (int i = 0; i < gameInfo.numPlayers; i++) {
+				gameInfo.selectedBotonoid[i] = selecters[i].selection;
+			}
+
+			menu->currentScreen = CUSTOMIZE_SCREEN;
+		}
 	}
 
 
 	//Input
 	for (int player = 0; player < gameInfo.numPlayers; player++) {
 
-		//Move selecter left
-		if (input->buttonPressed(INPUT_LEFT, player)) {
-			if (selecters[player].selection == 0) 
-				selecters[player].selection = 2;
-			else
-				selecters[player].selection--;
+		//Move selecters if not locked
+		if (!selecters[player].selected) {
 
-		//Move selecter right
-		} else if (input->buttonPressed(INPUT_RIGHT, player)) {
-			if (selecters[player].selection == 2) 
-				selecters[player].selection = 0;
-			else
-				selecters[player].selection++;
+			//Left
+			if (input->buttonPressed(INPUT_LEFT, player)) {
+				if (selecters[player].selection == 0) 
+					selecters[player].selection = 2;
+				else
+					selecters[player].selection--;
+
+			//Right
+			} else if (input->buttonPressed(INPUT_RIGHT, player)) {
+				if (selecters[player].selection == 2) 
+					selecters[player].selection = 0;
+				else
+					selecters[player].selection++;
+			}
+
+		}
+
+		//Select current botonoid
+		if (input->buttonPressed(INPUT_ACTION, player)) {
+			selecters[player].selected = true;
 		}
 
 	}
 
-
-
 	return false;
 }
+
+/**
+ * Returns whether or not all players have selected a Botonoid.
+ */
+bool BotonoidSelectScreen::allSelected() {
+	bool ret = true;
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
+		if (!selecters[i].selected) ret = false;
+	}
+	return ret;
+}
+
 

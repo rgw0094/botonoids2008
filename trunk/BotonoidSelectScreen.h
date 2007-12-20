@@ -25,6 +25,7 @@ public:
 	//Draw methods
 	void draw(float dt);
 	bool update(float dt, float mouseX, float mouseY);
+	bool allSelected();
 
 	Button *buttons[2];
 	hgeSprite *botonoids[3];
