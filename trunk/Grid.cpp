@@ -531,7 +531,7 @@ int Grid::numFoundations(int player) {
 	int numFoundations = 0;
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			if (foundations[i][j] == player) numFoundations++;
+			if (foundations[i][j] == player && gardens[i][j] == -1 && walls[i][j] == -1) numFoundations++;
 		}
 	}
 	return numFoundations;
