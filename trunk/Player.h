@@ -15,6 +15,7 @@ public:
 	void update(float dt);
 	void doColorChanging();
 	void startFoundationMode(int numFoundations);
+	void doStats(float dt);
 
 	//Variables
 	int gridX, gridY, lastGridX, lastGridY;

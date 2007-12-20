@@ -249,6 +249,66 @@ Particle dust {
  sprite=particleGraphic0
 }
 
+;****************************
+;******** STATS PAGE ********
+;****************************
+Sprite statsPage {
+ texture="Data/Graphics/statspage.png"
+ rect=0,0,280,600
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite wallIcon {
+ texture="Data/Graphics/icons.png"
+ rect=0,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite gardenIcon {
+ texture="Data/Graphics/icons.png"
+ rect=32,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite maxScoreIcon {
+ texture="Data/Graphics/icons.png"
+ rect=64,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite timeInFirstIcon {
+ texture="Data/Graphics/icons.png"
+ rect=96,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite itemsUsedIcon {
+ texture="Data/Graphics/icons.png"
+ rect=128,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite damageDealtIcon {
+ texture="Data/Graphics/icons.png"
+ rect=160,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite damageTakenIcon {
+ texture="Data/Graphics/icons.png"
+ rect=192,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+
 ;***********************
 ;******** MUSIC ********
 ;***********************

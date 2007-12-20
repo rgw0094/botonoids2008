@@ -6,6 +6,7 @@ extern Player *players[3];
 extern GameInfo gameInfo;
 extern hgeFont *debugFont;
 extern float timer;
+extern int mode;
 
 /**
  * Constructor.
@@ -84,10 +85,17 @@ void GUI::draw(float dt) {
 
 }
 
+/**
+ * Updates the GUI
+ */
 void GUI::update(float dt) {
+	
 	//Update timer
 	timer -= dt;
-	if (timer < 0.0f) timer = 0.0f;
+	
+	//When the timer reaches 0 the game is over
+	if (timer < 0.0f) endGame();
+
 }
 
 /**
