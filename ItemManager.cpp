@@ -83,6 +83,8 @@ void ItemManager::update(float dt) {
  */
 void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 		
+	if (gardenSize == 0) return;
+
 	//Determine what item to generate
 	int item = 1;
 
