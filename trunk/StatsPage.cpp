@@ -97,11 +97,11 @@ void StatsPage::draw(float dt) {
 		//Statistic icons
 		if (i < NUM_STATS) {
 
-			placeIcon(i, x + 15.0f, y + 100.0f + i*50.0f);
+			placeIcon(i, x + 15.0f, y + 110.0f + i*50.0f);
 			icons[i].graphic->Render(icons[i].x, icons[i].y);
 
 			if (icons[i].mouseOver) {
-				f->printf(icons[i].x + 16.0f, icons[i].y-30.0f, HGETEXT_CENTER, "%s", icons[i].tooltip);
+				f->printf(icons[i].x + 40.0f, icons[i].y-25.0f, HGETEXT_LEFT, "%s", icons[i].tooltip);
 			}
 
 		//Botonoid icons
@@ -128,13 +128,13 @@ void StatsPage::draw(float dt) {
 		if (stats[player].wallsBuilt == maxInt(stats[0].wallsBuilt, stats[1].wallsBuilt, stats[2].wallsBuilt))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, y + 100.0f, HGETEXT_CENTER, "%d", stats[player].wallsBuilt);
+		f->printf(x + 100.0f + player*75.0f, icons[WALL_ICON].y, HGETEXT_CENTER, "%d", stats[player].wallsBuilt);
 
 		//Gardens built
 		if (stats[player].gardensBuilt == maxInt(stats[0].gardensBuilt, stats[1].gardensBuilt, stats[2].gardensBuilt))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, y + 150.0f, HGETEXT_CENTER, "%d", stats[player].gardensBuilt);
+		f->printf(x + 100.0f + player*75.0f, icons[GARDEN_ICON].y, HGETEXT_CENTER, "%d", stats[player].gardensBuilt);
 
 		//Max Score
 		if (stats[player].maxScore == maxInt(stats[0].maxScore, stats[1].maxScore, stats[2].maxScore))
