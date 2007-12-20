@@ -67,9 +67,10 @@ void startGame() {
 	statsPage = new StatsPage();
 	if (itemManager) delete itemManager;
 	itemManager = new ItemManager();
-	players[0] = new Player(5,5,0,0);
-	players[1] = new Player(15,5,1,1);
-	if (gameInfo.numPlayers == 3) players[2] = new Player(10,15,2,2);
+
+	players[0] = new Player(5, 5, 0, gameInfo.selectedBotonoid[0]);
+	players[1] = new Player(15, 5,1 , gameInfo.selectedBotonoid[1]);
+	if (gameInfo.numPlayers == 3) players[2] = new Player(10,15, 2, gameInfo.selectedBotonoid[2]);
 
 }
 

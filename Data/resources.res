@@ -93,6 +93,13 @@ Sprite selecter {
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
+Sprite lockedSelecter {
+ texture="Data/Graphics/selecter.png"
+ rect=75,0,75,75
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
 
 
 ;//*********************
