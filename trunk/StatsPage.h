@@ -49,7 +49,7 @@ public:
 
 	bool active;
 	PlayerStats stats[3];
-	Icon icons[NUM_STATS];
+	Icon icons[NUM_STATS+3];
 	float mouseX, mouseY;
 	StatsButton okButton;
 

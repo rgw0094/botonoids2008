@@ -8,6 +8,7 @@
 struct Item {
 	int itemCode;
 	float x, y, dx, dy;
+	hgeParticleSystem *trail;
 };
 
 

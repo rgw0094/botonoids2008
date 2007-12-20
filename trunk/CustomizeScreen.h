@@ -1,15 +1,8 @@
 #ifndef _CUSTOMIZESCREEN_H_
 #define _CUSTOMIZESCREEN_H_
 
-#include "game.h"
 #include "MenuScreen.h"
-
-struct CustomizeButton {
-	float x, float y;
-	bool highlighted;
-	hgeRect *collisionBox;
-	char text[50];
-};
+#include "button.h"
 
 class CustomizeScreen : public MenuScreen {
 
@@ -22,7 +15,7 @@ public:
 	void draw(float dt);
 	bool update(float dt, float mouseX, float mouseY);
 
-	CustomizeButton buttons[2];
+	Button *buttons[2];
 
 };
 

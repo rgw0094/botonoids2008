@@ -65,6 +65,7 @@ Sprite mouse {
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
+
 Sprite miniMenuButton {
  texture="Data/Graphics/menuitems.png"
  rect=0,0,248,71
@@ -73,6 +74,21 @@ Sprite miniMenuButton {
  resgroup=1 
 }
 Sprite miniMenuButtonHighlighted {
+ texture="Data/Graphics/menuitems.png"
+ rect=248,0,248,71
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+
+Sprite buttonGraphic {
+ texture="Data/Graphics/menuitems.png"
+ rect=0,0,248,71
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite highlightedButtonGraphic {
  texture="Data/Graphics/menuitems.png"
  rect=248,0,248,71
  hotspot=0,0
@@ -95,6 +111,11 @@ Font score {
 }
 Font timer {
  filename="Data/Fonts/timer.fnt"
+ tracking=1.0
+ resgroup=1
+}
+Font button {
+ filename="Data/Fonts/button.fnt"
  tracking=1.0
  resgroup=1
 }
@@ -240,6 +261,13 @@ Sprite silverHealth {
 Sprite particleGraphic0 {
  texture="Data/Graphics/particles.png"
  rect=0,0,32,32
+ hotspot=16,16
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite particleGraphic5 {
+ texture="Data/Graphics/particles.png"
+ rect=32,32,32,32
  hotspot=16,16
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
