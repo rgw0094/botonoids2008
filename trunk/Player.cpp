@@ -209,7 +209,7 @@ void Player::draw(float dt) {
 }
 
 /**
- * Update color change stuff
+ * This is called every time the player enters a new square when in color change mode.
  */ 
 void Player::doColorChanging() {
 
@@ -217,8 +217,9 @@ void Player::doColorChanging() {
 	if (!foundationMode && colorChangeMode) {
 
 		//Start changing the color at the current square if its not already changing
-		grid->startColorChangeAt(gridX, gridY, playerNum);
-		numChangesLeft--;
+		if (grid->startColorChangeAt(gridX, gridY, playerNum)) {
+			numChangesLeft--;
+		}
 
 	}
 
