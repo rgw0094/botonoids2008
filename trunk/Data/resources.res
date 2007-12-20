@@ -310,6 +310,15 @@ Sprite damageTakenIcon {
 }
 
 ;***********************
+;******** ITEMS ********
+;***********************
+Texture items {
+ filename=Data/Graphics/items.png
+ resgroup=1
+}
+
+
+;***********************
 ;******** MUSIC ********
 ;***********************
 Music song1 {

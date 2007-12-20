@@ -39,6 +39,9 @@ public:
 	bool colorChangeMode;
 	bool foundationMode;
 
+	//Objects
+	hgeRect *collisionBox;
+
 };
 
 #endif

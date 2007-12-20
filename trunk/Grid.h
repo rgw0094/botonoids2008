@@ -27,6 +27,10 @@ public:
 	void countReachableWalls(int x, int y, int player);
 	void fillGarden(int x, int y, int player);
 	int numWallsTouched();	
+	int countVisited();
+	bool isWallAt(float x, float y);
+	bool inBounds(float x, float y);
+	int numFoundations(int player);
 
 	//Variables
 	int height, width, xOffset, yOffset;
@@ -43,6 +47,7 @@ public:
 	//Objects
 	HGE *hge;
 	hgeParticleManager *dustClouds;
+	
 
 };
 

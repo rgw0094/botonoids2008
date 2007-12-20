@@ -34,6 +34,7 @@
 				AdditionalOptions="hge.lib hgehelp.lib dinput8.lib dxguid.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
+				IgnoreEmbeddedIDL="TRUE"
 				GenerateDebugInformation="TRUE"
 				AssemblyDebug="1"/>
 			<Tool
@@ -79,6 +80,7 @@
 				AdditionalOptions="hge.lib hgehelp.lib dinput8.lib dxguid.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
+				IgnoreEmbeddedIDL="TRUE"
 				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -128,6 +130,9 @@
 				RelativePath=".\Input.cpp">
 			</File>
 			<File
+				RelativePath=".\ItemManager.cpp">
+			</File>
+			<File
 				RelativePath=".\main.cpp">
 			</File>
 			<File
@@ -141,6 +146,9 @@
 			</File>
 			<File
 				RelativePath=".\Player.cpp">
+			</File>
+			<File
+				RelativePath=".\StatsPage.cpp">
 			</File>
 			<File
 				RelativePath=".\TitleScreen.cpp">
@@ -169,6 +177,9 @@
 				RelativePath=".\Input.h">
 			</File>
 			<File
+				RelativePath=".\ItemManager.h">
+			</File>
+			<File
 				RelativePath=".\menu.h">
 			</File>
 			<File
@@ -182,6 +193,9 @@
 			</File>
 			<File
 				RelativePath=".\Player.h">
+			</File>
+			<File
+				RelativePath=".\StatsPage.h">
 			</File>
 			<File
 				RelativePath=".\TitleScreen.h">
