@@ -54,10 +54,7 @@ StatsPage::StatsPage() {
 	}
 
 	//Create OK Button
-	okButton.x = 512.0f - BUTTON_WIDTH/2.0f - 70.0f;
-	okButton.y = 600.0f;
-	okButton.collisionBox = new hgeRect(okButton.x, okButton.y, okButton.x + BUTTON_WIDTH, okButton.y + BUTTON_HEIGHT);
-	strcpy(okButton.text, "Return to Menu");
+	okButton = new Button(512.0f - BUTTON_WIDTH/2.0f - 70.0f, 600.0f, "Done");
 
 }
 
@@ -65,7 +62,7 @@ StatsPage::StatsPage() {
  * Destructor
  */
 StatsPage::~StatsPage() { 
-	delete okButton.collisionBox;
+	delete okButton;
 }
 
 /**
@@ -170,12 +167,7 @@ void StatsPage::draw(float dt) {
 	f->SetColor(ARGB(255,255,255,255));
 
 	//Draw OK Button
-	if (okButton.collisionBox->TestPoint(mouseX, mouseY)) {
-		resources->GetSprite("miniMenuButtonHighlighted")->Render(okButton.x, okButton.y);
-	} else {
-		resources->GetSprite("miniMenuButton")->Render(okButton.x, okButton.y);
-	}
-	resources->GetFont("timer")->printf(okButton.x + BUTTON_WIDTH/2.0f, okButton.y + 20.0f, HGETEXT_CENTER, okButton.text);
+	okButton->draw(dt);
 
 	//Draw mouse
 	resources->GetSprite("mouse")->Render(mouseX, mouseY);
@@ -205,12 +197,11 @@ void StatsPage::update(float dt) {
 	}
 
 	//Mouse click
-	if (hge->Input_KeyDown(HGEK_LBUTTON)) {
-		if (okButton.collisionBox->TestPoint(mouseX, mouseY)) {
-			mode = MENU_MODE;
-			menu->currentScreen = TITLE_SCREEN;
-			active = false;
-		}
+	okButton->update(mouseX, mouseY);
+	if (okButton->isClicked()) {
+		mode = MENU_MODE;
+		menu->currentScreen = TITLE_SCREEN;
+		active = false;
 	}
 
 	//ESC to exit

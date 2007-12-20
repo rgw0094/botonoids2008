@@ -2,6 +2,7 @@
 #define _STATSPAGE_H_
 
 #include "game.h"
+#include "button.h"
 
 #define NUM_STATS 7
 #define WALL_ICON 0
@@ -30,11 +31,6 @@ struct Icon {
 	float x,y;
 };
 
-struct StatsButton {
-	float x, float y;
-	hgeRect *collisionBox;
-	char text[50];
-};
 
 class StatsPage {
 
@@ -51,7 +47,7 @@ public:
 	PlayerStats stats[3];
 	Icon icons[NUM_STATS+3];
 	float mouseX, mouseY;
-	StatsButton okButton;
+	Button *okButton;
 
 };
 
