@@ -9,6 +9,7 @@ extern hgeFont *debugFont;
 extern Input *input;
 extern StatsPage *statsPage;
 extern GameInfo gameInfo;
+extern Player *players[3];
 
 /**
  * Constructor
@@ -32,13 +33,16 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	endedColorChange = -10.0f;
 	timeToMove = (GRID_SIZE+1) / speed;
 
+	collisionBox = new hgeRect();
+	collisionBox->SetRadius(x,y,14.0f);
+
 }
 
 /**
  * Destructor
  */
 Player::~Player() {
-
+	delete collisionBox;
 }
 
 void Player::update(float dt) {
@@ -46,6 +50,9 @@ void Player::update(float dt) {
 	//Find current grid location
 	gridX = (x - grid->xOffset) / (GRID_SIZE+1);
 	gridY = (y - grid->yOffset) / (GRID_SIZE+1);
+
+	//Update collision box
+	collisionBox->SetRadius(x, y, 14.0f);
 
 	//If the player just changed squares, doColorChanging() at the new square
 	if ((gridX != lastGridX || gridY != lastGridY) && colorChangeMode) {
@@ -151,7 +158,8 @@ void Player::update(float dt) {
 			}
 
 			//No walls left to build
-			if (numWallsLeft == 0) {
+			if (numWallsLeft == 0 || grid->numFoundations(playerNum) == 0) {
+				numWallsLeft = 0;
 				foundationMode = false;
 				grid->clearFoundations(playerNum);
 			}	 
@@ -165,6 +173,9 @@ void Player::update(float dt) {
 	if (hge->Input_KeyDown(HGEK_G)) {
 		grid->foundations[gridX][gridY] = playerNum;
 		grid->buildWall(gridX, gridY, playerNum);
+	}
+	if (hge->Input_KeyDown(HGEK_F)) {
+		grid->foundations[gridX][gridY] = playerNum;
 	}
 
 }
@@ -246,6 +257,19 @@ void Player::doStats(float dt) {
 				score += 2;
 				statsPage->stats[playerNum].gardensBuilt++;
 			}
+		}
+	}
+
+	//Determine winner
+	int maxScore = -1;
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
+		if (players[i]->score > maxScore) {
+			//Player i is the winner
+			gameInfo.winner = i;
+			maxScore = players[i]->score;
+		} else if (players[i]->score == maxScore) {
+			//Tie
+			gameInfo.winner = -1;
 		}
 	}
 

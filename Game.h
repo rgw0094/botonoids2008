@@ -12,6 +12,7 @@
 #include "menu.h"
 #include "minimenu.h"
 #include "statspage.h"
+#include "itemmanager.h"
 #include <string>
 
 //Game modes
@@ -54,7 +55,12 @@ struct GameInfo {
 int nextColor(int currentColor);
 void setMusic(char *music);
 void drawCollisionBox(hgeRect *box, int r, int g, int b);
+int getGridX(float x);
+int getGridY(float y);
 void startGame();
 void endGame();
+std::string formatTime(int seconds);
+int maxInt(int num1, int num2, int num3);
+int minInt(int num1, int num2, int num3);
 
 #endif

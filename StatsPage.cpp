@@ -94,8 +94,10 @@ void StatsPage::draw(float dt) {
 
 	//Draw column headers
 	for (int i = 0; i < NUM_BOTONOIDS; i++) {
+		int oldFrame = botonoidGraphics[i]->GetFrame();
 		botonoidGraphics[i]->SetFrame(0);
 		botonoidGraphics[i]->Render(x + 100.0f + i*75.0f, y + 70.0f);
+		botonoidGraphics[i]->SetFrame(oldFrame);
 	}
 
 	//Draw Icons
@@ -115,21 +117,49 @@ void StatsPage::draw(float dt) {
 	for (int player = 0; player < gameInfo.numPlayers; player++) {
 
 		//Walls built
+		if (stats[player].wallsBuilt == maxInt(stats[0].wallsBuilt, stats[1].wallsBuilt, stats[2].wallsBuilt))
+			f->SetColor(ARGB(255,0,255,0));
+		else f->SetColor(ARGB(255,255,0,0));
 		f->printf(x + 100.0f + player*75.0f, y + 100.0f, HGETEXT_CENTER, "%d", stats[player].wallsBuilt);
+
 		//Gardens built
+		if (stats[player].gardensBuilt == maxInt(stats[0].gardensBuilt, stats[1].gardensBuilt, stats[2].gardensBuilt))
+			f->SetColor(ARGB(255,0,255,0));
+		else f->SetColor(ARGB(255,255,0,0));
 		f->printf(x + 100.0f + player*75.0f, y + 150.0f, HGETEXT_CENTER, "%d", stats[player].gardensBuilt);
+
 		//Max Score
+		if (stats[player].maxScore == maxInt(stats[0].maxScore, stats[1].maxScore, stats[2].maxScore))
+			f->SetColor(ARGB(255,0,255,0));
+		else f->SetColor(ARGB(255,255,0,0));
 		f->printf(x + 100.0f + player*75.0f, y + 200.0f, HGETEXT_CENTER, "%d", stats[player].maxScore);
+
 		//Time in lead
-		f->printf(x + 100.0f + player*75.0f, y + 250.0f, HGETEXT_CENTER, "%ds", (int)stats[player].timeWinning);
+		if ((int)stats[player].timeWinning == maxInt((int)stats[0].timeWinning, (int)stats[1].timeWinning, (int)stats[2].timeWinning))
+			f->SetColor(ARGB(255,0,255,0));
+		else f->SetColor(ARGB(255,255,0,0));
+		f->printf(x + 100.0f + player*75.0f, y + 250.0f, HGETEXT_CENTER, "%s", formatTime((int)stats[player].timeWinning).c_str());
+		
 		//Items used
-		f->printf(x + 100.0f + player*75.0f, y + 300.0f, HGETEXT_CENTER, "%ds", (int)stats[player].numItemsUsed);
+		if (stats[player].numItemsUsed == maxInt(stats[0].numItemsUsed, stats[1].numItemsUsed, stats[2].numItemsUsed))
+			f->SetColor(ARGB(255,0,255,0));
+		else f->SetColor(ARGB(255,255,0,0));
+		f->printf(x + 100.0f + player*75.0f, y + 300.0f, HGETEXT_CENTER, "%d", (int)stats[player].numItemsUsed);
+		
 		//Damage Dealt
-		f->printf(x + 100.0f + player*75.0f, y + 350.0f, HGETEXT_CENTER, "%ds", (int)stats[player].damageDealt);
+		if (stats[player].damageDealt == maxInt(stats[0].damageDealt, stats[1].damageDealt, stats[2].damageDealt))
+			f->SetColor(ARGB(255,0,255,0));
+		else f->SetColor(ARGB(255,255,0,0));
+		f->printf(x + 100.0f + player*75.0f, y + 350.0f, HGETEXT_CENTER, "%d", (int)stats[player].damageDealt);
+		
 		//Damage Taken
-		f->printf(x + 100.0f + player*75.0f, y + 400.0f, HGETEXT_CENTER, "%ds", (int)stats[player].damageTaken);
+		if (stats[player].damageTaken == minInt(stats[0].damageTaken, stats[1].damageTaken, stats[2].damageTaken))
+			f->SetColor(ARGB(255,0,255,0));
+		else f->SetColor(ARGB(255,255,0,0));
+		f->printf(x + 100.0f + player*75.0f, y + 400.0f, HGETEXT_CENTER, "%d", (int)stats[player].damageTaken);
 
 	}
+	f->SetColor(ARGB(255,255,255,255));
 
 	//Draw OK Button
 	if (okButton.collisionBox->TestPoint(mouseX, mouseY)) {

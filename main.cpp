@@ -10,6 +10,7 @@ Menu *menu;
 MiniMenu *minimenu;
 Input *input;
 StatsPage *statsPage;
+ItemManager *itemManager;
 std::string botonoidNames[3];
 
 //Sounds
@@ -35,9 +36,9 @@ void loadResources() {
 	hge->Resource_AttachPack("Data/Sounds.dat");
 
 	//Botonoid names
-	botonoidNames[0] = "Botonoid";
+	botonoidNames[0] = "Alphanoid";
 	botonoidNames[1] = "Barvinoid";
-	botonoidNames[2] = "Flowernoid";
+	botonoidNames[2] = "Herbanoid";
 
 	//Load textures
 	botonoidsTexture = resources->GetTexture("botonoids");
@@ -106,6 +107,7 @@ bool FrameFunc() {
 			grid->update(dt);
 			for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->update(dt);
 			gui->update(dt);
+			itemManager->update(dt);
 
 			//Press ESC to open exit/continue menu
 			if (hge->Input_KeyDown(HGEK_ESCAPE)) minimenu->active = true;
@@ -136,10 +138,13 @@ bool RenderFunc() {
 		grid->draw(dt);
 		for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->draw(dt);
 		gui->draw(dt);
+		itemManager->draw(dt);
 		minimenu->draw(dt);
 		statsPage->draw(dt);
 
 	}
+
+	resources->GetFont("timer")->printf(5,5,HGETEXT_LEFT, "%d", gameInfo.winner);
 
 	// End rendering and update the screen
 	hge->Gfx_EndScene();
@@ -166,6 +171,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	if(hge->System_Initiate()) {
 
+		srand(time(NULL));
+			
 		//Load shit
 		loadResources();
 		
@@ -187,7 +194,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Free shit
 		input->saveInputs();
 		deleteResources();
-		delete input;
+		if (input) delete input;
+		if (itemManager) delete itemManager;
 
 	}
 	else MessageBox(NULL, hge->System_GetErrorMessage(), "Error", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);

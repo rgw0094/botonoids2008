@@ -10,6 +10,7 @@ extern Menu *menu;
 extern MiniMenu *minimenu;
 extern Player *players[3];
 extern StatsPage *statsPage;
+extern ItemManager *itemManager;
 extern int mode;
 extern float timer;
 
@@ -64,6 +65,11 @@ void startGame() {
 	gui = new GUI();
 	if (statsPage) delete statsPage;
 	statsPage = new StatsPage();
+	if (itemManager) {
+		itemManager->reset();
+	} else {
+		itemManager = new ItemManager();
+	}
 
 	players[0] = new Player(5,5,0,0);
 	players[1] = new Player(15,5,1,1);
@@ -79,20 +85,87 @@ void endGame() {
 	timer = 0.0f;
 	statsPage->active = true;
 
-	//Determine winner
-	int maxScore = -1;
-	for (int i = 0; i < gameInfo.numPlayers; i++) {
-		if (players[i]->score > maxScore) {
-			//Player i is the winner
-			gameInfo.winner = i;
-			maxScore = players[i]->score;
-		} else if (players[i]->score == maxScore) {
-			//Tie
-			gameInfo.winner = -1;
-		}
-	}
+	
 
 	//Play victory music
 	//...
 
 }
+
+/**
+ * Returns the grid coordinate of the pixel coordinate x.
+ */
+int getGridX(float x) {
+	return (x-grid->xOffset) / 33;
+}
+
+/**
+ * Returns the grid coordinate of the pixel coordinate y.
+ */
+int getGridY(float y) {
+	return (y-grid->yOffset) / 33;
+}
+
+/**
+ * Returns a time in seconds in MM:SS format
+ */
+std::string formatTime(int s) {
+
+	//Create minutes string
+	int minutes = (s % 60) / 60;
+	char minString[3];
+	itoa(minutes,minString, 10);
+
+	//Create seconds string
+	int seconds = s % 60;
+	char secString[3];
+	itoa(seconds, secString, 10);
+	std::string secondsString = "";
+	if (seconds < 10) {
+		secondsString = "0";
+		secondsString += secString;
+	} else {
+		secondsString = secString;
+	}
+
+	//Combine minutes and seconds
+	std::string timeString = "";
+	timeString += minString;
+	timeString += ":";
+	timeString += secondsString;
+
+	return timeString;
+
+}
+
+/**
+ * Returns the maximum of 3 ints
+ */
+int maxInt(int num1, int num2, int num3) {
+
+	if (num1 > num2 && num1 > num3) {
+		return num1;
+	} else if (num2 > num1 && num2 > num3) {
+		return num2;
+	} else if (num3 > num1 && num3 > num2) {
+		return num3;
+	}
+
+}
+
+/**
+ * Returns the minimum of 3 ints
+ */
+int minInt(int num1, int num2, int num3) {
+
+	if (num1 < num2 && num1 < num3) {
+		return num1;
+	} else if (num2 < num1 && num2 < num3) {
+		return num2;
+	} else if (num3 < num1 && num3 < num2) {
+		return num3;
+	}
+
+}
+
+

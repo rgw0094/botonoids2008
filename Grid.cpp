@@ -8,6 +8,7 @@ extern Player *players[3];
 extern hgeResourceManager *resources;
 extern hgeFont *debugFont;
 extern StatsPage *statsPage;
+extern ItemManager *itemManager;
 
 /**
  * Constructor
@@ -336,6 +337,7 @@ bool Grid::buildWall(int x, int y, int player) {
 
 	bool wallBuilt = false;
 
+	//If this square has a foundation belonging to player
 	if (foundations[x][y] == player && walls[x][y] == -1 && gardens[x][y] == -1) {
 		walls[x][y] = player;
 		foundations[x][y] = -1;
@@ -369,6 +371,7 @@ bool Grid::buildWall(int x, int y, int player) {
             resetVisited();
 			if (numWallsTouched() <= 2) {
 				fillGarden(x+1, y, player);
+				itemManager->generateItem(x, y, countVisited());
 				resetVisited();
 			}
             resetWallsTouched();
@@ -380,6 +383,7 @@ bool Grid::buildWall(int x, int y, int player) {
             resetVisited();
 			if (numWallsTouched() <= 2) {
 				fillGarden(x-1, y, player);
+				itemManager->generateItem(x, y, countVisited());
 				resetVisited();
 			}
             resetWallsTouched();
@@ -391,6 +395,7 @@ bool Grid::buildWall(int x, int y, int player) {
             resetVisited();
 			if (numWallsTouched() <= 2) {
 				fillGarden(x, y-1, player);
+				itemManager->generateItem(x, y, countVisited());
 				resetVisited();
 			}
             resetWallsTouched();
@@ -402,13 +407,14 @@ bool Grid::buildWall(int x, int y, int player) {
             resetVisited();
 			if (numWallsTouched() <= 2) {
 				fillGarden(x, y+1, player);
+				itemManager->generateItem(x, y, countVisited());
 				resetVisited();
 			}
             resetWallsTouched();
         }
 
 	}
-
+		
 	return wallBuilt;
 
 }
@@ -435,7 +441,7 @@ void Grid::clearFoundations(int player) {
 void Grid::fillGarden(int x, int y, int player) {
 
 	//Stop recursing if this square is a wall
-	if (walls[x][y] != -1) return;
+	if (walls[x][y] != -1 || gardens[x][y] != -1) return;
 
 	//Put a garden in this spot
     gardens[x][y] = player;
@@ -484,3 +490,50 @@ int Grid::numWallsTouched() {
 	}
 	return numTouched;
 }
+
+/** 
+ * Returns the number of squares marked as visited
+ */
+int Grid::countVisited() {
+	int numVisited = 0;
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			if (visited[i][j]) numVisited++;
+		}
+	}
+	return numVisited;
+}
+
+/**
+ * Returns whether or not there is a wall at point (x,y)
+ */
+bool Grid::isWallAt(float x, float y) {
+	return (walls[getGridX(x)][getGridY(y)] != -1);
+}
+
+/**
+ * Returns whether or not (x,y) is on the grid.
+ */
+bool Grid::inBounds(float x, float y) {
+	
+	if (x < xOffset) return false;
+	if (x > xOffset + 33*width) return false;
+	if (y < yOffset) return false;
+	if (y > yOffset + 33*height) return false;
+
+	return true;
+}
+
+/**
+ * Returns the number of foundations on the grid that belong to player.
+ */
+int Grid::numFoundations(int player) {
+	int numFoundations = 0;
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			if (foundations[i][j] == player) numFoundations++;
+		}
+	}
+	return numFoundations;
+}
+
