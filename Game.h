@@ -13,6 +13,7 @@
 #include "minimenu.h"
 #include "statspage.h"
 #include "itemmanager.h"
+#include "button.h"
 #include <string>
 
 //Game modes

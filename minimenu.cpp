@@ -15,8 +15,8 @@ MiniMenu::MiniMenu() {
 	active = false;
 
 	//Create the buttons
-	addButton(QUIT_BUTTON, "Quit");
-	addButton(CONTINUE_BUTTON, "Continue");
+	buttons[QUIT_BUTTON] = new Button((1024 - BUTTON_WIDTH) / 2, (768 - NUM_BUTTONS*BUTTON_HEIGHT + (NUM_BUTTONS-1)*25) / 2 + BUTTON_HEIGHT*0 + 25*0, "Quit");
+	buttons[CONTINUE_BUTTON] = new Button((1024 - BUTTON_WIDTH) / 2, (768 - NUM_BUTTONS*BUTTON_HEIGHT + (NUM_BUTTONS-1)*25) / 2 + BUTTON_HEIGHT*1 + 25*1, "Continue");
 
 }
 
@@ -25,7 +25,7 @@ MiniMenu::MiniMenu() {
  */
 MiniMenu::~MiniMenu() { 
 	for (int i = 0; i < NUM_BUTTONS; i++) {
-		delete buttons[i].collisionBox;
+		delete buttons[i];
 	}
 }
 
@@ -35,21 +35,7 @@ void MiniMenu::draw(float dt) {
 
 	//Draw Buttons
 	for (int i = 0; i < NUM_BUTTONS; i++) {
-
-		//Button background
-		if (buttons[i].highlighted) {
-			resources->GetSprite("miniMenuButtonHighlighted")->Render(buttons[i].x, buttons[i].y);
-		} else {
-			resources->GetSprite("miniMenuButton")->Render(buttons[i].x, buttons[i].y);
-		}
-
-		//Button text
-		resources->GetFont("timer")->SetScale(1.5f);
-		resources->GetFont("timer")->SetColor(ARGB(255,0,0,0));
-		resources->GetFont("timer")->printf(buttons[i].x + BUTTON_WIDTH/2, buttons[i].y+15.0f, HGETEXT_CENTER, buttons[i].text);
-		resources->GetFont("timer")->SetScale(1.0f);
-		resources->GetFont("timer")->SetColor(ARGB(255,255,255,255));
-
+		buttons[i]->draw(dt);
 	}
 	
 	
@@ -67,25 +53,21 @@ void MiniMenu::update(float dt) {
 
 	//Update buttons - determine whether or not they are being moused over
 	for (int i = 0; i < NUM_BUTTONS; i++) {		
-		buttons[i].highlighted = buttons[i].collisionBox->TestPoint(mouseX, mouseY);
+		buttons[i]->update(mouseX, mouseY);
 	}
 
-	//Listen for mouse click
-	if (hge->Input_KeyDown(HGEK_LBUTTON)) {
-
-		//Quit (Return to main menu)
-		if (buttons[QUIT_BUTTON].highlighted) {
-			mode = MENU_MODE;
-			menu->currentScreen = TITLE_SCREEN;
-			active = false;
-		}
-
-		//Continue
-		if (buttons[CONTINUE_BUTTON].highlighted) {
-			active = false;
-		}
-
+	//Quit (Return to main menu)
+	if (buttons[QUIT_BUTTON]->isClicked()) {
+		mode = MENU_MODE;
+		menu->currentScreen = TITLE_SCREEN;
+		active = false;
 	}
+
+	//Continue
+	if (buttons[CONTINUE_BUTTON]->isClicked()) {
+		active = false;
+	}
+
 
 	//Listen for ESC to close mini menu and return to main menu
 	if (hge->Input_KeyDown(HGEK_ESCAPE)) {
@@ -93,15 +75,5 @@ void MiniMenu::update(float dt) {
 		menu->currentScreen = TITLE_SCREEN;
 		active = false;
 	}
-
-}
-
-void MiniMenu::addButton(int num, char* _text) {
-
-	strcpy(buttons[num].text, _text);
-	buttons[num].x = (1024 - BUTTON_WIDTH) / 2;
-	buttons[num].y = (768 - NUM_BUTTONS*BUTTON_HEIGHT + (NUM_BUTTONS-1)*25) / 2 + BUTTON_HEIGHT*num + 25*(num-1);
-	buttons[num].highlighted = false;
-	buttons[num].collisionBox = new hgeRect(buttons[num].x, buttons[num].y, buttons[num].x + BUTTON_WIDTH, buttons[num].y + BUTTON_HEIGHT);
 
 }

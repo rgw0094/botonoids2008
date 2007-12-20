@@ -33,6 +33,9 @@ void ItemManager::draw(float dt) {
 
 	std::list<Item>::iterator i;
 	for (i = itemList.begin(); i != itemList.end(); i++) {
+		i->trail->MoveTo(i->x, i->y);
+		i->trail->Update(dt);
+		i->trail->Render();
 		itemSprites[i->itemCode]->Render(i->x, i->y);
 	}
 
@@ -112,6 +115,10 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 		}
 	}
 
+	//Create particle trail
+	newItem.trail = new hgeParticleSystem("Data/particle9.psi", resources->GetSprite("particleGraphic5"));
+	newItem.trail->FireAt(newItem.x, newItem.y);
+
 	//Generate random initial velocity
 	int dir1 = rand() % 2;
 	int dir2 = rand() % 2;
@@ -129,6 +136,7 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 void ItemManager::reset() {
 	std::list<Item>::iterator i;
 	for (i = itemList.begin(); i != itemList.end(); i++) {
+		delete i->trail;
 		i = itemList.erase(i);
 	}
 }

@@ -40,7 +40,6 @@ StatsPage::StatsPage() {
 	icons[DAMAGE_TAKEN_ICON].graphic = resources->GetSprite("damageTakenIcon");
 	strcpy(icons[DAMAGE_TAKEN_ICON].tooltip, "Damage Taken");
 
-
 	//Set icon mouseovers to false
 	for (int i = 0; i < NUM_STATS; i++) {
 		icons[i].mouseOver = false;
@@ -92,23 +91,32 @@ void StatsPage::draw(float dt) {
 		f->printf(x + 280/2, y + 10.0f, HGETEXT_CENTER, "%s Wins!", botonoidNames[players[gameInfo.winner]->whichBotonoid].c_str());
 	}
 
-	//Draw column headers
-	for (int i = 0; i < NUM_BOTONOIDS; i++) {
-		int oldFrame = botonoidGraphics[i]->GetFrame();
-		botonoidGraphics[i]->SetFrame(0);
-		botonoidGraphics[i]->Render(x + 100.0f + i*75.0f, y + 70.0f);
-		botonoidGraphics[i]->SetFrame(oldFrame);
-	}
-
 	//Draw Icons
-	for (int i = 0; i < NUM_STATS; i++) {
+	for (int i = 0; i < NUM_STATS+3; i++) {
 
-		placeIcon(i, x + 15.0f, y + 100.0f + i*50.0f);
-		icons[i].graphic->Render(icons[i].x, icons[i].y);
+		//Statistic icons
+		if (i < NUM_STATS) {
 
-		if (icons[i].mouseOver) {
-			drawCollisionBox(icons[i].collisionBox, 255, 255, 255);
-			f->printf(icons[i].x + 16.0f, icons[i].y-30.0f, HGETEXT_CENTER, "%s", icons[i].tooltip);
+			placeIcon(i, x + 15.0f, y + 100.0f + i*50.0f);
+			icons[i].graphic->Render(icons[i].x, icons[i].y);
+
+			if (icons[i].mouseOver) {
+				f->printf(icons[i].x + 16.0f, icons[i].y-30.0f, HGETEXT_CENTER, "%s", icons[i].tooltip);
+			}
+
+		//Botonoid icons
+		} else {
+
+			placeIcon(i, x-16 + 100.0f + (i-NUM_STATS)*75.0f, y-16 + 70.0f);
+			int oldFrame = botonoidGraphics[i-NUM_STATS]->GetFrame();
+			botonoidGraphics[i-NUM_STATS]->SetFrame(0);
+			botonoidGraphics[i-NUM_STATS]->Render(icons[i].x+16, icons[i].y+16);
+			botonoidGraphics[i-NUM_STATS]->SetFrame(oldFrame);
+
+			if (icons[i].mouseOver) {
+				f->printf(icons[i].x + 16.0f, icons[i].y-30.0f, HGETEXT_CENTER, "%s", botonoidNames[i-NUM_STATS].c_str());
+			}
+
 		}
 
 	}
@@ -192,7 +200,7 @@ void StatsPage::update(float dt) {
 	hge->Input_GetMousePos(&mouseX, &mouseY);
 
 	//Update icon mouseovers
-	for (int i = 0; i < NUM_STATS; i++) {
+	for (int i = 0; i < NUM_STATS+3; i++) {
 		icons[i].mouseOver = icons[i].collisionBox->TestPoint(mouseX, mouseY);
 	}
 
