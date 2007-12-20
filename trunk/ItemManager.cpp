@@ -46,7 +46,7 @@ void ItemManager::update(float dt) {
 	//Loop through each item
 	std::list<Item>::iterator i;
 	for (i = itemList.begin(); i != itemList.end(); i++) {
-		
+
 		//Update position
 		i->y += i->dy*dt;
 		i->x += i->dx*dt;
@@ -55,14 +55,12 @@ void ItemManager::update(float dt) {
 		float yDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dy;
 
 		//Horizontal collision
-		if (grid->isWallAt(i->x + xDist, i->y) || grid->isWallAt(i->x - xDist, i->y) ||
-		   !grid->inBounds(i->x + xDist, i->y) || !grid->inBounds(i->x - xDist, i->y)) {	
+		if (grid->isWallAt(i->x + xDist, i->y) || !grid->inBounds(i->x + xDist, i->y)) {
 			i->dx = -i->dx;
 		}
 
 		//Vertical collision
-		if (grid->isWallAt(i->x, i->y + yDist) || grid->isWallAt(i->x, i->y - yDist) ||
-			!grid->inBounds(i->x, i->y + yDist) || !grid->inBounds(i->x , i->y - yDist)) {	
+		if (grid->isWallAt(i->x, i->y + yDist) || !grid->inBounds(i->x, i->y + yDist)){
 			i->dy = -i->dy;
 		}
 

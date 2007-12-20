@@ -144,8 +144,6 @@ bool RenderFunc() {
 
 	}
 
-	resources->GetFont("timer")->printf(5,5,HGETEXT_LEFT, "%d", gameInfo.winner);
-
 	// End rendering and update the screen
 	hge->Gfx_EndScene();
 	return false;
