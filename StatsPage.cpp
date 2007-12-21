@@ -111,7 +111,8 @@ void StatsPage::draw(float dt) {
 			botonoidGraphics[players[i-NUM_STATS]->whichBotonoid]->SetFrame(oldFrame);
 
 			if (icons[i].mouseOver) {
-				f->printf(icons[i].x + 16.0f, icons[i].y-30.0f, HGETEXT_CENTER, "%s", botonoidNames[i-NUM_STATS].c_str());
+				f->printf(x + 140.0f, y + 87.0f, HGETEXT_CENTER, "%s", botonoidNames[players[i-NUM_STATS]->whichBotonoid].c_str());
+				//f->printf(icons[i].x + 16.0f, icons[i].y-30.0f, HGETEXT_CENTER, "%s", botonoidNames[i-NUM_STATS].c_str());
 			}
 
 		}
