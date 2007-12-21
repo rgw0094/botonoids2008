@@ -38,7 +38,7 @@ void OptionsScreen::draw(float dt) {
 	resources->GetSprite("titlescreen")->Render(0,0);
 
 	//Draw header graphic
-	resources->GetFont("timer")->printf(512,50,HGETEXT_CENTER, "Options");
+	resources->GetFont("button")->printf(512,50,HGETEXT_CENTER, "Options");
 
 	//Draw buttons
 	for (int i = 0; i < 2; i++) {

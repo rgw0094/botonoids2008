@@ -11,7 +11,7 @@ struct Selecter {
 	bool selected;
 };
 
-struct SelectionPoint {
+struct Point {
 	float x,y;
 };
 
@@ -34,7 +34,8 @@ public:
 	hgeSprite *highlightedBotonoids[3];
 
 	Selecter selecters[3];
-	SelectionPoint points[3][3];
+	Point points[3][3];
+	Point botonoidPoints[3];
 
 };
 

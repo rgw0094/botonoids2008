@@ -28,15 +28,22 @@ BotonoidSelectScreen::BotonoidSelectScreen() {
 	highlightedBotonoids[1] = resources->GetSprite("selectBlackHighlighted");
 	highlightedBotonoids[2] = resources->GetSprite("selectWhiteHighlighted");
 	
+	//Place botonoids
+	botonoidPoints[0].x = 30.0f;
+	botonoidPoints[0].y = 270.0f;
+	botonoidPoints[1].x = 30.0f + 338.0f;
+	botonoidPoints[1].y = 130.0f;
+	botonoidPoints[2].x = 30.0f + 690.0f;
+	botonoidPoints[2].y = 210.0f;
 
 	//Selection points (i==player, j==selection)
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			float y;
-			if (j == 0) y = 500.0f;
-			if (j == 1) y = 400.0f;
-			if (j == 2) y = 500.0f;
-			points[i][j].x = 100.0f + 350.0f*j + 90.0f*i;
+			if (j == 0) y = 540.0f;
+			if (j == 1) y = 440.0f;
+			if (j == 2) y = 540.0f;
+			points[i][j].x = 50.0f + 350.0f*j + 90.0f*i;
 			points[i][j].y = y;
 		}
 	}
@@ -63,18 +70,14 @@ void BotonoidSelectScreen::draw(float dt) {
 	resources->GetSprite("titlescreen")->Render(0,0);
 	
 	//Draw header graphic
-	resources->GetFont("timer")->printf(512,50,HGETEXT_CENTER, "Select Your Botonoid");
+	resources->GetFont("button")->printf(512,50,HGETEXT_CENTER, "Select Your Botonoid");
 
 	//Draw botonoids
 	for (int i = 0; i < 3; i++) {
-		float y;
-		if (i == 0) y = 270.0f;
-		if (i == 1) y = 140.0f;
-		if (i == 2) y = 190.0f;
 		if (botonoidSelected(i)) {
-			highlightedBotonoids[i]->Render(30.0f + 350.0f*i, y);
+			highlightedBotonoids[i]->Render(botonoidPoints[i].x, botonoidPoints[i].y);
 		} else {
-			botonoids[i]->Render(30.0f + 350.0f*i, y);
+			botonoids[i]->Render(botonoidPoints[i].x, botonoidPoints[i].y);
 		}
 	}
 
