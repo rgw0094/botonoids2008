@@ -25,6 +25,7 @@ public:
 	//Draw methods
 	void draw(float dt);
 	bool update(float dt);
+	void returnToMenu();
 
 	//Variables
 	MenuScreen *screens[NUM_SCREENS];

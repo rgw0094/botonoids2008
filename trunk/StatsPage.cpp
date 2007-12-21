@@ -89,7 +89,7 @@ void StatsPage::draw(float dt) {
 	}
 
 	//Draw Icons
-	for (int i = 0; i < NUM_STATS+3; i++) {
+	for (int i = 0; i < NUM_STATS+gameInfo.numPlayers; i++) {
 
 		//Statistic icons
 		if (i < NUM_STATS) {
@@ -106,9 +106,9 @@ void StatsPage::draw(float dt) {
 
 			placeIcon(i, x-16 + 100.0f + (i-NUM_STATS)*75.0f, y-16 + 70.0f);
 			int oldFrame = botonoidGraphics[i-NUM_STATS]->GetFrame();
-			botonoidGraphics[i-NUM_STATS]->SetFrame(0);
-			botonoidGraphics[i-NUM_STATS]->Render(icons[i].x+16, icons[i].y+16);
-			botonoidGraphics[i-NUM_STATS]->SetFrame(oldFrame);
+			botonoidGraphics[players[i-NUM_STATS]->whichBotonoid]->SetFrame(0);
+			botonoidGraphics[players[i-NUM_STATS]->whichBotonoid]->Render(icons[i].x+16, icons[i].y+16);
+			botonoidGraphics[players[i-NUM_STATS]->whichBotonoid]->SetFrame(oldFrame);
 
 			if (icons[i].mouseOver) {
 				f->printf(icons[i].x + 16.0f, icons[i].y-30.0f, HGETEXT_CENTER, "%s", botonoidNames[i-NUM_STATS].c_str());
@@ -192,16 +192,15 @@ void StatsPage::update(float dt) {
 	hge->Input_GetMousePos(&mouseX, &mouseY);
 
 	//Update icon mouseovers
-	for (int i = 0; i < NUM_STATS+3; i++) {
+	for (int i = 0; i < NUM_STATS+gameInfo.numPlayers; i++) {
 		icons[i].mouseOver = icons[i].collisionBox->TestPoint(mouseX, mouseY);
 	}
 
 	//Mouse click
 	okButton->update(mouseX, mouseY);
 	if (okButton->isClicked()) {
-		mode = MENU_MODE;
-		menu->currentScreen = TITLE_SCREEN;
 		active = false;
+		menu->returnToMenu();
 	}
 
 	//ESC to exit

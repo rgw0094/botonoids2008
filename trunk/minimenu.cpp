@@ -58,9 +58,8 @@ void MiniMenu::update(float dt) {
 
 	//Quit (Return to main menu)
 	if (buttons[QUIT_BUTTON]->isClicked()) {
-		mode = MENU_MODE;
-		menu->currentScreen = TITLE_SCREEN;
 		active = false;
+		menu->returnToMenu();
 	}
 
 	//Continue

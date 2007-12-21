@@ -54,3 +54,14 @@ bool Menu::update(float dt) {
 	return screens[currentScreen]->update(dt, mouseX, mouseY);
 
 }
+
+/**
+ * Returns to the MENU
+ */
+void Menu::returnToMenu() {
+	mode = MENU_MODE;
+	currentScreen = TITLE_SCREEN;
+	setMusic("menu");
+}
+
+
