@@ -36,6 +36,9 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	collisionBox = new hgeRect();
 	collisionBox->SetRadius(x,y,14.0f);
 
+	//Reset the player's animation to face down
+	botonoidGraphics[whichBotonoid]->SetFrame(0);
+
 }
 
 /**
@@ -216,10 +219,14 @@ void Player::doColorChanging() {
 	//Change current square
 	if (!foundationMode && colorChangeMode) {
 
-		//Start changing the color at the current square if its not already changing
-		if (grid->startColorChangeAt(gridX, gridY, playerNum)) {
+		//Decrease color change counter if the player moves onto a garden even if its
+		// already changing
+		if (grid->walls[gridX][gridY] == -1 && grid->foundations[gridX][gridY] == -1) {
 			numChangesLeft--;
 		}
+
+		//Start changing the color at the current square if its not already changing
+		grid->startColorChangeAt(gridX, gridY, playerNum);
 
 	}
 
