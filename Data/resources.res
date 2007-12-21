@@ -73,14 +73,14 @@ Sprite selectBlackHighlighted {
 
 Sprite selectWhite {
  texture="Data/Graphics/botonoidSelect.png"
- rect=0,676,255,381
+ rect=0,676,231,356
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
 Sprite selectWhiteHighlighted {
  texture="Data/Graphics/botonoidSelect.png"
- rect=255,676,255,381
+ rect=231,676,231,356
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
@@ -152,6 +152,36 @@ Sprite buttonGraphic {
 Sprite highlightedButtonGraphic {
  texture="Data/Graphics/menuitems.png"
  rect=248,0,248,71
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+
+;//Petals
+Sprite petal1 {
+ texture="Data/Graphics/petal1.png"
+ rect=0,0,201,112
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite petal2 {
+ texture="Data/Graphics/petal2.png"
+ rect=0,0,151,198
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite petal3 {
+ texture="Data/Graphics/petal3.png"
+ rect=0,0,152,191
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite petal4 {
+ texture="Data/Graphics/petal4.png"
+ rect=0,0,200,111
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
