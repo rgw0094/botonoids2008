@@ -53,22 +53,22 @@ void TitleScreen::draw(float dt) {
 	resources->GetSprite("titlescreen")->Render(0,0);
 
 	//Draw header graphic
-	resources->GetFont("timer")->printf(512,50,HGETEXT_CENTER, "Botonoids 2008");
+	resources->GetFont("button")->printf(512,50,HGETEXT_CENTER, "Botonoids 2008");
 
 	//Draw the buttons on the petals
 	for (int i = 0; i < 4; i++) {
 		
 		//Button Background???
 		if (buttons[i].highlighted) {
-			drawCollisionBox(buttons[i].collisionBox, 255,0,0);
-		} else {
-			drawCollisionBox(buttons[i].collisionBox, 0,255,0);
+			//...
 		}
 	
 		//Button text
 		float textX = buttons[i].collisionBox->x1 + (buttons[i].collisionBox->x2 - buttons[i].collisionBox->x1)/2;
-		float textY = buttons[i].collisionBox->y1 + (buttons[i].collisionBox->y2 - buttons[i].collisionBox->y1)/2 - 10.0f;
-		resources->GetFont("timer")->printf(textX, textY, HGETEXT_CENTER, buttons[i].text);
+		float textY = buttons[i].collisionBox->y1 + (buttons[i].collisionBox->y2 - buttons[i].collisionBox->y1)/2 - 15.0f;
+		if (buttons[i].highlighted) resources->GetFont("button")->SetColor(ARGB(255,255,0,0));
+		resources->GetFont("button")->printf(textX, textY, HGETEXT_CENTER, buttons[i].text);
+		resources->GetFont("button")->SetColor(ARGB(255,255,255,255));
 
 	}
 
