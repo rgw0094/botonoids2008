@@ -33,7 +33,7 @@ void loadResources() {
 
 	//Create resource manager from resource script
 	resources = new hgeResourceManager("Data/resources.res");
-	hge->Resource_AttachPack("Data/Sounds.dat");
+	hge->Resource_AttachPack("Data/Sounds.zip");
 
 	//Botonoid names
 	botonoidNames[0] = "Alphanoid";
@@ -184,6 +184,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		minimenu = new MiniMenu();	
 		input = new Input();
 
+		//Start menu music
+		setMusic("menu");
 		debugFont = new hgeFont("Data/Fonts/debug.fnt");
 
 		//Let's rock now!

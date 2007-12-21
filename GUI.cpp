@@ -63,7 +63,7 @@ void GUI::draw(float dt) {
 			} else {
 				barLength = ((float)players[i]->score / (float)maxScore) * 76.0f;
 			}
-			barSprites[i]->RenderStretch(922, yOffset+18*i, 922.0f+barLength, yOffset+18+18*i);
+			barSprites[players[i]->whichBotonoid]->RenderStretch(922, yOffset+18*i, 922.0f+barLength, yOffset+18+18*i);
 			resources->GetFont("score")->printf(890,yOffset+18*i,HGETEXT_LEFT,"%d", players[i]->score);
 	
 			//Item windows

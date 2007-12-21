@@ -65,7 +65,7 @@ Sprite selectBlack {
 }
 Sprite selectBlackHighlighted {
  texture="Data/Graphics/botonoidSelect.png"
- rect=282,322s,243,354
+ rect=282,322,282,354
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
@@ -410,6 +410,11 @@ Texture items {
 ;***********************
 ;******** MUSIC ********
 ;***********************
+Music menu {
+ filename="menu.xm"
+ amplify=50
+ resgroup=11
+}
 Music song1 {
  filename="song1.xm"
  amplify=50
