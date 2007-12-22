@@ -41,6 +41,10 @@ Animation silverBotonoid {
 }
 
 
+
+;//********************************
+;//******** BOTONOID SELECT *******
+;//********************************
 Sprite selectGold {
  texture="Data/Graphics/botonoidSelect.png"
  rect=0,0,281,322
@@ -86,16 +90,44 @@ Sprite selectWhiteHighlighted {
  resgroup=1 
 }
 
-Sprite selecter {
+Sprite selecter1 {
  texture="Data/Graphics/selecter.png"
  rect=0,0,75,75
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
-Sprite lockedSelecter {
+Sprite lockedSelecter1 {
  texture="Data/Graphics/selecter.png"
  rect=75,0,75,75
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite selecter2 {
+ texture="Data/Graphics/selecter.png"
+ rect=0,75,75,75
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite lockedSelecter2 {
+ texture="Data/Graphics/selecter.png"
+ rect=75,75,75,75
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite selecter3 {
+ texture="Data/Graphics/selecter.png"
+ rect=0,150,75,75
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+Sprite lockedSelecter3 {
+ texture="Data/Graphics/selecter.png"
+ rect=75,150,75,75
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
