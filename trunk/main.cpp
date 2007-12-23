@@ -38,7 +38,7 @@ void loadResources() {
 	//Botonoid names
 	botonoidNames[0] = "Alphanoid";
 	botonoidNames[1] = "Barvinoid";
-	botonoidNames[2] = "Herbanoid";
+	botonoidNames[2] = "Gardennoid";
 
 	//Load textures
 	botonoidsTexture = resources->GetTexture("botonoids");

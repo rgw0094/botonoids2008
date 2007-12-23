@@ -1,7 +1,6 @@
 #ifndef _MENU_H_
 #define _MENU_H_
 
-#include "game.h"
 #include "titlescreen.h"
 #include "BotonoidSelectScreen.h"
 #include "CustomizeScreen.h"
@@ -13,7 +12,6 @@
 #define SELECT_SCREEN 1
 #define CUSTOMIZE_SCREEN 2
 #define OPTIONS_SCREEN 3
-
 
 class Menu {
 

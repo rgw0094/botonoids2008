@@ -15,6 +15,7 @@ public:
 	void update(float dt);
 	void doColorChanging();
 	void startFoundationMode(int numFoundations);
+	void doMovement(float dt);
 	void doStats(float dt);
 
 	//Variables
@@ -38,6 +39,7 @@ public:
 	//State variables
 	bool colorChangeMode;
 	bool foundationMode;
+	bool buildWallPressed;
 
 	//Objects
 	hgeRect *collisionBox;
