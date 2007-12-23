@@ -28,6 +28,7 @@ public:
 	bool update(float dt, float mouseX, float mouseY);
 
 	TitleButton buttons[4];
+	hgeSprite *highlightedPetal[4];
 
 };
 

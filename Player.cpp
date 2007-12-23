@@ -1,5 +1,6 @@
 #include "game.h"
 
+//Global stuff
 extern HGE *hge;
 extern Grid *grid;
 extern GUI *gui;
@@ -16,6 +17,7 @@ extern Player *players[3];
  */
 Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 
+	//Set initial state
 	gridX = lastGridX = _x;
 	gridY = lastGridY = _y;
 	x = grid->xOffset + gridX*(GRID_SIZE+1) + (GRID_SIZE+1)/2;
@@ -26,13 +28,10 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	speed = 150.0f;
 	score = 0;
 	health = 3;
-
-	colorChangeMode = foundationMode = false;
-
+	colorChangeMode = foundationMode = buildWallPressed = false;
 	startedMoving = -10.0f;
 	endedColorChange = -10.0f;
 	timeToMove = (GRID_SIZE+1) / speed;
-
 	collisionBox = new hgeRect();
 	collisionBox->SetRadius(x,y,14.0f);
 
@@ -48,6 +47,9 @@ Player::~Player() {
 	delete collisionBox;
 }
 
+/**
+ * This is the main update function for the Player that is called every frame by HGE.
+ */
 void Player::update(float dt) {
 
 	//Find current grid location
@@ -57,14 +59,195 @@ void Player::update(float dt) {
 	//Update collision box
 	collisionBox->SetRadius(x, y, 14.0f);
 
-	//If the player just changed squares, doColorChanging() at the new square
-	if ((gridX != lastGridX || gridY != lastGridY) && colorChangeMode) {
-		doColorChanging();
-	}
+	doColorChanging();
+	doMovement(dt);
+	doStats(dt);
 
-	//Update previous position
+	//Update previous position - this must be done after doColorChanging() is called.
 	lastGridX = gridX;
 	lastGridY = gridY;
+	
+	//Action key - keep track of whether or not the action button has been pressed to
+	// build a wall so that the player build walls by moving and holding down the action
+	// button, but when the last wall is placed it won't automatically enter color change
+	// mode. (Fix for Issue 5)
+	if (!input->buttonDown(INPUT_ACTION, playerNum)) buildWallPressed = false;
+	if (input->buttonDown(INPUT_ACTION, playerNum)) {
+
+		//Start color change mode
+		if (!colorChangeMode && !foundationMode && !buildWallPressed) {
+			if (!foundationMode && !colorChangeMode && hge->Timer_GetTime() > endedColorChange + COLOR_CHANGE_REFRESH) {
+				colorChangeMode = true;
+				numChangesLeft = 5;
+			}
+
+		//Build wall
+		} else if (foundationMode) {
+
+			//Remember that action button was pressed to build a wall (see comment above)
+			buildWallPressed = true;
+
+			//If the player is on a foundation, build a wall.
+			if (grid->buildWall(gridX,gridY,playerNum)) {
+				numWallsLeft--;
+			}
+
+			//No walls left to build
+			if (numWallsLeft == 0 || grid->numFoundations(playerNum) == 0) {
+				numWallsLeft = 0;
+				foundationMode = false;
+				grid->clearFoundations(playerNum);
+			}	 
+		}
+	}
+
+
+	//temp debug input
+	if (hge->Input_KeyDown(HGEK_G)) {
+		grid->foundations[gridX][gridY] = playerNum;
+		grid->buildWall(gridX, gridY, playerNum);
+	}
+	if (hge->Input_KeyDown(HGEK_F)) {
+		grid->foundations[gridX][gridY] = playerNum;
+	}
+
+} //end update()
+
+void Player::draw(float dt) {
+
+	//Draw the botonoid animation. Only update the animation if it is not set to the frame
+	// corresponding to the botonoid's correct direction. This makes the botonoid turn to
+	// its current direction then display a still image.
+	if (botonoidGraphics[whichBotonoid]->GetFrame() != facing*4) {
+		botonoidGraphics[whichBotonoid]->Update(dt);
+	}
+	botonoidGraphics[whichBotonoid]->Render(x,y);
+
+	//Draw the number of color changes remaining to the left of the Botonoid
+	if (colorChangeMode) {
+		resources->GetFont("timer")->printf(x - 16.0f, y-13.0f, HGETEXT_RIGHT, "%d", numChangesLeft);
+	}
+
+	//Drew the number of walls remaining to the right of the Botonoid
+	if (foundationMode) {
+		resources->GetFont("timer")->printf(x + 16.0f, y-13.0f, HGETEXT_LEFT, "%d", numWallsLeft);
+	}
+
+	//Color change bar
+	if (hge->Timer_GetTime() < endedColorChange + COLOR_CHANGE_REFRESH) {
+
+		//Determine where to draw the bar based on botonoid model
+		float barY = y-28.0f;
+		if (whichBotonoid == 1) barY = y - 35.0f;		//Barvinoid
+
+		//Draw the bar
+		float length = ((COLOR_CHANGE_REFRESH-(hge->Timer_GetTime() - endedColorChange))/COLOR_CHANGE_REFRESH) * 32.0f;
+		gui->barSprites[whichBotonoid]->RenderStretch(x-16.0f,				//x0
+													  barY,					//y0
+													  x-16.0f+length,		//x1
+													  barY+10.0f);			//y1
+
+	}
+
+} //end draw()
+
+/**
+ * Update color changing stuff. This is called every frame from the update() method.
+ */ 
+void Player::doColorChanging() {
+
+	//Start a new color change every time the player enters a new square while in
+	// color change mode.
+	if ((gridX != lastGridX || gridY != lastGridY) && colorChangeMode) {
+
+		//Change current square
+		if (!foundationMode && colorChangeMode) {
+
+			//Decrease color change counter if the player moves onto any colored square, even if its
+			// already changing (meaning not if wall/foundation/gardens)
+			if (grid->walls[gridX][gridY] == -1 && grid->foundations[gridX][gridY] == -1 && grid->gardens[gridX][gridY] == -1) {
+				numChangesLeft--;
+			}
+
+			//Start changing the color at the current square if its not already changing
+			grid->startColorChangeAt(gridX, gridY, playerNum);
+
+		}
+
+		//End color change mode
+		if (numChangesLeft == 0) {
+			colorChangeMode = false;
+			endedColorChange = hge->Timer_GetTime();
+		}
+
+	}
+} //end doColorChanging()
+
+/**
+ * Enter foundation mode.
+ */
+void Player::startFoundationMode(int _numWalls) {
+
+	//Stop color change mode and start foundation mode
+	foundationMode = true;
+	numWallsLeft = _numWalls;
+
+}
+
+/**
+ * Updates stats for this player that will show when the game ends. This is called
+ * every frame from the update() method.
+ */
+void Player::doStats(float dt) {
+
+	//Count score and walls/gardens
+	score = 0;
+	statsPage->stats[playerNum].wallsBuilt = 0;
+	statsPage->stats[playerNum].gardensBuilt = 0;
+	for (int i = 0; i < grid->width; i++) {
+		for (int j = 0; j < grid->height; j++) {
+			if (grid->walls[i][j] == playerNum) {
+				score += 1;
+				statsPage->stats[playerNum].wallsBuilt++;
+			}
+			if (grid->gardens[i][j] == playerNum) {
+				score += 2;
+				statsPage->stats[playerNum].gardensBuilt++;
+			}
+		}
+	}
+
+	//Determine winner
+	int maxScore = -1;
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
+		if (players[i]->score > maxScore) {
+			//Player i is the winner
+			gameInfo.winner = i;
+			maxScore = players[i]->score;
+		} else if (players[i]->score == maxScore) {
+			//Tie
+			gameInfo.winner = -1;
+		}
+	}
+
+	//Max score
+	if (score > statsPage->stats[playerNum].maxScore) {
+		statsPage->stats[playerNum].maxScore = score;
+	}
+
+	//Time winning
+	if (gameInfo.winner == playerNum) {
+		statsPage->stats[playerNum].timeWinning += dt;
+	}
+
+} //end doStats()
+
+/**
+ * Update movement related stuff - apply velocity for this frame, detect and process 
+ * new movement, and update turning animations. This is called every frame from the
+ * update() method.
+ */
+void Player::doMovement(float dt) {
 
 	//Update movement
 	if (hge->Timer_GetTime() < startedMoving + timeToMove) {
@@ -141,154 +324,5 @@ void Player::update(float dt) {
 		if (oldDir != facing) botonoidGraphics[whichBotonoid]->SetFrame(oldDir*4);
 
 	}
-	
-	//Action key
-	if (input->buttonDown(INPUT_ACTION, playerNum)) {
+} //end doMovement()
 
-		//Start color change mode
-		if (!colorChangeMode && !foundationMode) {
-			if (!foundationMode && !colorChangeMode && hge->Timer_GetTime() > endedColorChange + COLOR_CHANGE_REFRESH) {
-				colorChangeMode = true;
-				numChangesLeft = 5;
-			}
-
-		//Build wall
-		} else if (foundationMode) {
-
-			//If the player is on a foundation, build a wall.
-			if (grid->buildWall(gridX,gridY,playerNum)) {
-				numWallsLeft--;
-			}
-
-			//No walls left to build
-			if (numWallsLeft == 0 || grid->numFoundations(playerNum) == 0) {
-				numWallsLeft = 0;
-				foundationMode = false;
-				grid->clearFoundations(playerNum);
-			}	 
-		}
-	}
-
-	//Update stats
-	doStats(dt);
-
-	//temp
-	if (hge->Input_KeyDown(HGEK_G)) {
-		grid->foundations[gridX][gridY] = playerNum;
-		grid->buildWall(gridX, gridY, playerNum);
-	}
-	if (hge->Input_KeyDown(HGEK_F)) {
-		grid->foundations[gridX][gridY] = playerNum;
-	}
-
-}
-
-void Player::draw(float dt) {
-
-	//Botonoid sprite
-	if (botonoidGraphics[whichBotonoid]->GetFrame() != facing*4) {
-		botonoidGraphics[whichBotonoid]->Update(dt);
-	}
-	botonoidGraphics[whichBotonoid]->Render(x,y);
-
-	//Number of color changes left
-	if (colorChangeMode) {
-		resources->GetFont("timer")->printf(x,y-40,HGETEXT_CENTER, "%d", numChangesLeft);
-	}
-
-	//Number of walls left
-	if (foundationMode) {
-		resources->GetFont("timer")->SetColor(ARGB(255,0,255,0));
-		resources->GetFont("timer")->printf(x,y-20,HGETEXT_CENTER, "%d", numWallsLeft);
-		resources->GetFont("timer")->SetColor(ARGB(255,255,255,255));
-	}
-
-	//Color change bar
-	if (hge->Timer_GetTime() < endedColorChange + COLOR_CHANGE_REFRESH) {
-		float length = ((COLOR_CHANGE_REFRESH-(hge->Timer_GetTime() - endedColorChange))/COLOR_CHANGE_REFRESH) * 32.0f;
-		gui->barSprites[playerNum]->RenderStretch(x-16.0f,y-25.0f,x-16.0f+length,y-15.0f);
-	}
-
-}
-
-/**
- * This is called every time the player enters a new square when in color change mode.
- */ 
-void Player::doColorChanging() {
-
-	//Change current square
-	if (!foundationMode && colorChangeMode) {
-
-		//Decrease color change counter if the player moves onto a garden even if its
-		// already changing
-		if (grid->walls[gridX][gridY] == -1 && grid->foundations[gridX][gridY] == -1) {
-			numChangesLeft--;
-		}
-
-		//Start changing the color at the current square if its not already changing
-		grid->startColorChangeAt(gridX, gridY, playerNum);
-
-	}
-
-	//End color change mode
-	if (numChangesLeft == 0) {
-		colorChangeMode = false;
-		endedColorChange = hge->Timer_GetTime();
-	}
-}
-
-/**
- * Enter foundation mode.
- */
-void Player::startFoundationMode(int _numWalls) {
-
-	//Stop color change mode and start foundation mode
-	foundationMode = true;
-	numWallsLeft = _numWalls;
-
-}
-
-
-void Player::doStats(float dt) {
-
-	//Count score and walls/gardens
-	score = 0;
-	statsPage->stats[playerNum].wallsBuilt = 0;
-	statsPage->stats[playerNum].gardensBuilt = 0;
-	for (int i = 0; i < grid->width; i++) {
-		for (int j = 0; j < grid->height; j++) {
-			if (grid->walls[i][j] == playerNum) {
-				score += 1;
-				statsPage->stats[playerNum].wallsBuilt++;
-			}
-			if (grid->gardens[i][j] == playerNum) {
-				score += 2;
-				statsPage->stats[playerNum].gardensBuilt++;
-			}
-		}
-	}
-
-	//Determine winner
-	int maxScore = -1;
-	for (int i = 0; i < gameInfo.numPlayers; i++) {
-		if (players[i]->score > maxScore) {
-			//Player i is the winner
-			gameInfo.winner = i;
-			maxScore = players[i]->score;
-		} else if (players[i]->score == maxScore) {
-			//Tie
-			gameInfo.winner = -1;
-		}
-	}
-
-	//Max score
-	if (score > statsPage->stats[playerNum].maxScore) {
-		statsPage->stats[playerNum].maxScore = score;
-	}
-
-	//Time winning
-	if (gameInfo.winner == playerNum) {
-		statsPage->stats[playerNum].timeWinning += dt;
-	}
-
-}

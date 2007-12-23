@@ -15,7 +15,7 @@ extern int mode;
 CustomizeScreen::CustomizeScreen() {
 
 	//Create buttons
-	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "Back");
+	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "Return");
 	buttons[NEXT_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "Start Game");
 
 }

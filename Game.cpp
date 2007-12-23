@@ -108,11 +108,6 @@ int getGridY(float y) {
  */
 std::string formatTime(int s) {
 
-	//Create minutes string
-	int minutes = (s % 60) / 60;
-	char minString[3];
-	itoa(minutes,minString, 10);
-
 	//Create seconds string
 	int seconds = s % 60;
 	char secString[3];
@@ -124,6 +119,11 @@ std::string formatTime(int s) {
 	} else {
 		secondsString = secString;
 	}
+
+	//Create minutes string
+	int minutes = (s - seconds) / 60;
+	char minString[3];
+	itoa(minutes,minString, 10);
 
 	//Combine minutes and seconds
 	std::string timeString = "";

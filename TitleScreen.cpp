@@ -33,6 +33,12 @@ TitleScreen::TitleScreen() {
 	buttons[TITLE_QUIT].highlighted = false;
 	strcpy(buttons[TITLE_QUIT].text, "Quit");
 
+	//Highlighted Petal Graphics
+	highlightedPetal[0] = resources->GetSprite("petal1");
+	highlightedPetal[1] = resources->GetSprite("petal2");
+	highlightedPetal[2] = resources->GetSprite("petal3");
+	highlightedPetal[3] = resources->GetSprite("petal4");
+	
 }
 
 /** 
@@ -58,17 +64,18 @@ void TitleScreen::draw(float dt) {
 	//Draw the buttons on the petals
 	for (int i = 0; i < 4; i++) {
 		
-		//Button Background???
+		//Draw highlighted petals
 		if (buttons[i].highlighted) {
-			//...
+			if (i ==0) highlightedPetal[i]->Render(264,627);
+			if (i ==1) highlightedPetal[i]->Render(365,456);
+			if (i ==2) highlightedPetal[i]->Render(519,451);
+			if (i ==3) highlightedPetal[i]->Render(572,626);
 		}
 	
 		//Button text
 		float textX = buttons[i].collisionBox->x1 + (buttons[i].collisionBox->x2 - buttons[i].collisionBox->x1)/2;
 		float textY = buttons[i].collisionBox->y1 + (buttons[i].collisionBox->y2 - buttons[i].collisionBox->y1)/2 - 15.0f;
-		if (buttons[i].highlighted) resources->GetFont("button")->SetColor(ARGB(255,255,0,0));
 		resources->GetFont("button")->printf(textX, textY, HGETEXT_CENTER, buttons[i].text);
-		resources->GetFont("button")->SetColor(ARGB(255,255,255,255));
 
 	}
 

@@ -28,6 +28,14 @@ BotonoidSelectScreen::BotonoidSelectScreen() {
 	highlightedBotonoids[1] = resources->GetSprite("selectBlackHighlighted");
 	highlightedBotonoids[2] = resources->GetSprite("selectWhiteHighlighted");
 	
+	//Load selecter graphics
+	selecterSprites[0] = resources->GetSprite("selecter1");
+	selecterSprites[1] = resources->GetSprite("selecter2");
+	selecterSprites[2] = resources->GetSprite("selecter3");
+	lockedSelecterSprites[0] = resources->GetSprite("lockedSelecter1");
+	lockedSelecterSprites[1] = resources->GetSprite("lockedSelecter2");
+	lockedSelecterSprites[2] = resources->GetSprite("lockedSelecter3");
+
 	//Place botonoids
 	botonoidPoints[0].x = 30.0f;
 	botonoidPoints[0].y = 270.0f;
@@ -48,7 +56,7 @@ BotonoidSelectScreen::BotonoidSelectScreen() {
 		}
 	}
 
-	resetSelecters();
+	resetScreen();
 
 }
 
@@ -58,6 +66,12 @@ BotonoidSelectScreen::BotonoidSelectScreen() {
 BotonoidSelectScreen::~BotonoidSelectScreen() {
 	for (int i = 0; i < 2; i++) {
 		delete buttons[i];
+	}
+	for (int i = 0; i < 3; i++) {
+		delete botonoids[i];
+		delete highlightedBotonoids[i];
+		delete selecterSprites[i];
+		delete lockedSelecterSprites[i];
 	}
 }
 
@@ -86,11 +100,11 @@ void BotonoidSelectScreen::draw(float dt) {
 		float x = points[i][selecters[i].selection].x;
 		float y = points[i][selecters[i].selection].y;
 		if (selecters[i].selected) {
-			resources->GetSprite("lockedSelecter")->Render(x,y);
+			lockedSelecterSprites[i]->Render(x,y);
 		} else {
-			resources->GetSprite("selecter")->Render(x,y);
+			selecterSprites[i]->Render(x,y);
 		}
-		resources->GetFont("button")->printf(x+32.5f, y + 10.0f, HGETEXT_CENTER, "%dP", i+1);
+		resources->GetFont("button")->printf(x+37.5f, y + 20.0f, HGETEXT_CENTER, "%dP", i+1);
 	}
 
 	//Draw buttons
@@ -107,11 +121,12 @@ bool BotonoidSelectScreen::update(float dt, float mouseX, float mouseY) {
 
 	//Determine whether each button is highlighted
 	buttons[BACK_BUTTON]->update(mouseX, mouseY);
-	if (allSelected()) buttons[NEXT_BUTTON]->update(mouseX, mouseY);
+	//if (allSelected()) buttons[NEXT_BUTTON]->update(mouseX, mouseY);
+	buttons[NEXT_BUTTON]->update(mouseX, mouseY);	//temp for debug
 
 	//Click Back Button
 	if (buttons[BACK_BUTTON]->isClicked()) {
-		resetSelecters();
+		resetScreen();
 		menu->currentScreen = TITLE_SCREEN;
 	}
 	
@@ -124,9 +139,16 @@ bool BotonoidSelectScreen::update(float dt, float mouseX, float mouseY) {
 				gameInfo.selectedBotonoid[i] = selecters[i].selection;
 			}
 
-			resetSelecters();
+			resetScreen();
 			menu->currentScreen = CUSTOMIZE_SCREEN;
 
+		} else {
+			//temp for debugging
+			for (int i = 0; i < gameInfo.numPlayers; i++) {
+				gameInfo.selectedBotonoid[i] = i;
+			}
+			resetScreen();
+			menu->currentScreen = CUSTOMIZE_SCREEN;
 		}
 	}
 
@@ -181,13 +203,16 @@ bool BotonoidSelectScreen::allSelected() {
 }
 
 /**
- * Resets the selecters.
+ * Resets the screen to it's initial status.
  */
-void BotonoidSelectScreen::resetSelecters() {
+void BotonoidSelectScreen::resetScreen() {
 	for (int i = 0; i < 3; i++) {
 		selecters[i].player = i;
 		selecters[i].selected = false;
 		selecters[i].selection = 0;
+	}
+	for (int i = 0; i < 2; i++) {
+		buttons[i]->highlighted = false;
 	}
 }
 

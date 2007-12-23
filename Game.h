@@ -51,7 +51,6 @@ struct GameInfo {
 	int selectedBotonoid[3];
 };
 
-
 //Global functions
 int nextColor(int currentColor);
 void setMusic(char *music);
