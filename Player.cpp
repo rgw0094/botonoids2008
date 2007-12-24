@@ -357,7 +357,7 @@ void Player::addItem(int item) {
 void Player::updateItemSlots(float dt) {
 
 	//Change to next item
-	if (input->buttonPressed(INPUT_NEXT_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + 0.5f) {
+	if (input->buttonPressed(INPUT_NEXT_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + SPIN_TIME) {
 		for (int i = 0; i < 4; i++) {
 			if (itemSlots[i].position == 3) itemSlots[i].position = 0;
 			else itemSlots[i].position++;
@@ -366,7 +366,7 @@ void Player::updateItemSlots(float dt) {
 		timeChangedItem = hge->Timer_GetTime();
 	}
 	//Change to previous item
-	if (input->buttonPressed(INPUT_LAST_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + 0.5f) {
+	if (input->buttonPressed(INPUT_LAST_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + SPIN_TIME) {
 		for (int i = 0; i < 4; i++) {
 			if (itemSlots[i].position == 0) itemSlots[i].position = 3;
 			else itemSlots[i].position--;
@@ -376,7 +376,7 @@ void Player::updateItemSlots(float dt) {
 	}
 
 	//Update angles
-	float speed = PI;
+	float speed = (PI/2.0f)/SPIN_TIME;
 	float angle, targetAngle;
 	for (int i = 0; i < 4; i++) {
 
