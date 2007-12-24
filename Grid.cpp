@@ -371,7 +371,7 @@ bool Grid::buildWall(int x, int y, int player) {
             resetVisited();
 			if (numWallsTouched() <= 2) {
 				fillGarden(x+1, y, player);
-				itemManager->generateItem(x, y, countVisited());
+				itemManager->generateItem(x, y, countVisited(), player);
 				resetVisited();
 			}
             resetWallsTouched();
@@ -383,7 +383,7 @@ bool Grid::buildWall(int x, int y, int player) {
             resetVisited();
 			if (numWallsTouched() <= 2) {
 				fillGarden(x-1, y, player);
-				itemManager->generateItem(x, y, countVisited());
+				itemManager->generateItem(x, y, countVisited(), player);
 				resetVisited();
 			}
             resetWallsTouched();
@@ -395,7 +395,7 @@ bool Grid::buildWall(int x, int y, int player) {
             resetVisited();
 			if (numWallsTouched() <= 2) {
 				fillGarden(x, y-1, player);
-				itemManager->generateItem(x, y, countVisited());
+				itemManager->generateItem(x, y, countVisited(), player);
 				resetVisited();
 			}
             resetWallsTouched();
@@ -407,7 +407,7 @@ bool Grid::buildWall(int x, int y, int player) {
             resetVisited();
 			if (numWallsTouched() <= 2) {
 				fillGarden(x, y+1, player);
-				itemManager->generateItem(x, y, countVisited());
+				itemManager->generateItem(x, y, countVisited(), player);
 				resetVisited();
 			}
             resetWallsTouched();

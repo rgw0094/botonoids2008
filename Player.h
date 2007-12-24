@@ -3,6 +3,20 @@
 
 #include "game.h"
 
+#define EMPTY -1
+#define RIGHT_SLOT 0
+#define BOTTOM_SLOT 1
+#define LEFT_SLOT 2
+#define TOP_SLOT 3
+#define PI 3.1415926f
+
+struct ItemSlot {
+	int code;
+	int quantity;
+	int position;
+	float angle;
+};
+
 class Player {
 
 public:
@@ -17,6 +31,7 @@ public:
 	void startFoundationMode(int numFoundations);
 	void doMovement(float dt);
 	void doStats(float dt);
+	void addItem(int item);
 
 	//Variables
 	int gridX, gridY, lastGridX, lastGridY;
@@ -31,6 +46,7 @@ public:
 	int numWallsLeft;
 	int health;
 
+
 	//Time variables
 	float startedMoving;
 	float timeToMove;
@@ -43,6 +59,7 @@ public:
 
 	//Objects
 	hgeRect *collisionBox;
+	ItemSlot itemSlots[4];
 
 };
 

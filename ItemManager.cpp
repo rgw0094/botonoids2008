@@ -53,9 +53,10 @@ void ItemManager::update(float dt) {
 		//Update position
 		i->y += i->dy*dt;
 		i->x += i->dx*dt;
+		i->collisionBox->SetRadius(i->x, i->y, i->radius);
 
-		float xDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dx;
-		float yDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dy;
+		float xDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dx + i->radius * (i->dx > 0.0f ? 1.0f : -1.0f);
+		float yDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dy + i->radius * (i->dy > 0.0f ? 1.0f : -1.0f);
 
 		//Horizontal collision
 		if (grid->isWallAt(i->x + xDist, i->y) || !grid->inBounds(i->x + xDist, i->y)) {
@@ -68,13 +69,20 @@ void ItemManager::update(float dt) {
 		}
 
 		//Check for collision with player
+		bool collided = false;
 		for (int player = 0; player < gameInfo.numPlayers; player++) {
-			if (players[player]->collisionBox->TestPoint(i->x, i->y)) {
+			if (players[player]->collisionBox->Intersect(i->collisionBox) && i->player == player) {
+	
 				//Player collects this item
-
-				//Remove the item from the list
-				i = itemList.erase(i);
+				players[player]->addItem(i->itemCode);
+				collided = true;
+	
 			}
+		}
+		if (collided) {
+			//Remove the item from the list
+			delete i->collisionBox;
+			i = itemList.erase(i);
 		}
 
 	}
@@ -84,9 +92,10 @@ void ItemManager::update(float dt) {
 /**
  * Generates a new random item. The bigger the garden the better the items!!!
  */
-void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
+void ItemManager::generateItem(int gridX, int gridY, int gardenSize, int whichPlayer) {
 		
-	if (gardenSize == 0) return;
+	//Gardens must be at least 3 
+	if (gardenSize < 2) return;
 
 	//Determine what item to generate
 	int item = 1;
@@ -94,6 +103,8 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 	//Create the new item
 	Item newItem;
 	newItem.itemCode = item;
+	newItem.player = whichPlayer;
+	newItem.radius = 13.0f;
 
 	//Randomly choose a square marked by the grid->visited[][] array to spawn the item in.
 	int randNum = rand() % 10000;
@@ -114,6 +125,10 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 			}
 		}
 	}
+
+	//Set collision box
+	newItem.collisionBox = new hgeRect();
+	newItem.collisionBox->SetRadius(newItem.x, newItem.y, 12.0f);
 
 	//Create particle trail
 	newItem.trail = new hgeParticleSystem("Data/particle9.psi", resources->GetSprite("particleGraphic5"));
@@ -137,6 +152,7 @@ void ItemManager::reset() {
 	std::list<Item>::iterator i;
 	for (i = itemList.begin(); i != itemList.end(); i++) {
 		delete i->trail;
+		delete i->collisionBox;
 		i = itemList.erase(i);
 	}
 }

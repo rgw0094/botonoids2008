@@ -46,6 +46,7 @@ struct GameInfo {
 	int numPlayers;
 	int musicVolume;
 	int soundVolume;
+	char gameMusic[30];
 	int winner;
 	float timeLimit;
 	int selectedBotonoid[3];
@@ -54,6 +55,7 @@ struct GameInfo {
 //Global functions
 int nextColor(int currentColor);
 void setMusic(char *music);
+void stopMusic();
 void drawCollisionBox(hgeRect *box, int r, int g, int b);
 int getGridX(float x);
 int getGridY(float y);
