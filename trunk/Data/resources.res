@@ -512,6 +512,16 @@ Texture items {
  filename=Data/Graphics/items.png
  resgroup=1
 }
+Animation silverBotonoid {
+ texture=botonoids
+ rect=0,82,33,38
+ frames=16
+ fps=20.0
+ mode=FORWARD,LOOP
+ hotspot=16,25
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
 
 
 ;***********************

@@ -15,6 +15,17 @@ ItemManager::ItemManager() {
 	for (int i = 0; i < NUM_ITEMS; i++) {
 		itemSprites[i] = new hgeSprite(resources->GetTexture("items"),i*32,0,32,32);
 		itemSprites[i]->SetHotSpot(16,16);
+
+		itemAnimations[i] = new hgeAnimation(resources->GetTexture("items"),	//texture
+											 16, //frames
+											 16, //FPS
+											 0,	 //x
+											 0,	 //y
+											 32.0f, //w
+											 32.0f); //h
+		itemAnimations[i]->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
+		itemAnimations[i]->Play();
+
 	}
 }
 
@@ -33,10 +44,10 @@ void ItemManager::draw(float dt) {
 
 	std::list<Item>::iterator i;
 	for (i = itemList.begin(); i != itemList.end(); i++) {
-		i->trail->MoveTo(i->x, i->y);
+		i->trail->MoveTo(i->x + 16.0f, i->y + 16.0f);
 		i->trail->Update(dt);
 		i->trail->Render();
-		itemSprites[i->itemCode]->Render(i->x, i->y);
+		itemAnimations[i->itemCode]->Render(i->x, i->y);
 	}
 
 }
@@ -45,6 +56,11 @@ void ItemManager::draw(float dt) {
  * Update all managed items.
  */
 void ItemManager::update(float dt) {
+
+	//Update item animations
+	for (int i = 0; i < NUM_ITEMS; i++) {
+		itemAnimations[i]->Update(dt);
+	}
 
 	//Loop through each item
 	std::list<Item>::iterator i;
@@ -98,7 +114,7 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize, int whichPl
 	if (gardenSize < 2) return;
 
 	//Determine what item to generate
-	int item = 1;
+	int item = ITEM_SILLY_PAD;
 
 	//Create the new item
 	Item newItem;
@@ -132,7 +148,7 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize, int whichPl
 
 	//Create particle trail
 	newItem.trail = new hgeParticleSystem("Data/particle9.psi", resources->GetSprite("particleGraphic5"));
-	newItem.trail->FireAt(newItem.x, newItem.y);
+	newItem.trail->FireAt(newItem.x+16.0f, newItem.y+16.0f);
 
 	//Generate random initial velocity
 	int dir1 = rand() % 2;
