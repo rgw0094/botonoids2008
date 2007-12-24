@@ -218,6 +218,17 @@ Sprite petal4 {
  resgroup=1 
 }
 
+;//*********************************
+;//******** CUSTOMIZE SCREEN *******
+;//*********************************
+Sprite customizeGUI {
+ texture="Data/Graphics/TheCustomGui.png"
+ rect=0,0,927,511
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+
 ;//**********************
 ;//******** FONTS *******
 ;//**********************
