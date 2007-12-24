@@ -252,10 +252,22 @@ Font button {
  tracking=1.0
  resgroup=1
 }
+Font tooltip {
+ filename="Data/Fonts/tooltip.fnt"
+ tracking=1.0
+ resgroup=1
+}
 
 ;//*********************
 ;//******** GUI ********
 ;//*********************
+Sprite blackbox {
+ texture="Data/Graphics/blackbox.png"
+ rect=0,0,10,10
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
 Sprite tileorder {
  texture="Data/Graphics/colororder.png"
  rect=0,0,186,26
