@@ -3,7 +3,8 @@
 
 #include "game.h"
 
-#define NUM_ITEMS 4
+#define NUM_ITEMS 1
+#define ITEM_SILLY_PAD 0
 
 struct Item {
 	int itemCode;
@@ -28,6 +29,7 @@ public:
 
 	std::list<Item> itemList;
 	hgeSprite *itemSprites[NUM_ITEMS];
+	hgeAnimation *itemAnimations[NUM_ITEMS];
 
 };
 

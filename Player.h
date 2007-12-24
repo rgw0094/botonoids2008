@@ -15,6 +15,7 @@ struct ItemSlot {
 	int quantity;
 	int position;
 	float angle;
+	float targetAngle;
 };
 
 class Player {
@@ -27,6 +28,7 @@ public:
 	//methods
 	void draw(float dt);
 	void update(float dt);
+	void updateItemSlots(float dt);
 	void doColorChanging();
 	void startFoundationMode(int numFoundations);
 	void doMovement(float dt);
@@ -45,12 +47,13 @@ public:
 	int numChangesLeft;		//Number of changes left in color change mode
 	int numWallsLeft;
 	int health;
-
+	float positionAngles[4];	//angles corresponding to position in item wheel
 
 	//Time variables
 	float startedMoving;
 	float timeToMove;
 	float endedColorChange;
+	float timeChangedItem;
 
 	//State variables
 	bool colorChangeMode;

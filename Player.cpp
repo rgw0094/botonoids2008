@@ -31,6 +31,7 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	colorChangeMode = foundationMode = buildWallPressed = false;
 	startedMoving = -10.0f;
 	endedColorChange = -10.0f;
+	timeChangedItem = -10.0f;
 	timeToMove = (GRID_SIZE+1) / speed;
 	collisionBox = new hgeRect();
 	collisionBox->SetRadius(x,y,14.0f);
@@ -40,8 +41,9 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	
 	//Item slots
 	for (int i = 0; i < 4; i++) {
+		positionAngles[i] = 0.5f * PI *(float)i;
 		itemSlots[i].position = i;
-		itemSlots[i].angle = 0.5f * PI * (float)i;
+		itemSlots[i].angle = itemSlots[i].targetAngle = positionAngles[itemSlots[i].position];
 		itemSlots[i].code = EMPTY;
 		itemSlots[i].quantity = 0;
 	}
@@ -70,6 +72,7 @@ void Player::update(float dt) {
 	doColorChanging();
 	doMovement(dt);
 	doStats(dt);
+	updateItemSlots(dt);
 
 	//Update previous position - this must be done after doColorChanging() is called.
 	lastGridX = gridX;
@@ -108,7 +111,6 @@ void Player::update(float dt) {
 			}	 
 		}
 	}
-
 
 	//temp debug input
 	if (hge->Input_KeyDown(HGEK_G)) {
@@ -161,7 +163,7 @@ void Player::draw(float dt) {
 	float centerX = 928.0f;
 	float centerY = 320.0f + playerNum * 185.0f;	
 	for (int i = 0; i < 4; i++) {
-		resources->GetSprite("testItem")->Render(centerX + 35.0f * cos(itemSlots[i].angle), centerY + 35.0f * sin(itemSlots[i].angle));
+		resources->GetSprite("testItem")->Render(centerX + 35.0f * cos(itemSlots[i].angle), centerY + 25.0f * sin(itemSlots[i].angle));
 	}
 
 } //end draw()
@@ -348,4 +350,52 @@ void Player::addItem(int item) {
 
 }
 
+/**
+ * Updates the Player's item slots in the GUI. Called every frame from the update()
+ * method.
+ */
+void Player::updateItemSlots(float dt) {
 
+	//Change to next item
+	if (input->buttonPressed(INPUT_NEXT_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + 0.5f) {
+		for (int i = 0; i < 4; i++) {
+			if (itemSlots[i].position == 3) itemSlots[i].position = 0;
+			else itemSlots[i].position++;
+			itemSlots[i].targetAngle += (PI/2.0f);
+		}
+		timeChangedItem = hge->Timer_GetTime();
+	}
+	//Change to previous item
+	if (input->buttonPressed(INPUT_LAST_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + 0.5f) {
+		for (int i = 0; i < 4; i++) {
+			if (itemSlots[i].position == 0) itemSlots[i].position = 3;
+			else itemSlots[i].position--;
+			itemSlots[i].targetAngle -= (PI/2.0f);
+		}
+		timeChangedItem = hge->Timer_GetTime();
+	}
+
+	//Update angles
+	float speed = PI;
+	float angle, targetAngle;
+	for (int i = 0; i < 4; i++) {
+
+		angle = itemSlots[i].angle;
+		targetAngle = itemSlots[i].targetAngle;
+
+		//Set to target angle once its close
+		if (angle > targetAngle - 0.05f && angle < targetAngle + 0.05f) {
+			itemSlots[i].angle = itemSlots[i].targetAngle;
+
+		//Spin right
+		} else if (angle < targetAngle) {
+			itemSlots[i].angle += speed*dt;
+
+		//Spin left
+		} else if (angle > targetAngle) {
+			itemSlots[i].angle -= speed*dt;
+		}
+
+	}
+
+}

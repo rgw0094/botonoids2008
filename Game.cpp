@@ -56,7 +56,7 @@ void startGame() {
 
 	//Enter game state
 	mode = GAME_MODE;
-	countDown = 4;
+	countDown = 0;//4;
 	countDownTimer = 1.0f;
 	stopMusic();
 
