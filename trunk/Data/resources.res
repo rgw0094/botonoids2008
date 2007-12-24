@@ -523,3 +523,13 @@ Sound snd_countdown {
  filename="countDownSound.wav"
  resgroup=1
 }
+
+
+
+Sprite testItem {
+ texture="Data/Graphics/items.png"
+ rect=0,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}

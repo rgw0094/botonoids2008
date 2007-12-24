@@ -27,6 +27,8 @@ hgeSprite *specialTiles[3*4], *tileSprites[NUM_COLORS];
 GameInfo gameInfo;
 int debug;
 float timer;
+int countDown;
+float countDownTimer;
 int mode = MENU_MODE;
 
 void loadResources() {
@@ -94,10 +96,25 @@ bool FrameFunc() {
 	//Update game
 	} else if (mode == GAME_MODE) {	
 
+		//Count down until start
+		if (countDown > 0) {
+			countDownTimer -= dt;
+			if (countDownTimer < 0.0f) {
+				//Decrease counter
+				countDown--;
+				countDownTimer = 1.0f;
+				if (countDown == 0) {
+					//If this was the final count down (GOOD SONG) start the music
+					setMusic(gameInfo.gameMusic);
+				} else {
+					hge->Effect_Play(resources->GetEffect("snd_countdown"));
+				}
+			}
+
 		//If the mini menu is active, only update it
-		if (minimenu->active) {
+		} else if (minimenu->active) {
 			minimenu->update(dt);
-			
+				
 		//If the stats page is active only update it
 		} else if (statsPage->active) {
 			statsPage->update(dt);
@@ -136,11 +153,16 @@ bool RenderFunc() {
 	} else if (mode == GAME_MODE) {
 
 		grid->draw(dt);
-		for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->draw(dt);
 		gui->draw(dt);
+		for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->draw(dt);
 		itemManager->draw(dt);
 		minimenu->draw(dt);
 		statsPage->draw(dt);
+
+		//Draw countdown
+		if (countDown == 3) resources->GetSprite("countdown3")->Render(400,300);
+		if (countDown == 2) resources->GetSprite("countdown2")->Render(400,300);
+		if (countDown == 1) resources->GetSprite("countdown1")->Render(400,300);
 
 	}
 
@@ -178,6 +200,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		gameInfo.timeLimit = 300.0f;
 		gameInfo.musicVolume = 100.0f;
 		gameInfo.soundVolume = 100.0f;
+		strcpy(gameInfo.gameMusic, "song3");
 
 		//Create Game Objects
 		menu = new Menu();

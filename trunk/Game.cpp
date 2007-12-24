@@ -13,6 +13,8 @@ extern StatsPage *statsPage;
 extern ItemManager *itemManager;
 extern int mode;
 extern float timer;
+extern float countDownTimer;
+extern int countDown;
 
 /**
  * Returns the color that comes after currentColor
@@ -30,6 +32,10 @@ void setMusic(char *music) {
 	musicChannel = hge->Music_Play(resources->GetMusic(music), true, gameInfo.musicVolume);
 }
 
+void stopMusic() {
+	hge->Channel_Stop(musicChannel);
+}
+
 /**
  * Draw a collision box with the specified RGB values.
  */
@@ -43,16 +49,16 @@ void drawCollisionBox(hgeRect *box, int r, int g, int b) {
 }
 
 /**
- * This is called after the players have navigated the menu. Game objects are 
- * created based on the choices players made.
+ * This is called when the "Start Game" button is pressed in the Customize screen. 
+ * Game objects are created based on the choices players made in the menu.
  */
 void startGame() {
 
 	//Enter game state
 	mode = GAME_MODE;
-
-	//Set selected music
-	setMusic("song3");
+	countDown = 4;
+	countDownTimer = 1.0f;
+	stopMusic();
 
 	//Reset game info
 	timer = gameInfo.timeLimit;

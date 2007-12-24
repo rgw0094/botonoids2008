@@ -37,6 +37,14 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 
 	//Reset the player's animation to face down
 	botonoidGraphics[whichBotonoid]->SetFrame(0);
+	
+	//Item slots
+	for (int i = 0; i < 4; i++) {
+		itemSlots[i].position = i;
+		itemSlots[i].angle = 0.5f * PI * (float)i;
+		itemSlots[i].code = EMPTY;
+		itemSlots[i].quantity = 0;
+	}
 
 }
 
@@ -147,6 +155,13 @@ void Player::draw(float dt) {
 													  x-16.0f+length,		//x1
 													  barY+10.0f);			//y1
 
+	}
+
+	//Draw item slots
+	float centerX = 928.0f;
+	float centerY = 320.0f + playerNum * 185.0f;	
+	for (int i = 0; i < 4; i++) {
+		resources->GetSprite("testItem")->Render(centerX + 35.0f * cos(itemSlots[i].angle), centerY + 35.0f * sin(itemSlots[i].angle));
 	}
 
 } //end draw()
@@ -325,4 +340,12 @@ void Player::doMovement(float dt) {
 
 	}
 } //end doMovement()
+
+/**
+ * Add Item.
+ */
+void Player::addItem(int item) {
+
+}
+
 
