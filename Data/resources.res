@@ -380,21 +380,21 @@ Sprite silverHealth {
 ;//Count down
 Sprite countdown3 {
  texture="Data/Graphics/countdown.png"
- rect=0,0,92,164
+ rect=0,0,111,141
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite countdown2 {
  texture="Data/Graphics/countdown.png"
- rect=0,164,92,164
+ rect=111,0,111,142
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite countdown1 {
  texture="Data/Graphics/countdown.png"
- rect=0,328,92,164
+ rect=222,0,111,141
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
