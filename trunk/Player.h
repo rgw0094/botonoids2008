@@ -9,6 +9,7 @@
 #define LEFT_SLOT 2
 #define TOP_SLOT 3
 #define PI 3.1415926f
+#define SPIN_TIME 0.15f
 
 struct ItemSlot {
 	int code;
