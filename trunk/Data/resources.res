@@ -377,6 +377,29 @@ Sprite silverHealth {
  resgroup=1
 }
 
+;//Count down
+Sprite countdown3 {
+ texture="Data/Graphics/countdown.png"
+ rect=0,0,92,164
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite countdown2 {
+ texture="Data/Graphics/countdown.png"
+ rect=0,164,92,164
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite countdown1 {
+ texture="Data/Graphics/countdown.png"
+ rect=0,328,92,164
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+
 ;**************************
 ;******** PARTICLE ********
 ;**************************
@@ -490,4 +513,13 @@ Music song3 {
  filename="song3.mod"
  amplify=50
  resgroup=11
+}
+
+
+;************************
+;******** SOUNDS ********
+;************************
+Sound snd_countdown {
+ filename="countDownSound.wav"
+ resgroup=1
 }
