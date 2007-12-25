@@ -8,7 +8,6 @@
 
 struct Item {
 	int itemCode;
-	int player;
 	float x, y, dx, dy, radius;
 	hgeParticleSystem *trail;
 	hgeRect *collisionBox;
@@ -25,7 +24,7 @@ public:
 
 	void draw(float dt);
 	void update(float dt);
-	void generateItem(int gridX, int gridY, int gardenSize, int whichPlayer);
+	void generateItem(int gridX, int gridY, int gardenSize);
 	void reset();
 
 	std::list<Item> itemList;

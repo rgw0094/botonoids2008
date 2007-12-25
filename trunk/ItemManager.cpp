@@ -52,7 +52,7 @@ void ItemManager::update(float dt) {
 		//Update stuff
 		i->y += i->dy*dt;
 		i->x += i->dx*dt;
-		i->trail->MoveTo(i->x + 16.0f, i->y + 16.0f);
+		i->trail->MoveTo(i->x, i->y);
 		i->trail->Update(dt);
 		i->collisionBox->SetRadius(i->x, i->y, i->radius);
 		i->animation->Update(dt);
@@ -71,19 +71,21 @@ void ItemManager::update(float dt) {
 		}
 
 		//Check for collision with player
-		bool collided = false;
+		bool itemCollected = false;
 		for (int player = 0; player < gameInfo.numPlayers; player++) {
-			if (players[player]->collisionBox->Intersect(i->collisionBox) && i->player == player) {
+			if (players[player]->collisionBox->Intersect(i->collisionBox)) {
 	
-				//Player collects this item
-				players[player]->addItem(i->itemCode);
-				collided = true;
+				//Player attempts to collects this item. If the player has no room in
+				//his item wheel then the item can not be collected!!!!!!!
+				itemCollected = players[player]->addItem(i->itemCode);
 	
 			}
 		}
-		if (collided) {
-			//Remove the item from the list
+
+		//If the player collected the item, delete it
+		if (itemCollected) {
 			delete i->collisionBox;
+			delete i->animation;
 			i = itemList.erase(i);
 		}
 
@@ -94,7 +96,7 @@ void ItemManager::update(float dt) {
 /**
  * Generates a new random item. The bigger the garden the better the items!!!
  */
-void ItemManager::generateItem(int gridX, int gridY, int gardenSize, int whichPlayer) {
+void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 		
 	//Gardens must be at least 3 
 	if (gardenSize < 2) return;
@@ -105,7 +107,6 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize, int whichPl
 	//Create the new item
 	Item newItem;
 	newItem.itemCode = item;
-	newItem.player = whichPlayer;
 	newItem.radius = 13.0f;
 	newItem.animation = new hgeAnimation(resources->GetTexture("items"),
 											 32,		//frames
@@ -144,7 +145,7 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize, int whichPl
 
 	//Create particle trail
 	newItem.trail = new hgeParticleSystem("Data/particle9.psi", resources->GetSprite("particleGraphic5"));
-	newItem.trail->FireAt(newItem.x+16.0f, newItem.y+16.0f);
+	newItem.trail->FireAt(newItem.x, newItem.y);
 
 	//Generate random initial direction
 	int degrees = rand() % 360;

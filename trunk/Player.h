@@ -4,10 +4,10 @@
 #include "game.h"
 
 #define EMPTY -1
-#define RIGHT_SLOT 0
-#define BOTTOM_SLOT 1
-#define LEFT_SLOT 2
-#define TOP_SLOT 3
+#define TOP_SLOT 0
+#define RIGHT_SLOT 1
+#define BOTTOM_SLOT 2
+#define LEFT_SLOT 3
 #define PI 3.1415926f
 #define SPIN_TIME 0.15f
 
@@ -28,13 +28,14 @@ public:
 
 	//methods
 	void draw(float dt);
+	void drawItemWheel(float dt);
 	void update(float dt);
 	void updateItemSlots(float dt);
 	void doColorChanging();
 	void startFoundationMode(int numFoundations);
 	void doMovement(float dt);
 	void doStats(float dt);
-	void addItem(int item);
+	bool addItem(int item);
 
 	//Variables
 	int gridX, gridY, lastGridX, lastGridY;
