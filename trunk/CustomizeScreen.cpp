@@ -60,6 +60,7 @@ CustomizeScreen::~CustomizeScreen() {
  */
 void CustomizeScreen::draw(float dt) {
 
+	resources->GetSprite("titlescreen")->Render(0.0f, 0.0f);
 	resources->GetFont("button")->printf(512.0f, 25.0f, HGETEXT_CENTER, "Customize Game");
 	
 	//Draw GUI
