@@ -42,10 +42,10 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	
 	//Item slots
 	for (int i = 0; i < 4; i++) {
-		positionAngles[i] = 0.5f * PI *(float)i;
+		positionAngles[i] = (1.5f*PI) + (0.5f * PI *(float)i);
 		itemSlots[i].position = i;
 		itemSlots[i].angle = itemSlots[i].targetAngle = positionAngles[itemSlots[i].position];
-		itemSlots[i].code = 0; //EMPTY
+		itemSlots[i].code = EMPTY;
 		itemSlots[i].quantity = 0;
 	}
 
@@ -160,13 +160,8 @@ void Player::draw(float dt) {
 
 	}
 
-	//Draw item slots
-	float centerX = 928.0f;
-	float centerY = 320.0f + playerNum * 185.0f;
-	resources->GetSprite("itemcursor")->Render(centerX - 1.0f, centerY - 26.0f);
-	for (int i = 0; i < 4; i++) {
-		itemManager->itemSprites[itemSlots[i].code]->Render(centerX + 35.0f * cos(itemSlots[i].angle), centerY + 25.0f * sin(itemSlots[i].angle));
-	}
+	drawItemWheel(dt);
+
 
 } //end draw()
 
@@ -346,9 +341,29 @@ void Player::doMovement(float dt) {
 } //end doMovement()
 
 /**
- * Add Item.
+ * Add an item to the player's item wheel. Returns whether or not there was room.
  */
-void Player::addItem(int item) {
+bool Player::addItem(int item) {
+
+	//Loop through the item wheel. If a slot already has the item, add to its quantity
+	for (int i = 0; i < 4; i++) {
+		if (itemSlots[i].code == item) {
+			itemSlots[i].quantity++;
+			return true;
+		}
+	}
+
+	//If the player doesn't already have the item, add it to the first empty slot
+	for (int i = 0; i < 4; i++) {
+		if (itemSlots[i].code == EMPTY) {
+			itemSlots[i].code = item;
+			itemSlots[i].quantity = 1;
+			return true;
+		}
+	}
+
+	//Return false if there was no room for the item
+	return false;
 
 }
 
@@ -402,3 +417,27 @@ void Player::updateItemSlots(float dt) {
 	}
 
 }
+
+/**
+ * Draws the player's item wheel in the GUI
+ */
+void Player::drawItemWheel(float dt) {
+
+	//Center of the wheel
+	float centerX = 928.0f;
+	float centerY = 320.0f + playerNum * 185.0f;
+
+	//Draw the selected item cursor - it is always the top item
+	resources->GetSprite("itemcursor")->Render(centerX - 1.0f, centerY - 26.0f);
+
+	//Loop through the slots
+	for (int i = 0; i < 4; i++) {
+
+		//If the slot isn't empty, draw the item in it.
+		if (itemSlots[i].code != EMPTY) {
+			itemManager->itemSprites[itemSlots[i].code]->Render(centerX + 35.0f * cos(itemSlots[i].angle), centerY + 25.0f * sin(itemSlots[i].angle));
+			
+		}
+
+	}
+} //end drawItemWheel()
