@@ -37,6 +37,7 @@ public:
 	void doMovement(float dt);
 	void doStats(float dt);
 	bool addItem(int item);
+	void useItem(float dt);
 
 	//Variables
 	int gridX, gridY, lastGridX, lastGridY;
