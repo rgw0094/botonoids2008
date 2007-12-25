@@ -117,6 +117,13 @@ void Player::update(float dt) {
 		}
 	}
 
+	//Use Item key
+	if (input->buttonPressed(INPUT_ITEM, playerNum)) {
+		if (itemSlots[TOP_SLOT].code == ITEM_SILLY_PAD) {
+			grid->placeSillyPad(gridX, gridY, playerNum);
+		}
+	}
+
 	//temp debug input
 	if (hge->Input_KeyDown(HGEK_G)) {
 		grid->foundations[gridX][gridY] = playerNum;
@@ -287,25 +294,29 @@ void Player::doMovement(float dt) {
 		//Left
 		if (input->buttonDown(INPUT_LEFT, playerNum)) {
 			facing = movingDirection = LEFT;
-			if (gridX > 0 && !(grid->walls[gridX-1][gridY] != -1 && grid->walls[gridX-1][gridY] != playerNum)) {
+			if (gridX > 0 && !(grid->walls[gridX-1][gridY] != -1 && grid->walls[gridX-1][gridY] != playerNum)
+					&& !(grid->sillyPads[gridX-1][gridY] != -1 && grid->sillyPads[gridX-1][gridY] != playerNum)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		//Right
 		} else if (input->buttonDown(INPUT_RIGHT, playerNum)) {
 			facing = movingDirection =  RIGHT;
-			if (gridX < grid->width-1 && !(grid->walls[gridX+1][gridY] != -1 && grid->walls[gridX+1][gridY] != playerNum)) {
+			if (gridX < grid->width-1 && !(grid->walls[gridX+1][gridY] != -1 && grid->walls[gridX+1][gridY] != playerNum)
+					&& !(grid->sillyPads[gridX+1][gridY] != -1 && grid->sillyPads[gridX+1][gridY] != playerNum)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		//Down
 		} else if (input->buttonDown(INPUT_DOWN, playerNum)) {
 			facing = movingDirection =  DOWN;
-			if (gridY < grid->height-1 && !(grid->walls[gridX][gridY+1] != -1 && grid->walls[gridX][gridY+1] != playerNum)) {
+			if (gridY < grid->height-1 && !(grid->walls[gridX][gridY+1] != -1 && grid->walls[gridX][gridY+1] != playerNum)
+					&& !(grid->sillyPads[gridX][gridY+1] != -1 && grid->sillyPads[gridX][gridY+1] != playerNum)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		//Up
 		} else if (input->buttonDown(INPUT_UP, playerNum)) {
 			facing = movingDirection =  UP;
-			if (gridY > 0 && !(grid->walls[gridX][gridY-1] != -1 && grid->walls[gridX][gridY-1] != playerNum)) {
+			if (gridY > 0 && !(grid->walls[gridX][gridY-1] != -1 && grid->walls[gridX][gridY-1] != playerNum)
+					&& !(grid->sillyPads[gridX][gridY-1] != -1 && grid->sillyPads[gridX][gridY-1] != playerNum)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		}

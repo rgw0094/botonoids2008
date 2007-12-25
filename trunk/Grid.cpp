@@ -9,6 +9,7 @@ extern hgeResourceManager *resources;
 extern hgeFont *debugFont;
 extern StatsPage *statsPage;
 extern ItemManager *itemManager;
+extern float gameTime;
 
 /**
  * Constructor
@@ -27,6 +28,8 @@ Grid::Grid(int _width, int _height) {
 			foundations[i][j] = -1;
 			walls[i][j] = -1;
 			gardens[i][j] = -1;
+			sillyPads[i][j] = -1;
+			sillyPadsPlaced[i][j] = - 10.0f;
 		}
 	}
 	resetVisited();
@@ -42,13 +45,18 @@ Grid::Grid(int _width, int _height) {
 	//Particle managers
 	dustClouds = new hgeParticleManager();
 
+	//Load silly pad graphics
+	for (int i = 0; i < 3; i++) {
+		sillyPadSprites[i] = new hgeSprite(resources->GetTexture("tiles"), 32.0f, 96.0f, 32.0f, 32.0f);
+	}
+
 }
 
 /**
  * Destructor
  */
 Grid::~Grid() {
-
+	for (int i = 0; i < 3; i++) delete sillyPadSprites[i];
 }
 
 void Grid::draw(float dt) {
@@ -94,6 +102,11 @@ void Grid::draw(float dt) {
 
 			}
 
+			//Silly pads
+			if (sillyPads[i][j] != -1) {//gameTime < sillyPadsPlaced[i][j] + SILLY_PAD_DURATION) {
+				sillyPadSprites[sillyPads[i][j]]->Render(tileX, tileY);
+			}
+
 		}
 	}
 
@@ -119,6 +132,19 @@ void Grid::draw(float dt) {
  */ 
 void Grid::update(float dt) {
 	doColorChanges(dt);
+
+	//Loop through each grid square
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			
+			//Update silly pads
+			if (gameTime > sillyPadsPlaced[i][j] + SILLY_PAD_DURATION) {
+				sillyPads[i][j] = -1;
+			}
+
+		}
+	}
+
 }
 
 /**
@@ -537,3 +563,10 @@ int Grid::numFoundations(int player) {
 	return numFoundations;
 }
 
+/**
+ * Places a silly pad at square
+ */ 
+void Grid::placeSillyPad(int gridX, int gridY, int player) {
+	sillyPads[gridX][gridY] = player;
+	sillyPadsPlaced[gridX][gridY] = hge->Timer_GetTime();
+}
