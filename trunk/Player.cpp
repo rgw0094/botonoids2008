@@ -53,6 +53,10 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 		itemSlots[i].quantity = 0;
 	}
 
+	//temp
+	itemSlots[0].code = ITEM_SILLY_PAD;
+	itemSlots[0].quantity = 10;
+
 }
 
 /**
@@ -119,9 +123,7 @@ void Player::update(float dt) {
 
 	//Use Item key
 	if (input->buttonPressed(INPUT_ITEM, playerNum)) {
-		if (itemSlots[TOP_SLOT].code == ITEM_SILLY_PAD) {
-			grid->placeSillyPad(gridX, gridY, playerNum);
-		}
+		useItem(dt);
 	}
 
 	//temp debug input
@@ -462,3 +464,29 @@ void Player::drawItemWheel(float dt) {
 
 	}
 } //end drawItemWheel()
+
+/**
+ * Uses the currently selected item
+ */
+void Player::useItem(float dt) {
+
+	//Silly Pad
+	if (itemSlots[TOP_SLOT].code == ITEM_SILLY_PAD) {
+		grid->placeSillyPad(gridX, gridY, playerNum);
+	}
+
+	//Decrease quantity
+	if (itemSlots[TOP_SLOT].code != EMPTY) {
+		if (itemSlots[TOP_SLOT].quantity == 1) {
+			itemSlots[TOP_SLOT].quantity = 0;
+			itemSlots[TOP_SLOT].code = EMPTY;
+		} else {
+			itemSlots[TOP_SLOT].quantity--;
+		}
+	}
+
+} //end useItem()
+
+
+
+
