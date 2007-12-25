@@ -78,14 +78,15 @@ void StatsPage::draw(float dt) {
 	hgeFont *f = resources->GetFont("timer");
 
 	//Draw window
-	resources->GetSprite("statsPage")->Render(x,y);
+	resources->GetSprite("blackbox")->RenderStretch(x,y, x + 285.0, y + 610.0);
+	resources->GetSprite("statsPage")->Render(x - 10.0, y - 15.0);
 
 	//Draw winner
 	if (gameInfo.winner == -1) {
 		//Tie
-		f->printf(x + 280/2, y + 10.0f, HGETEXT_CENTER, "Tie Game!");
+		f->printf(x + 280.0/2.0 + 5.0, y + 10.0f, HGETEXT_CENTER, "Tie Game!");
 	} else {
-		f->printf(x + 280/2, y + 10.0f, HGETEXT_CENTER, "%s Wins!", botonoidNames[players[gameInfo.winner]->whichBotonoid].c_str());
+		f->printf(x + 280.0/2.0 + 5.0, y + 10.0f, HGETEXT_CENTER, "%s Wins!", botonoidNames[players[gameInfo.winner]->whichBotonoid].c_str());
 	}
 
 	//Draw Icons

@@ -263,7 +263,7 @@ Font tooltip {
 ;//*********************
 Sprite blackbox {
  texture="Data/Graphics/blackbox.png"
- rect=0,0,10,10
+ rect=1,1,8,8
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
@@ -450,7 +450,7 @@ Particle dust {
 ;****************************
 Sprite statsPage {
  texture="Data/Graphics/statspage.png"
- rect=0,0,280,600
+ rect=0,0,310,630
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
