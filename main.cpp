@@ -30,6 +30,7 @@ float timer;
 int countDown;
 float countDownTimer;
 int mode = MENU_MODE;
+float gameTime;
 
 void loadResources() {
 
@@ -121,6 +122,7 @@ bool FrameFunc() {
 
 		} else {
 
+			gameTime += dt;
 			grid->update(dt);
 			for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->update(dt);
 			gui->update(dt);
@@ -192,7 +194,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	if(hge->System_Initiate()) {
 
 		srand(time(NULL));
-			
+		gameTime = 0.0f;	
+
 		//Load shit
 		loadResources();
 		

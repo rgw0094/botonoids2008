@@ -31,23 +31,29 @@ public:
 	bool isWallAt(float x, float y);
 	bool inBounds(float x, float y);
 	int numFoundations(int player);
+	void placeSillyPad(int gridX, int gridY, int player);
 
 	//Variables
 	int height, width, xOffset, yOffset;
+
 	int tiles[32][32];
 	float startedColorChange[32][32];
 	float alpha[32][32];
 	bool visited[32][32];			//Used for recursion
 	int foundations[32][32];		//Which player foundations belong to
 	int walls[32][32];				//Which player walls belong to
-	int gardens[32][32];				//Which player gardens belong to
+	int gardens[32][32];			//Which player gardens belong to
+	int sillyPads[32][32];			//Owner of silly pad
+	float sillyPadsPlaced[32][32];	//Time silly pad placed
+
 	bool wallsTouched[4];			//Which walls have been touched in the garden
 									// finding algorithm.
+
 
 	//Objects
 	HGE *hge;
 	hgeParticleManager *dustClouds;
-	
+	hgeSprite *sillyPadSprites[3];
 
 };
 

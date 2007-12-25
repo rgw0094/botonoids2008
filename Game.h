@@ -30,6 +30,7 @@
 #define GRID_SIZE 32
 #define COLOR_CHANGE_REFRESH 3.0f	//Time it takes for color change ability to refresh
 #define COLOR_CHANGE_TIME 2.0f		//Time it takes a square to change colors
+#define SILLY_PAD_DURATION 30.0f
 
 #define BUTTON_HEIGHT 71.0f
 #define BUTTON_WIDTH 248.0f

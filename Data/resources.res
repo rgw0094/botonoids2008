@@ -563,3 +563,11 @@ Sound snd_countdown {
  filename="countDownSound.wav"
  resgroup=1
 }
+
+;**************************
+;******** TEXTURES ********
+;**************************
+Texture sillypads {
+ filename="Data/Graphics/sillypads.png"
+ resgroup=1
+}
