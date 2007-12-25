@@ -510,7 +510,7 @@ Sprite damageTakenIcon {
 ;***********************
 Sprite itemcursor {
  texture="Data/Graphics/itemcursor.png"
- rect=0,0,34,34
+ rect=0,0,16,16
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
