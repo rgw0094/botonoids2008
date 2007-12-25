@@ -38,6 +38,7 @@ public:
 	void doStats(float dt);
 	bool addItem(int item);
 	void useItem(float dt);
+	int itemInSlot(int slot);
 
 	//Variables
 	int gridX, gridY, lastGridX, lastGridY;

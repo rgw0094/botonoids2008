@@ -175,7 +175,6 @@ void Player::draw(float dt) {
 
 	drawItemWheel(dt);
 
-
 } //end draw()
 
 /**
@@ -390,22 +389,60 @@ bool Player::addItem(int item) {
  */
 void Player::updateItemSlots(float dt) {
 
+	int numChanges = 1;
+	int currentSlot = 0;
+	bool keepTurning = true;
+
 	//Change to next item
 	if (input->buttonPressed(INPUT_NEXT_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + SPIN_TIME) {
-		for (int i = 0; i < 4; i++) {
-			if (itemSlots[i].position == 3) itemSlots[i].position = 0;
-			else itemSlots[i].position++;
-			itemSlots[i].targetAngle += (PI/2.0f);
+
+		//Determine how many turns to get to the next item
+		currentSlot = LEFT_SLOT;
+		numChanges = 1;
+		keepTurning = true;
+		while (currentSlot > TOP_SLOT && keepTurning) {
+			if (itemInSlot(currentSlot) == EMPTY) {
+				numChanges++;
+				currentSlot--;
+			} else {
+				keepTurning = false;
+			}
 		}
-		timeChangedItem = hge->Timer_GetTime();
+		
+		//Turn that number of times
+		for (int j = 0; j < numChanges; j++) {
+			for (int i = 0; i < 4; i++) {
+				if (itemSlots[i].position == 3) itemSlots[i].position = 0;
+				else itemSlots[i].position++;
+				itemSlots[i].targetAngle += (PI/2.0f);
+			}
+		}
+		timeChangedItem = hge->Timer_GetTime() + SPIN_TIME*(float)numChanges;
 	}
 
 	//Change to previous item
 	if (input->buttonPressed(INPUT_LAST_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + SPIN_TIME) {
-		for (int i = 0; i < 4; i++) {
-			if (itemSlots[i].position == 0) itemSlots[i].position = 3;
-			else itemSlots[i].position--;
-			itemSlots[i].targetAngle -= (PI/2.0f);
+
+		//Determine how many turns to get to the next item
+		currentSlot = RIGHT_SLOT;
+		numChanges = 1;
+		keepTurning = true;
+		while (currentSlot <= LEFT_SLOT && keepTurning) {
+			if (itemInSlot(currentSlot) == EMPTY) {
+				numChanges++;
+				currentSlot++;
+			} else {
+				keepTurning = false;
+			}
+		}
+		
+		//Turn that number of times
+		for (int j = 0; j < numChanges; j++) {
+			for (int i = 0; i < 4; i++) {
+				if (itemSlots[i].position == 0) itemSlots[i].position = 3;
+				else itemSlots[i].position--;
+				itemSlots[i].targetAngle -= (PI/2.0f);
+			}
 		}
 		timeChangedItem = hge->Timer_GetTime();
 	}
@@ -444,7 +481,7 @@ void Player::updateItemSlots(float dt) {
 void Player::drawItemWheel(float dt) {
 
 	//Draw the selected item cursor - it is always the top item
-	//resources->GetSprite("itemcursor")->Render(itemWheelX - 1.0f, itemWheelY - 26.0f);
+	resources->GetSprite("itemcursor")->Render(itemWheelX + 8.0, itemWheelY - 40.0);
 
 	//Loop through the slots
 	for (int i = 0; i < 4; i++) {
@@ -470,13 +507,19 @@ void Player::drawItemWheel(float dt) {
  */
 void Player::useItem(float dt) {
 
+	//Determine which item is in the top slot
+	int item;
+	for (int i = 0; i < 4; i++) {
+		if (itemSlots[i].position == TOP_SLOT) item = itemSlots[i].code;
+	}
+
 	//Silly Pad
-	if (itemSlots[TOP_SLOT].code == ITEM_SILLY_PAD) {
+	if (item == ITEM_SILLY_PAD) {
 		grid->placeSillyPad(gridX, gridY, playerNum);
 	}
 
 	//Decrease quantity
-	if (itemSlots[TOP_SLOT].code != EMPTY) {
+	if (item != EMPTY) {
 		if (itemSlots[TOP_SLOT].quantity == 1) {
 			itemSlots[TOP_SLOT].quantity = 0;
 			itemSlots[TOP_SLOT].code = EMPTY;
@@ -487,6 +530,13 @@ void Player::useItem(float dt) {
 
 } //end useItem()
 
-
-
+/**
+ * Returns what item is in the specified slot.
+ */
+int Player::itemInSlot(int slot) {
+	for (int i = 0; i < 4; i++) {
+		if (itemSlots[i].position == slot) return itemSlots[i].code;
+	}
+	return EMPTY;
+}
 
