@@ -149,10 +149,6 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize, int whichPl
 	//Generate random initial direction
 	int degrees = rand() % 360;
 	float radians = (float)degrees * (PI / 180.0f);
-	//int dir1 = rand() % 2;
-	//int dir2 = rand() % 2;
-	//newItem.dx = (rand() % 100 + 50) * (dir1 == 0 ? -1 : 1);
-	//newItem.dy = (rand() % 200) * (dir2 == 0 ? -1 : 1);
 	newItem.dx = 100.0f * cos(radians);
 	newItem.dy = 100.0f * sin(radians);
 
