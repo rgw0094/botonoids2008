@@ -37,6 +37,10 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	collisionBox = new hgeRect();
 	collisionBox->SetRadius(x,y,14.0f);
 
+	//Center of the wheel
+	itemWheelX = 928.0f;
+	itemWheelY = 320.0f + playerNum * 185.0f;
+
 	//Reset the player's animation to face down
 	botonoidGraphics[whichBotonoid]->SetFrame(0);
 	
@@ -414,6 +418,9 @@ void Player::updateItemSlots(float dt) {
 			itemSlots[i].angle -= speed*dt;
 		}
 
+		itemSlots[i].x = itemWheelX+ 35.0f * cos(itemSlots[i].angle);
+		itemSlots[i].y = itemWheelY + 25.0f * sin(itemSlots[i].angle);
+
 	}
 
 }
@@ -423,20 +430,23 @@ void Player::updateItemSlots(float dt) {
  */
 void Player::drawItemWheel(float dt) {
 
-	//Center of the wheel
-	float centerX = 928.0f;
-	float centerY = 320.0f + playerNum * 185.0f;
-
 	//Draw the selected item cursor - it is always the top item
-	resources->GetSprite("itemcursor")->Render(centerX - 1.0f, centerY - 26.0f);
+	//resources->GetSprite("itemcursor")->Render(itemWheelX - 1.0f, itemWheelY - 26.0f);
 
 	//Loop through the slots
 	for (int i = 0; i < 4; i++) {
 
 		//If the slot isn't empty, draw the item in it.
 		if (itemSlots[i].code != EMPTY) {
-			itemManager->itemSprites[itemSlots[i].code]->Render(centerX + 35.0f * cos(itemSlots[i].angle), centerY + 25.0f * sin(itemSlots[i].angle));
+			itemManager->itemSprites[itemSlots[i].code]->Render(itemSlots[i].x, itemSlots[i].y);
 			
+			//If there is more than 1 of this item, draw the quantity
+			if (itemSlots[i].quantity > 1) {
+				resources->GetFont("timer")->SetScale(0.6f);
+				resources->GetFont("timer")->printf(itemSlots[i].x + 28.0f, itemSlots[i].y-4.0f, HGETEXT_LEFT, "%d", itemSlots[i].quantity);
+				resources->GetFont("timer")->SetScale(1.0f);
+			}
+
 		}
 
 	}

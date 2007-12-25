@@ -102,7 +102,7 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 	if (gardenSize < 2) return;
 
 	//Determine what item to generate
-	int item = ITEM_SILLY_PAD;
+	int item = rand() % 10;
 
 	//Create the new item
 	Item newItem;

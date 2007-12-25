@@ -17,6 +17,7 @@ struct ItemSlot {
 	int position;
 	float angle;
 	float targetAngle;
+	float x,y;
 };
 
 class Player {
@@ -50,6 +51,7 @@ public:
 	int numWallsLeft;
 	int health;
 	float positionAngles[4];	//angles corresponding to position in item wheel
+	float itemWheelX, itemWheelY;
 
 	//Time variables
 	float startedMoving;

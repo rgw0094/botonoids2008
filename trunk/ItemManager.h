@@ -3,7 +3,7 @@
 
 #include "game.h"
 
-#define NUM_ITEMS 1
+#define NUM_ITEMS 10
 #define ITEM_SILLY_PAD 0
 
 struct Item {
