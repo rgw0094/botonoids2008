@@ -103,8 +103,20 @@ void Grid::draw(float dt) {
 			}
 
 			//Silly pads
-			if (sillyPads[i][j] != -1) {//gameTime < sillyPadsPlaced[i][j] + SILLY_PAD_DURATION) {
+			float timeSincePlaced, alpha;
+			if (sillyPads[i][j] != -1) {
+				
+				//Make the silly pad fade out during the last second
+				timeSincePlaced = gameTime - sillyPadsPlaced[i][j];
+				if (SILLY_PAD_DURATION - timeSincePlaced < 1.0f) {
+					alpha = (1.0f - (1.0f - (SILLY_PAD_DURATION - timeSincePlaced))) / 1.0f * 255.0f;
+					sillyPadSprites[sillyPads[i][j]]->SetColor(ARGB(alpha, 255, 255, 255));
+				}
+
+				//Draw the silly pad
 				sillyPadSprites[sillyPads[i][j]]->Render(tileX, tileY);
+				sillyPadSprites[sillyPads[i][j]]->SetColor(ARGB(255,255,255,255));
+
 			}
 
 		}
