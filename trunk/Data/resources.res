@@ -508,8 +508,15 @@ Sprite damageTakenIcon {
 ;***********************
 ;******** ITEMS ********
 ;***********************
+Sprite itemcursor {
+ texture="Data/Graphics/itemcursor.png"
+ rect=0,0,34,34
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
 Texture items {
- filename=Data/Graphics/items.png
+ filename=Data/Graphics/itemTokens.png
  resgroup=1
 }
 Animation silverBotonoid {
@@ -554,15 +561,5 @@ Music song3 {
 ;************************
 Sound snd_countdown {
  filename="countDownSound.wav"
- resgroup=1
-}
-
-
-
-Sprite testItem {
- texture="Data/Graphics/items.png"
- rect=0,0,32,32
- hotspot=0,0
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }

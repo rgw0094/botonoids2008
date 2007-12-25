@@ -10,6 +10,7 @@ extern hgeFont *debugFont;
 extern Input *input;
 extern StatsPage *statsPage;
 extern GameInfo gameInfo;
+extern ItemManager *itemManager;
 extern Player *players[3];
 
 /**
@@ -44,7 +45,7 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 		positionAngles[i] = 0.5f * PI *(float)i;
 		itemSlots[i].position = i;
 		itemSlots[i].angle = itemSlots[i].targetAngle = positionAngles[itemSlots[i].position];
-		itemSlots[i].code = EMPTY;
+		itemSlots[i].code = 0; //EMPTY
 		itemSlots[i].quantity = 0;
 	}
 
@@ -161,9 +162,10 @@ void Player::draw(float dt) {
 
 	//Draw item slots
 	float centerX = 928.0f;
-	float centerY = 320.0f + playerNum * 185.0f;	
+	float centerY = 320.0f + playerNum * 185.0f;
+	resources->GetSprite("itemcursor")->Render(centerX - 1.0f, centerY - 26.0f);
 	for (int i = 0; i < 4; i++) {
-		resources->GetSprite("testItem")->Render(centerX + 35.0f * cos(itemSlots[i].angle), centerY + 25.0f * sin(itemSlots[i].angle));
+		itemManager->itemSprites[itemSlots[i].code]->Render(centerX + 35.0f * cos(itemSlots[i].angle), centerY + 25.0f * sin(itemSlots[i].angle));
 	}
 
 } //end draw()
@@ -365,6 +367,7 @@ void Player::updateItemSlots(float dt) {
 		}
 		timeChangedItem = hge->Timer_GetTime();
 	}
+
 	//Change to previous item
 	if (input->buttonPressed(INPUT_LAST_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + SPIN_TIME) {
 		for (int i = 0; i < 4; i++) {

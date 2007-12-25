@@ -12,6 +12,7 @@ struct Item {
 	float x, y, dx, dy, radius;
 	hgeParticleSystem *trail;
 	hgeRect *collisionBox;
+	hgeAnimation *animation;
 };
 
 
@@ -29,7 +30,6 @@ public:
 
 	std::list<Item> itemList;
 	hgeSprite *itemSprites[NUM_ITEMS];
-	hgeAnimation *itemAnimations[NUM_ITEMS];
 
 };
 

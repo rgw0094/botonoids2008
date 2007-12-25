@@ -13,19 +13,7 @@ extern GameInfo gameInfo;
 ItemManager::ItemManager() {
 	//Load item sprites
 	for (int i = 0; i < NUM_ITEMS; i++) {
-		itemSprites[i] = new hgeSprite(resources->GetTexture("items"),i*32,0,32,32);
-		itemSprites[i]->SetHotSpot(16,16);
-
-		itemAnimations[i] = new hgeAnimation(resources->GetTexture("items"),	//texture
-											 16, //frames
-											 16, //FPS
-											 0,	 //x
-											 0,	 //y
-											 32.0f, //w
-											 32.0f); //h
-		itemAnimations[i]->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
-		itemAnimations[i]->Play();
-
+		itemSprites[i] = new hgeSprite(resources->GetTexture("items"), 0, 32*i, 32, 32);
 	}
 }
 
@@ -33,7 +21,9 @@ ItemManager::ItemManager() {
  * Destructor.
  */
 ItemManager::~ItemManager() {
-	for (int i = 0; i < NUM_ITEMS; i++) delete itemSprites[i];
+	for (int i = 0; i < NUM_ITEMS; i++) {
+		delete itemSprites[i];
+	}
 	reset();
 }
 
@@ -44,10 +34,8 @@ void ItemManager::draw(float dt) {
 
 	std::list<Item>::iterator i;
 	for (i = itemList.begin(); i != itemList.end(); i++) {
-		i->trail->MoveTo(i->x + 16.0f, i->y + 16.0f);
-		i->trail->Update(dt);
 		i->trail->Render();
-		itemAnimations[i->itemCode]->Render(i->x, i->y);
+		i->animation->Render(i->x, i->y);
 	}
 
 }
@@ -57,19 +45,17 @@ void ItemManager::draw(float dt) {
  */
 void ItemManager::update(float dt) {
 
-	//Update item animations
-	for (int i = 0; i < NUM_ITEMS; i++) {
-		itemAnimations[i]->Update(dt);
-	}
-
 	//Loop through each item
 	std::list<Item>::iterator i;
 	for (i = itemList.begin(); i != itemList.end(); i++) {
 
-		//Update position
+		//Update stuff
 		i->y += i->dy*dt;
 		i->x += i->dx*dt;
+		i->trail->MoveTo(i->x + 16.0f, i->y + 16.0f);
+		i->trail->Update(dt);
 		i->collisionBox->SetRadius(i->x, i->y, i->radius);
+		i->animation->Update(dt);
 
 		float xDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dx + i->radius * (i->dx > 0.0f ? 1.0f : -1.0f);
 		float yDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dy + i->radius * (i->dy > 0.0f ? 1.0f : -1.0f);
@@ -121,6 +107,16 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize, int whichPl
 	newItem.itemCode = item;
 	newItem.player = whichPlayer;
 	newItem.radius = 13.0f;
+	newItem.animation = new hgeAnimation(resources->GetTexture("items"),
+											 32,		//frames
+											 32,		//FPS
+											 0,			//x
+											 item*32,	//y
+											 32.0f,		//w
+											 32.0f);	//h
+	newItem.animation->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
+	newItem.animation->SetHotSpot(16.0f, 16.0f);
+	newItem.animation->Play();
 
 	//Randomly choose a square marked by the grid->visited[][] array to spawn the item in.
 	int randNum = rand() % 10000;
@@ -150,11 +146,15 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize, int whichPl
 	newItem.trail = new hgeParticleSystem("Data/particle9.psi", resources->GetSprite("particleGraphic5"));
 	newItem.trail->FireAt(newItem.x+16.0f, newItem.y+16.0f);
 
-	//Generate random initial velocity
-	int dir1 = rand() % 2;
-	int dir2 = rand() % 2;
-	newItem.dx = (rand() % 100 + 50) * (dir1 == 0 ? -1 : 1);
-	newItem.dy = (rand() % 200) * (dir2 == 0 ? -1 : 1);
+	//Generate random initial direction
+	int degrees = rand() % 360;
+	float radians = (float)degrees * (PI / 180.0f);
+	//int dir1 = rand() % 2;
+	//int dir2 = rand() % 2;
+	//newItem.dx = (rand() % 100 + 50) * (dir1 == 0 ? -1 : 1);
+	//newItem.dy = (rand() % 200) * (dir2 == 0 ? -1 : 1);
+	newItem.dx = 100.0f * cos(radians);
+	newItem.dy = 100.0f * sin(radians);
 
 	//Add it to the item list
 	itemList.push_back(newItem);

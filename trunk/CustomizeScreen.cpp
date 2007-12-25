@@ -73,7 +73,9 @@ void CustomizeScreen::draw(float dt) {
 	//Draw tooltips
 	for (int i = 0; i < 6; i++) {
 		//Non-tool tip text
-		//resources->GetFont("tooltip")->printf(tooltips[i].textX, tooltips[i].textY, HGETEXT_LEFT, "Player %d Handicap", (i/2)+1);
+		if (i % 2 == 0) {
+			resources->GetFont("tooltip")->printf(tooltips[i].textX, tooltips[i].textY, HGETEXT_LEFT, "Player %d Handicap", (i/2)+1);
+		}
 		//Tooltip text
 		if (tooltips[i].mouseOver) {
 			resources->GetSprite("blackbox")->RenderStretch(tooltips[i].textX, 
