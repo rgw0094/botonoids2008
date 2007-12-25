@@ -41,7 +41,7 @@ void loadResources() {
 	//Botonoid names
 	botonoidNames[0] = "Alphanoid";
 	botonoidNames[1] = "Barvinoid";
-	botonoidNames[2] = "Gardennoid";
+	botonoidNames[2] = "Herbonoid";
 
 	//Load textures
 	botonoidsTexture = resources->GetTexture("botonoids");
@@ -68,13 +68,14 @@ void loadResources() {
 
 }
 
-
-
+/**
+ * Deletes game resources and objects
+ */
 void deleteResources() {
 	delete resources;
+	if (input) delete input;
+	if (itemManager) delete itemManager;
 }
-
-
 
 bool FrameFunc() {
 
@@ -220,9 +221,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Free shit
 		input->saveInputs();
 		deleteResources();
-		if (input) delete input;
-		if (itemManager) delete itemManager;
-
+		
 	}
 	else MessageBox(NULL, hge->System_GetErrorMessage(), "Error", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 
