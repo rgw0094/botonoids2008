@@ -6,6 +6,7 @@ extern hgeResourceManager *resources;
 extern Menu *menu;
 extern Input *input;
 extern GameInfo gameInfo;
+extern std::string botonoidNames[3];
 extern int mode;
 
 #define BACK_BUTTON 0
@@ -84,7 +85,9 @@ void BotonoidSelectScreen::draw(float dt) {
 	resources->GetSprite("titlescreen")->Render(0,0);
 	
 	//Draw header graphic
-	resources->GetFont("button")->printf(512,50,HGETEXT_CENTER, "Select Your Botonoid");
+	resources->GetFont("button")->SetScale(1.3);
+	resources->GetFont("button")->printf(512,50,HGETEXT_CENTER, "select your botonoid");
+	resources->GetFont("button")->SetScale(1.0);
 
 	//Draw botonoids
 	for (int i = 0; i < 3; i++) {
@@ -94,6 +97,12 @@ void BotonoidSelectScreen::draw(float dt) {
 			botonoids[i]->Render(botonoidPoints[i].x, botonoidPoints[i].y);
 		}
 	}
+
+	//Botonoid names
+	resources->GetFont("button")->printf(170.0, 240.0, HGETEXT_CENTER, botonoidNames[0].c_str());
+	resources->GetFont("button")->printf(515.0, 525.0, HGETEXT_CENTER, botonoidNames[1].c_str());
+	resources->GetFont("button")->printf(835.0, 185.0, HGETEXT_CENTER, "herbanoid");
+
 
 	//Draw selecters
 	for (int i = 0; i < gameInfo.numPlayers; i++) {
