@@ -18,7 +18,11 @@ OptionsScreen::OptionsScreen() {
 	buttons[CANCEL_BUTTON] = new Button(100.0f, 650.0f, "Cancel");
 	buttons[SAVE_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "Save");
 
-}
+	//Coordinates of the top left pixel of the customize window
+	guiX = (1024.0f-927.0f)/2.0f;
+	guiY = (768.0f-511.0f)/2.0f - 50.0f;
+
+}	
 
 /**
  * Destructor.
@@ -36,9 +40,7 @@ void OptionsScreen::draw(float dt) {
 
 	//Draw background
 	resources->GetSprite("titlescreen")->Render(0,0);
-
-	//Draw header graphic
-	resources->GetFont("button")->printf(512,50,HGETEXT_CENTER, "Options");
+	resources->GetSprite("optionsGUI")->Render(guiX, guiY);
 
 	//Draw buttons
 	for (int i = 0; i < 2; i++) {

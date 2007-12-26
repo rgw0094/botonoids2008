@@ -15,8 +15,8 @@ extern int mode;
 CustomizeScreen::CustomizeScreen() {
 
 	//Create buttons
-	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "Return");
-	buttons[NEXT_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "Start Game");
+	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "return");
+	buttons[NEXT_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "play");
 
 	//Coordinates of the top left pixel of the customize window
 	guiX = (1024.0f-927.0f)/2.0f;
@@ -61,7 +61,6 @@ CustomizeScreen::~CustomizeScreen() {
 void CustomizeScreen::draw(float dt) {
 
 	resources->GetSprite("titlescreen")->Render(0.0f, 0.0f);
-	resources->GetFont("button")->printf(512.0f, 25.0f, HGETEXT_CENTER, "Customize Game");
 	
 	//Draw GUI
 	resources->GetSprite("customizeGUI")->Render(guiX, guiY);

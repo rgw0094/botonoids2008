@@ -229,6 +229,17 @@ Sprite customizeGUI {
  resgroup=1 
 }
 
+;//*******************************
+;//******** OPTIONS SCREEN *******
+;//*******************************
+Sprite optionsGUI {
+ texture="Data/Graphics/optionsGui.png"
+ rect=0,0,927,511
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
+
 ;//**********************
 ;//******** FONTS *******
 ;//**********************

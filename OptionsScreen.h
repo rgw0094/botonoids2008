@@ -15,6 +15,10 @@ public:
 	void draw(float dt);
 	bool update(float dt, float mouseX, float mouseY);
 
+	//Variables
+	float guiX, guiY;
+
+	//Objects
 	Button *buttons[2];
 
 };
