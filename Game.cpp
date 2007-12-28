@@ -74,7 +74,11 @@ void startGame() {
 
 	//Set board size and time limit
 	int distFromEdge;
-	if (gameInfo.boardSize == LARGE) {
+	if (gameInfo.boardSize == CLASSIC) {
+		gameInfo.timeLimit = 300.0;
+		grid = new Grid(24,17);
+		distFromEdge = 5;
+	} else if (gameInfo.boardSize == LARGE) {
 		gameInfo.timeLimit = 300.0;
 		grid = new Grid(25,22);
 		distFromEdge = 5;
