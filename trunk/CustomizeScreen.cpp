@@ -4,6 +4,7 @@
 extern HGE *hge;
 extern hgeResourceManager *resources;
 extern Menu *menu;
+extern GameInfo gameInfo;
 extern int mode;
 
 #define BACK_BUTTON 0
@@ -15,7 +16,7 @@ extern int mode;
 CustomizeScreen::CustomizeScreen() {
 
 	//Create buttons
-	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "return");
+	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "back");
 	buttons[NEXT_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "play");
 
 	//Coordinates of the top left pixel of the customize window
@@ -44,6 +45,11 @@ CustomizeScreen::CustomizeScreen() {
 		tooltips[i].mouseOver = false;
 		count ++;
 	}
+
+	//Board size collision boxes
+	boardSizeBoxes[0] = new hgeRect(guiX+580.0, guiY+37.0, guiX+580.0+77.0, guiY+37.0+35.0);
+	boardSizeBoxes[1] = new hgeRect(guiX+689.0, guiY+37.0, guiX+689.0+77.0, guiY+37.0+35.0);
+	boardSizeBoxes[2] = new hgeRect(guiX+803.0, guiY+37.0, guiX+803.0+77.0, guiY+37.0+35.0);
 
 }
 
@@ -86,12 +92,23 @@ void CustomizeScreen::draw(float dt) {
 		}
 	}
 
+	//Board size boxes
+	for (int i = 0; i < 3; i++) {
+		if (gameInfo.boardSize == i) {
+			drawCollisionBox(boardSizeBoxes[i], 0, 255, 0);
+		} else if (boardSizeBoxes[i]->TestPoint(mouseX, mouseY)) {
+			drawCollisionBox(boardSizeBoxes[i], 255, 255, 255);
+		}
+	}
+
 }
 
 /**
  * Update the botonoid select screen.
  */
-bool CustomizeScreen::update(float dt, float mouseX, float mouseY) {
+bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
+
+	hge->Input_GetMousePos(&mouseX, &mouseY);
 
 	//Determine whether each button is highlighted
 	for (int i = 0; i < 2; i++) {
@@ -101,6 +118,13 @@ bool CustomizeScreen::update(float dt, float mouseX, float mouseY) {
 	//Update tooltips
 	for (int i = 0; i < 6; i++) {
 		tooltips[i].mouseOver = tooltips[i].collisionBox->TestPoint(mouseX, mouseY);
+	}
+
+	//Select board size
+	for (int i = 0; i < 3; i++) {
+		if (hge->Input_KeyDown(HGEK_LBUTTON) && boardSizeBoxes[i]->TestPoint(mouseX, mouseY)) {
+			gameInfo.boardSize = i;
+		}
 	}
 
 	//Click Back Button

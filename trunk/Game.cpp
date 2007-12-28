@@ -50,7 +50,8 @@ void drawCollisionBox(hgeRect *box, int r, int g, int b) {
 
 /**
  * This is called when the "Start Game" button is pressed in the Customize screen. 
- * Game objects are created based on the choices players made in the menu.
+ * The game is initialized based on the choices made in the menu which are held in 
+ * the GameInfo struct.
  */
 void startGame() {
 
@@ -60,23 +61,41 @@ void startGame() {
 	countDownTimer = 1.0f;
 	stopMusic();
 
+	//Set board size and time limit
+	int distFromEdge;
+	if (gameInfo.boardSize == LARGE) {
+		gameInfo.timeLimit = 300.0;
+		grid = new Grid(25,22);
+		distFromEdge = 5;
+	} else if (gameInfo.boardSize == MEDIUM) {
+		gameInfo.timeLimit = 240.0;
+		grid = new Grid(21,19);
+		distFromEdge = 4;
+	} else if (gameInfo.boardSize == SMALL) {
+		gameInfo.timeLimit = 180.0;
+		grid = new Grid(17,16);
+		distFromEdge = 4;
+	}
+
+	//Create new players
+	if (gameInfo.numPlayers >= 1) 
+		players[0] = new Player(0 + distFromEdge, 0 + distFromEdge, 0, gameInfo.selectedBotonoid[0]);
+	if (gameInfo.numPlayers >= 2) 
+		players[1] = new Player(grid->width - distFromEdge - 1, 0 + distFromEdge, 1 , gameInfo.selectedBotonoid[1]);
+	if (gameInfo.numPlayers >= 3) 
+		players[2] = new Player(grid->width/2, grid->height - distFromEdge - 1, 2, gameInfo.selectedBotonoid[2]);
+
 	//Reset game info
 	timer = gameInfo.timeLimit;
 	gameInfo.winner = -1;
 
 	//Create new game objects
-	if (grid) delete grid;
-	grid = new Grid(25,22);
 	if (gui) delete gui;
 	gui = new GUI();
 	if (statsPage) delete statsPage;
 	statsPage = new StatsPage();
 	if (itemManager) delete itemManager;
 	itemManager = new ItemManager();
-
-	players[0] = new Player(5, 5, 0, gameInfo.selectedBotonoid[0]);
-	players[1] = new Player(15, 5,1 , gameInfo.selectedBotonoid[1]);
-	if (gameInfo.numPlayers == 3) players[2] = new Player(10,15, 2, gameInfo.selectedBotonoid[2]);
 
 }
 

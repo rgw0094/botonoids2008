@@ -43,6 +43,11 @@
 #define BLUE 3
 #define PURPLE 4
 
+//Board size
+#define SMALL 0
+#define MEDIUM 1
+#define LARGE 2
+
 struct GameInfo {
 	int numPlayers;
 	int musicVolume;
@@ -51,6 +56,7 @@ struct GameInfo {
 	int winner;
 	float timeLimit;
 	int selectedBotonoid[3];
+	int boardSize;
 };
 
 //Global functions
