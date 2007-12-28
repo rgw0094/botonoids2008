@@ -199,13 +199,14 @@ bool Grid::startColorChangeAt(int gridX, int gridY, int player) {
 		resetVisited();
 		int comboSize = floodCount(gridX,gridY,nextColor(tiles[gridX][gridY]));
 
-		//Update player's max combo size
-		if (comboSize > statsPage->stats[player].biggestCombo) 
-			statsPage->stats[player].biggestCombo = comboSize;
-
 		//If the combo is at least 6 large, make foundations
 		if (comboSize >= 6) {
 						
+			//Update player's max combo size
+			if (comboSize > statsPage->stats[player].biggestCombo) 
+				statsPage->stats[player].biggestCombo = comboSize;
+
+
             //Create the foundations
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
