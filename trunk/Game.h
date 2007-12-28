@@ -47,6 +47,7 @@
 #define SMALL 0
 #define MEDIUM 1
 #define LARGE 2
+#define CLASSIC 3
 
 //Selectable game music
 #define NUM_SONGS 13

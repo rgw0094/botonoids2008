@@ -56,10 +56,9 @@ CustomizeScreen::CustomizeScreen() {
 	}
 
 	//Board size collision boxes
-	boardSizeBoxes[0] = new hgeRect(guiX+580.0, guiY+37.0, guiX+580.0+77.0, guiY+37.0+35.0);
-	boardSizeBoxes[1] = new hgeRect(guiX+689.0, guiY+37.0, guiX+689.0+77.0, guiY+37.0+35.0);
-	boardSizeBoxes[2] = new hgeRect(guiX+803.0, guiY+37.0, guiX+803.0+77.0, guiY+37.0+35.0);
-
+	for (int i = 0; i < 4; i++) {
+		boardSizeBoxes[i] = new hgeRect(guiX+567.0 + i*80.0, guiY+37.0, guiX+567.0+77.0+i*80.0, guiY+37.0+35.0);
+	}
 }
 
 /**
@@ -68,7 +67,7 @@ CustomizeScreen::CustomizeScreen() {
 CustomizeScreen::~CustomizeScreen() {
 	for (int i = 0; i < 2; i++) delete buttons[i];
 	for (int i = 0; i < 6; i++) delete tooltips[i].collisionBox;
-	for (int i = 0; i < 3; i++) delete boardSizeBoxes[i];
+	for (int i = 0; i < 4; i++) delete boardSizeBoxes[i];
 	delete nextSongBox;
 	delete previousSongBox;
 	delete playSongBox;
@@ -106,7 +105,7 @@ void CustomizeScreen::draw(float dt) {
 	}
 
 	//Board size boxes
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		if (gameInfo.boardSize == i) {
 			drawCollisionBox(boardSizeBoxes[i], 0, 255, 0);
 		} else if (boardSizeBoxes[i]->TestPoint(mouseX, mouseY)) {
@@ -150,7 +149,7 @@ bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
 	}
 
 	//Select board size
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		if (hge->Input_KeyDown(HGEK_LBUTTON) && boardSizeBoxes[i]->TestPoint(mouseX, mouseY)) {
 			gameInfo.boardSize = i;
 		}
