@@ -199,6 +199,10 @@ bool Grid::startColorChangeAt(int gridX, int gridY, int player) {
 		resetVisited();
 		int comboSize = floodCount(gridX,gridY,nextColor(tiles[gridX][gridY]));
 
+		//Update player's max combo size
+		if (comboSize > statsPage->stats[player].biggestCombo) 
+			statsPage->stats[player].biggestCombo = comboSize;
+
 		//If the combo is at least 6 large, make foundations
 		if (comboSize >= 6) {
 						
@@ -207,6 +211,7 @@ bool Grid::startColorChangeAt(int gridX, int gridY, int player) {
                 for (int j = 0; j < height; j++) {
                     if (visited[i][j]) {
 						foundations[i][j] = player;
+						gardens[i][j] = -1;
                     }
                 }
             }
@@ -291,7 +296,7 @@ int Grid::floodCount(int x, int y, int color) {
  * color it is changing to.
  */
 int Grid::getColorAt(int x, int y) {
-	if (foundations[x][y] != -1 || walls[x][y] != -1) return -1;
+	if (foundations[x][y] != -1 || walls[x][y] != -1 || gardens[x][y] != -1) return -1;
 	if (startedColorChange[x][y] != 0.0f) {
 		return (tiles[x][y] == PURPLE) ? RED : tiles[x][y] + 1;
 	} else {

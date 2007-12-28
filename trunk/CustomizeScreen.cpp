@@ -107,7 +107,7 @@ void CustomizeScreen::draw(float dt) {
 	//Board size boxes
 	for (int i = 0; i < 4; i++) {
 		if (gameInfo.boardSize == i) {
-			drawCollisionBox(boardSizeBoxes[i], 0, 255, 0);
+			drawCollisionBox(boardSizeBoxes[i], 0, 180, 0);
 		} else if (boardSizeBoxes[i]->TestPoint(mouseX, mouseY)) {
 			drawCollisionBox(boardSizeBoxes[i], 255, 255, 255);
 		}

@@ -24,9 +24,9 @@ StatsPage::StatsPage() {
 	//Garden icon
 	icons[GARDEN_ICON].graphic = resources->GetSprite("gardenIcon");
 	strcpy(icons[GARDEN_ICON].tooltip, "Gardens Built");
-	//Max Score icon
-	icons[MAX_SCORE_ICON].graphic = resources->GetSprite("maxScoreIcon");
-	strcpy(icons[MAX_SCORE_ICON].tooltip, "Max Score");
+	//Biggest Combo icon
+	icons[BIGGEST_COMBO_ICON].graphic = resources->GetSprite("biggestComboIcon");
+	strcpy(icons[BIGGEST_COMBO_ICON].tooltip, "Largest Combo");
 	//Time In First icon
 	icons[TIME_IN_FIRST_ICON].graphic = resources->GetSprite("timeInFirstIcon");
 	strcpy(icons[TIME_IN_FIRST_ICON].tooltip, "Time in First");
@@ -47,14 +47,14 @@ StatsPage::StatsPage() {
 
 	//Init stats
 	for (int i = 0; i < 3; i++) {
-		stats[i].wallsBuilt = stats[i].gardensBuilt = stats[i].maxScore = stats[i].numItemsUsed =
+		stats[i].wallsBuilt = stats[i].gardensBuilt = stats[i].biggestCombo = stats[i].numItemsUsed =
 			stats[i].damageDealt = stats[i].damageTaken = 0;
 		stats[i].timeWinning = 0.0f;
 	
 	}
 
 	//Create OK Button
-	okButton = new Button(512.0f - BUTTON_WIDTH/2.0f - 70.0f, 600.0f, "Done");
+	okButton = new Button(512.0f - BUTTON_WIDTH/2.0f - 67.0f, 595.0f, "Done");
 
 }
 
@@ -135,11 +135,11 @@ void StatsPage::draw(float dt) {
 		else f->SetColor(ARGB(255,255,0,0));
 		f->printf(x + 100.0f + player*75.0f, icons[GARDEN_ICON].y, HGETEXT_CENTER, "%d", stats[player].gardensBuilt);
 
-		//Max Score
-		if (stats[player].maxScore == maxInt(stats[0].maxScore, stats[1].maxScore, stats[2].maxScore))
+		//Biggest Combo
+		if (stats[player].biggestCombo == maxInt(stats[0].biggestCombo, stats[1].biggestCombo, stats[2].biggestCombo))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, icons[MAX_SCORE_ICON].y, HGETEXT_CENTER, "%d", stats[player].maxScore);
+		f->printf(x + 100.0f + player*75.0f, icons[BIGGEST_COMBO_ICON].y, HGETEXT_CENTER, "%d", stats[player].biggestCombo);
 
 		//Time in first
 		if ((int)stats[player].timeWinning == maxInt((int)stats[0].timeWinning, (int)stats[1].timeWinning, (int)stats[2].timeWinning))
