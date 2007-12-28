@@ -204,6 +204,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		gameInfo.timeLimit = 300.0f;
 		gameInfo.musicVolume = 100.0f;
 		gameInfo.soundVolume = 100.0f;
+		gameInfo.boardSize = LARGE;
 		strcpy(gameInfo.gameMusic, "song3");
 
 		//Create Game Objects

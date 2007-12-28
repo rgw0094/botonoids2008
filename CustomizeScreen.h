@@ -24,10 +24,12 @@ public:
 
 	//Variables
 	float guiX, guiY;
+	float mouseX, mouseY;
 
 	//Objects
 	Button *buttons[2];
 	ToolTip tooltips[6];
+	hgeRect *boardSizeBoxes[3];
 
 };
 
