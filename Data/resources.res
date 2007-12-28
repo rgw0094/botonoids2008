@@ -268,6 +268,11 @@ Font tooltip {
  tracking=1.0
  resgroup=1
 }
+Font input {
+ filename="Data/Fonts/input.fnt"
+ tracking=1.0
+ resgroup=1
+}
 
 ;//*********************
 ;//******** GUI ********

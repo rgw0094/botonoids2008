@@ -1,9 +1,9 @@
-#include "Game.h"
-#include "OptionsScreen.h"
+#include "game.h"
 
 extern HGE *hge;
 extern hgeResourceManager *resources;
 extern Menu *menu;
+extern Input *input;
 extern int mode;
 
 #define CANCEL_BUTTON 0
@@ -45,6 +45,21 @@ void OptionsScreen::draw(float dt) {
 	//Draw buttons
 	for (int i = 0; i < 2; i++) {
 		buttons[i]->draw(dt);
+	}
+
+	//Controls
+	resources->GetFont("input")->SetColor(ARGB(255,20,20,255));
+	for (int player = 0; player < 3; player++) {
+		for (int control = 0; control < NUM_INPUTS; control++) {
+			float x = 280.0 + player*154.0;
+			float y = 190.0 + control*45.0;
+			if (input->inputs[player][control].keyboard) {
+				//Keyboard control
+				resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, hge->Input_GetKeyName(input->inputs[player][control].code));
+			} else {
+				//Input device control
+			}
+		}
 	}
 
 }
