@@ -53,6 +53,15 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 		itemSlots[i].quantity = 0;
 	}
 
+	//Empty item slot
+	if (whichBotonoid == 0) {
+		emptyItemSlot = resources->GetSprite("emptySlotGold");
+	} else if (whichBotonoid == 1) {
+		emptyItemSlot = resources->GetSprite("emptySlotBlack");
+	} else if (whichBotonoid == 2) {
+		emptyItemSlot = resources->GetSprite("emptySlotWhite");
+	}
+
 	//temp
 	itemSlots[0].code = ITEM_SILLY_PAD;
 	itemSlots[0].quantity = 10;
@@ -64,6 +73,7 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
  */
 Player::~Player() {
 	delete collisionBox;
+	delete emptyItemSlot;
 }
 
 /**
@@ -492,6 +502,9 @@ void Player::drawItemWheel(float dt) {
 				resources->GetFont("timer")->SetScale(1.0f);
 			}
 
+		} else {
+			//If the slot is empty, draw the empty item sprite
+			emptyItemSlot->Render(itemSlots[i].x, itemSlots[i].y);
 		}
 
 	}

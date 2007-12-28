@@ -540,6 +540,27 @@ Texture items {
  filename=Data/Graphics/itemTokens.png
  resgroup=1
 }
+Sprite emptySlotGold {
+ texture="Data/Graphics/emptyspots.png"
+ rect=0,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite emptySlotBlack {
+ texture="Data/Graphics/emptyspots.png"
+ rect=0,32,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite emptySlotWhite {
+ texture="Data/Graphics/emptyspots.png"
+ rect=0,64,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
 
 
 ;***********************
