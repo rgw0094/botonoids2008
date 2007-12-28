@@ -273,6 +273,11 @@ Font input {
  tracking=1.0
  resgroup=1
 }
+Font smallBattlefield {
+ filename="Data/Fonts/smallBattlefield.fnt"
+ tracking=1.0
+ resgroup=1
+}
 
 ;//*********************
 ;//******** GUI ********
@@ -535,16 +540,6 @@ Texture items {
  filename=Data/Graphics/itemTokens.png
  resgroup=1
 }
-Animation silverBotonoid {
- texture=botonoids
- rect=0,82,33,38
- frames=16
- fps=20.0
- mode=FORWARD,LOOP
- hotspot=16,25
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
-}
 
 
 ;***********************
@@ -555,22 +550,71 @@ Music menu {
  amplify=50
  resgroup=11
 }
-Music song1 {
- filename="song1.xm"
+Music mtalking {
+ filename="modernTalking.it"
  amplify=50
  resgroup=11
 }
-Music song2 {
- filename="song2.it"
- amplify=50
- resgroup=11
-}
-Music song3 {
+Music her11 {
  filename="song3.mod"
  amplify=50
  resgroup=11
 }
-
+Music noMercy {
+ filename="noMercy.mod"
+ amplify=30
+ resgroup=11
+}
+Music trainer5 {
+ filename="trainer5.mod"
+ amplify=40
+ resgroup=11
+}
+Music heidi7 {
+ filename="heidi7.xm"
+ amplify=40
+ resgroup=11
+}
+Music aSadTouch {
+ filename="ASadTouch.xm"
+ amplify=60
+ resgroup=11
+}
+Music stStyle {
+ filename="stStyle.xm"
+ amplify=50
+ resgroup=11
+}
+Music saturn {
+ filename="Saturn.xm"
+ amplify=50
+ resgroup=11
+}
+Music moskito {
+ filename="Moskito.xm"
+ amplify=50
+ resgroup=11
+}
+Music jttimarsuEdit {
+ filename="JttimarsuEdit.xm"
+ amplify=50
+ resgroup=11
+}
+Music puzzler {
+ filename="puzzler.mid"
+ amplify=20
+ resgroup=11
+}
+Music demag {
+ filename="Demag.xm"
+ amplify=40
+ resgroup=11
+}
+Music sierain2 {
+ filename="Sierain2.xm"
+ amplify=50
+ resgroup=11
+}
 
 ;************************
 ;******** SOUNDS ********

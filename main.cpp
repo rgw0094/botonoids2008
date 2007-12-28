@@ -12,6 +12,7 @@ Input *input;
 StatsPage *statsPage;
 ItemManager *itemManager;
 std::string botonoidNames[3];
+Song songs[NUM_SONGS];
 
 //Sounds
 HCHANNEL musicChannel;
@@ -31,12 +32,53 @@ int countDown;
 float countDownTimer;
 int mode = MENU_MODE;
 float gameTime;
+bool menuMusicPlaying;
 
 void loadResources() {
 
 	//Create resource manager from resource script
 	resources = new hgeResourceManager("Data/resources.res");
 	hge->Resource_AttachPack("Data/Sounds.zip");
+
+	//Selectable songs
+	strcpy(songs[0].fileName, "stStyle");
+	strcpy(songs[0].songName, "ST-Style");
+
+	strcpy(songs[1].fileName, "mtalking");
+	strcpy(songs[1].songName, "Modern Talking");
+
+	strcpy(songs[2].fileName, "her11");
+	strcpy(songs[2].songName, "Her 11");
+
+	strcpy(songs[3].fileName, "trainer5");
+	strcpy(songs[3].songName, "Trainer 5");
+
+	strcpy(songs[4].fileName, "heidi7");
+	strcpy(songs[4].songName, "Heidi #7");
+
+	strcpy(songs[5].fileName, "aSadTouch");
+	strcpy(songs[5].songName, "A Sad Touch");
+
+	strcpy(songs[6].fileName, "noMercy");
+	strcpy(songs[6].songName, "No Mercy");
+
+	strcpy(songs[7].fileName, "saturn");
+	strcpy(songs[7].songName, "Saturn");
+
+	strcpy(songs[8].fileName, "moskito");
+	strcpy(songs[8].songName, "Moskito");
+
+	strcpy(songs[9].fileName, "jttimarsuEdit");
+	strcpy(songs[9].songName, "Jttimarsu Edit");
+
+	strcpy(songs[10].fileName, "demag");
+	strcpy(songs[10].songName, "Demag");
+
+	strcpy(songs[11].fileName, "sierain2");
+	strcpy(songs[11].songName, "Sierain 2");
+
+	strcpy(songs[12].fileName, "puzzler");
+	strcpy(songs[12].songName, "Classic Puzzler");
 
 	//Botonoid names
 	botonoidNames[0] = "Alphanoid";
@@ -205,7 +247,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		gameInfo.musicVolume = 100.0f;
 		gameInfo.soundVolume = 100.0f;
 		gameInfo.boardSize = LARGE;
-		strcpy(gameInfo.gameMusic, "song3");
 
 		//Create Game Objects
 		menu = new Menu();

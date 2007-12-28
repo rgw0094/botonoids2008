@@ -48,11 +48,18 @@
 #define MEDIUM 1
 #define LARGE 2
 
+//Selectable game music
+#define NUM_SONGS 13
+struct Song {
+	char songName[50];
+	char fileName[50];
+};
+
 struct GameInfo {
 	int numPlayers;
 	int musicVolume;
 	int soundVolume;
-	char gameMusic[30];
+	int gameMusic;
 	int winner;
 	float timeLimit;
 	int selectedBotonoid[3];
@@ -61,6 +68,7 @@ struct GameInfo {
 
 //Global functions
 int nextColor(int currentColor);
+void setMusic(int music);
 void setMusic(char *music);
 void stopMusic();
 void drawCollisionBox(hgeRect *box, int r, int g, int b);

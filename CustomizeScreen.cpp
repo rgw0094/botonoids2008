@@ -5,7 +5,9 @@ extern HGE *hge;
 extern hgeResourceManager *resources;
 extern Menu *menu;
 extern GameInfo gameInfo;
+extern bool menuMusicPlaying;
 extern int mode;
+extern Song songs[NUM_SONGS];
 
 #define BACK_BUTTON 0
 #define NEXT_BUTTON 1
@@ -15,6 +17,13 @@ extern int mode;
  */
 CustomizeScreen::CustomizeScreen() {
 	
+	selectedSong = 0;
+
+	//Song selection GUI items
+	nextSongBox = new hgeRect(265.0, 175.0, 295.0, 205.0);
+	previousSongBox = new hgeRect(88.0, 175.0, 115.0, 205.0);
+	playSongBox = new hgeRect(120.0, 175.0, 260.0, 205.0);
+
 	//Create buttons
 	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "back");
 	buttons[NEXT_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "play");
@@ -60,6 +69,9 @@ CustomizeScreen::~CustomizeScreen() {
 	for (int i = 0; i < 2; i++) delete buttons[i];
 	for (int i = 0; i < 6; i++) delete tooltips[i].collisionBox;
 	for (int i = 0; i < 3; i++) delete boardSizeBoxes[i];
+	delete nextSongBox;
+	delete previousSongBox;
+	delete playSongBox;
 }
 
 /**
@@ -102,6 +114,22 @@ void CustomizeScreen::draw(float dt) {
 		}
 	}
 
+	//Song selection
+	resources->GetFont("timer")->printf(193.0, 138.0, HGETEXT_CENTER, "%s", songs[selectedSong].songName);
+	
+	if (playSongBox->TestPoint(mouseX, mouseY)) {
+		resources->GetFont("smallBattlefield")->SetColor(ARGB(255, 230, 0, 0));
+		resources->GetFont("smallBattlefield")->printf(193.0, 182.0, HGETEXT_CENTER, "Play Song");
+	} else {
+		resources->GetFont("smallBattlefield")->SetColor(ARGB(255, 255, 255, 255));
+		resources->GetFont("smallBattlefield")->printf(193.0, 182.0, HGETEXT_CENTER, "Play Song");
+	}
+	
+	//drawCollisionBox(playSongBox, 255, 255, 255);
+	//drawCollisionBox(previousSongBox, 255, 255, 255);
+	//drawCollisionBox(nextSongBox, 255, 255, 255);
+
+
 }
 
 /**
@@ -128,13 +156,34 @@ bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
 		}
 	}
 
+	//Click Play Song Button
+	if (hge->Input_KeyDown(HGEK_LBUTTON) && playSongBox->TestPoint(mouseX, mouseY)) {
+		setMusic(songs[selectedSong].fileName);
+	}
+
+	//Click Next Song Button
+	if (hge->Input_KeyDown(HGEK_LBUTTON) && nextSongBox->TestPoint(mouseX, mouseY)) {
+		selectedSong++;
+		if (selectedSong == NUM_SONGS) selectedSong = 0;
+	}
+
+	//Click Previous Song Button
+	if (hge->Input_KeyDown(HGEK_LBUTTON) && previousSongBox->TestPoint(mouseX, mouseY)) {
+		selectedSong--;
+		if (selectedSong < 0) selectedSong = NUM_SONGS-1;
+	}
+	
 	//Click Back Button
 	if (buttons[BACK_BUTTON]->isClicked()) {
 		menu->currentScreen = SELECT_SCREEN;
+		if (!menuMusicPlaying) setMusic("menu");
 	}
 
-	//Click Next Button
+	//Click Start Button
 	if (buttons[NEXT_BUTTON]->isClicked()) {
+		//Save music choice
+		gameInfo.gameMusic = selectedSong;
+		//Start the game
 		startGame();
 	}
 
