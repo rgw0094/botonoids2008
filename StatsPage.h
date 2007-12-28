@@ -7,7 +7,7 @@
 #define NUM_STATS 7
 #define WALL_ICON 0
 #define GARDEN_ICON 1
-#define MAX_SCORE_ICON 2
+#define BIGGEST_COMBO_ICON 2
 #define TIME_IN_FIRST_ICON 3
 #define ITEMS_USED_ICON 4
 #define DAMAGE_DEALT_ICON 5
@@ -16,7 +16,7 @@
 struct PlayerStats {
 	int wallsBuilt;
 	int gardensBuilt;
-	int maxScore;
+	int biggestCombo;
 	float timeWinning;
 	int numItemsUsed;
 	int damageDealt;

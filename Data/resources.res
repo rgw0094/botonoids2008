@@ -490,7 +490,7 @@ Sprite gardenIcon {
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
-Sprite maxScoreIcon {
+Sprite biggestComboIcon {
  texture="Data/Graphics/icons.png"
  rect=64,0,32,32
  hotspot=0,0

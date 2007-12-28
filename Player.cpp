@@ -256,11 +256,6 @@ void Player::doStats(float dt) {
 		}
 	}
 
-	//Max score
-	if (score > statsPage->stats[playerNum].maxScore) {
-		statsPage->stats[playerNum].maxScore = score;
-	}
-
 	//Time winning
 	if (gameInfo.winner == playerNum) {
 		statsPage->stats[playerNum].timeWinning += dt;
