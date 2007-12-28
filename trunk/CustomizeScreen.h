@@ -3,6 +3,7 @@
 
 #include "MenuScreen.h"
 #include "button.h"
+#include <string>
 
 struct ToolTip {
 	float textX, textY;
@@ -10,6 +11,8 @@ struct ToolTip {
 	char text[20];
 	bool mouseOver;
 };
+
+
 
 class CustomizeScreen : public MenuScreen {
 
@@ -25,11 +28,13 @@ public:
 	//Variables
 	float guiX, guiY;
 	float mouseX, mouseY;
+	int selectedSong;
 
 	//Objects
 	Button *buttons[2];
 	ToolTip tooltips[6];
-	hgeRect *boardSizeBoxes[3];
+	hgeRect *boardSizeBoxes[3], *nextSongBox, *previousSongBox, *playSongBox;
+
 
 };
 

@@ -15,6 +15,8 @@ extern int mode;
 extern float timer;
 extern float countDownTimer;
 extern int countDown;
+extern bool menuMusicPlaying;
+extern Song songs[NUM_SONGS];
 
 /**
  * Returns the color that comes after currentColor
@@ -24,9 +26,17 @@ int nextColor(int currentColor) {
 }
 
 /**
- * Changes the music channel to play the specified song.
+ * Changes the music channel to play the specified song id.
+ */
+void setMusic(int music) {
+	setMusic(songs[music].fileName);
+}
+
+/**
+ * Changes the music channel to play the specified song name.
  */
 void setMusic(char *music) {
+	menuMusicPlaying = (strcmp(music, "menu") == 0);
 	hge->Channel_Stop(musicChannel);
 	hge->Music_SetPos(resources->GetMusic(music),0,0);
 	musicChannel = hge->Music_Play(resources->GetMusic(music), true, gameInfo.musicVolume);
@@ -34,6 +44,7 @@ void setMusic(char *music) {
 
 void stopMusic() {
 	hge->Channel_Stop(musicChannel);
+	menuMusicPlaying = false;
 }
 
 /**
@@ -57,8 +68,8 @@ void startGame() {
 
 	//Enter game state
 	mode = GAME_MODE;
-	countDown = 0;//4;
-	countDownTimer = 1.0f;
+	countDown = 1;//4;
+	countDownTimer = 0.0;//1.0
 	stopMusic();
 
 	//Set board size and time limit
