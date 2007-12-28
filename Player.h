@@ -68,6 +68,7 @@ public:
 
 	//Objects
 	hgeRect *collisionBox;
+	hgeSprite *emptyItemSlot;
 	ItemSlot itemSlots[4];
 
 };
