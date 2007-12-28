@@ -14,7 +14,7 @@ extern int mode;
  * Constructor.
  */
 CustomizeScreen::CustomizeScreen() {
-
+	
 	//Create buttons
 	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "back");
 	buttons[NEXT_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "play");
@@ -59,6 +59,7 @@ CustomizeScreen::CustomizeScreen() {
 CustomizeScreen::~CustomizeScreen() {
 	for (int i = 0; i < 2; i++) delete buttons[i];
 	for (int i = 0; i < 6; i++) delete tooltips[i].collisionBox;
+	for (int i = 0; i < 3; i++) delete boardSizeBoxes[i];
 }
 
 /**

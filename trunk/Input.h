@@ -55,7 +55,7 @@ public:
 	void toggleGamePad();
 	void saveInputs();
 	void loadInputs();
-	void setEditMode(int whichInput, int player);
+	void setEditMode(int player, int whichInput);
 
 	//Variables
 	InputStruct inputs[3][NUM_INPUTS];

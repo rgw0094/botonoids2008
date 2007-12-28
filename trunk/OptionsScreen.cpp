@@ -7,7 +7,7 @@ extern Input *input;
 extern int mode;
 
 #define CANCEL_BUTTON 0
-#define SAVE_BUTTON 1
+#define DEFAULTS_BUTTON 1
 
 /**
  * Constructor.
@@ -15,12 +15,14 @@ extern int mode;
 OptionsScreen::OptionsScreen() {
 
 	//Create Buttons
-	buttons[CANCEL_BUTTON] = new Button(100.0f, 650.0f, "Cancel");
-	buttons[SAVE_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "Save");
+	buttons[CANCEL_BUTTON] = new Button(100.0f, 650.0f, "done");
+	buttons[DEFAULTS_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "defaults");
 
 	//Coordinates of the top left pixel of the customize window
 	guiX = (1024.0f-927.0f)/2.0f;
 	guiY = (768.0f-511.0f)/2.0f - 50.0f;
+
+	inputBox = new hgeRect();
 
 }	
 
@@ -31,6 +33,7 @@ OptionsScreen::~OptionsScreen() {
 	for (int i = 0; i < 2; i++) {
 		delete buttons[i];
 	}
+	delete inputBox;
 }
 
 /**
@@ -48,17 +51,27 @@ void OptionsScreen::draw(float dt) {
 	}
 
 	//Controls
-	resources->GetFont("input")->SetColor(ARGB(255,20,20,255));
 	for (int player = 0; player < 3; player++) {
 		for (int control = 0; control < NUM_INPUTS; control++) {
+			
 			float x = 280.0 + player*154.0;
 			float y = 190.0 + control*45.0;
-			if (input->inputs[player][control].keyboard) {
-				//Keyboard control
+			
+			//If the control is in edit mode
+			if (input->inputs[player][control].editMode) {
+				resources->GetFont("input")->SetColor(ARGB(255,255,255,255));
+				resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, "Press Button");
+
+			//If the control is using the keyboard
+			} else if (input->inputs[player][control].keyboard) {
+				resources->GetFont("input")->SetColor(ARGB(255,20,20,255));
 				resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, hge->Input_GetKeyName(input->inputs[player][control].code));
+			
+			//If the control is using the gamepad
 			} else {
-				//Input device control
+				resources->GetFont("input")->SetColor(ARGB(255,20,20,255));
 			}
+
 		}
 	}
 
@@ -69,6 +82,8 @@ void OptionsScreen::draw(float dt) {
  */
 bool OptionsScreen::update(float dt, float mouseX, float mouseY) {
 
+	hge->Input_GetMousePos(&mouseX, &mouseY);
+
 	//Update buttons
 	for (int i = 0; i < 2; i++) {
 		buttons[i]->update(mouseX, mouseY);
@@ -77,11 +92,44 @@ bool OptionsScreen::update(float dt, float mouseX, float mouseY) {
 	//Click Cancel Button
 	if (buttons[CANCEL_BUTTON]->isClicked()) {
 		menu->currentScreen = TITLE_SCREEN;
+		//Turn edit mode off for all inputs
+		input->setEditMode(-1,-1);
 	}
 
-	//Click Save Button
-	if (buttons[SAVE_BUTTON]->isClicked()) {
-		//save
+	//Click Defaults Button
+	if (buttons[DEFAULTS_BUTTON]->isClicked()) {
+		//Restore defaults
+		//...
+	}
+
+	//Controls
+	for (int player = 0; player < 3; player++) {
+		for (int control = 0; control < NUM_INPUTS; control++) {
+			
+			//Set collision box for this control
+			float x = 280.0 + player*154.0;
+			float y = 190.0 + control*45.0;
+			inputBox->Set(x - 75.0, y - 5.0, x + 75.0, y + 35.0);
+			drawCollisionBox(inputBox, 255, 255, 255);
+			
+			//Click on the control box
+			if (hge->Input_KeyDown(HGEK_LBUTTON) && inputBox->TestPoint(mouseX, mouseY)) {
+				input->setEditMode(player, control);
+			}
+
+			//If the control is in edit mode, listen for the new input
+			if (input->inputs[player][control].editMode) {
+				for (int i = 0; i < 255; i++) {
+					if (hge->Input_KeyDown(i) && i != HGEK_LBUTTON) {
+						//Save new control
+						input->inputs[player][control].code = i;
+						//Turn edit mode off
+						input->setEditMode(-1, -1);
+					}
+				}
+			}
+
+		}
 	}
 
 	return false;
