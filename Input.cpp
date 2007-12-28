@@ -444,8 +444,10 @@ void Input::loadInputs() {
 // Name: setEditMode()
 // Desc: Sets the specified input's editMode to true and the rest to false
 //-----------------------------------------------------------------------------
-void Input::setEditMode(int whichInput, int whichPlayer) {
-	for (int i = 0; i < NUM_INPUTS; i++) {
-		inputs[whichPlayer][i].editMode = (i == whichInput);
+void Input::setEditMode(int whichPlayer, int whichInput) {
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < NUM_INPUTS; j++) {
+			inputs[i][j].editMode = (i == whichPlayer && j == whichInput);
+		}
 	}
 }

@@ -17,9 +17,11 @@ public:
 
 	//Variables
 	float guiX, guiY;
+	float mouseX, mouseY;
 
 	//Objects
 	Button *buttons[2];
+	hgeRect *inputBox;
 
 };
 
