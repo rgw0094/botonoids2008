@@ -54,7 +54,7 @@ StatsPage::StatsPage() {
 	}
 
 	//Create OK Button
-	okButton = new Button(512.0f - BUTTON_WIDTH/2.0f - 67.0f, 595.0f, "Done");
+	okButton = new Button(512.0f - BUTTON_WIDTH/2.0f - 67.0f, 575.0f, "Done");
 
 }
 
@@ -113,7 +113,6 @@ void StatsPage::draw(float dt) {
 
 			if (icons[i].mouseOver) {
 				f->printf(x + 140.0f, y + 87.0f, HGETEXT_CENTER, "%s", botonoidNames[players[i-NUM_STATS]->whichBotonoid].c_str());
-				//f->printf(icons[i].x + 16.0f, icons[i].y-30.0f, HGETEXT_CENTER, "%s", botonoidNames[i-NUM_STATS].c_str());
 			}
 
 		}
