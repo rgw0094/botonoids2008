@@ -99,12 +99,30 @@ void ItemManager::update(float dt) {
  */
 void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 		
-	//Gardens must be at least 3 
-	if (gardenSize < 2) return;
+	//Return if items are all turned off!!!
+	int totalItemFreq = 0;
+	for (int i = 0; i < 10; i++) totalItemFreq += gameInfo.itemFrequencies[i];
+	if (totalItemFreq == 0) return;
+
+	//Return if garden is not at least ??? squares large
+	if (gardenSize < 1) return;
 
 	//Determine what item to generate
-	int item = rand() % 10;
-	//int item = ITEM_SILLY_PAD;
+	int item, itemRand, cumFreq;
+	bool itemSelected = false;
+	while (!itemSelected) {
+		itemRand = rand() % 50000;
+		cumFreq = 0;
+		for (int i = 0; i < 10; i++) {
+			cumFreq += gameInfo.itemFrequencies[i];
+			if (!itemSelected && (itemRand/1000) < cumFreq) {
+				itemSelected = true;
+				item = i;
+			}
+		}
+	}
+
+
 
 	//Create the new item
 	Item newItem;
