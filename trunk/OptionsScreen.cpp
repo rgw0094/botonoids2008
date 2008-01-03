@@ -78,6 +78,7 @@ void OptionsScreen::draw(float dt) {
 			//If the control is using the gamepad
 			} else {
 				resources->GetFont("input")->SetColor(ARGB(255,20,20,255));
+				//...
 			}
 
 		}
@@ -111,14 +112,14 @@ bool OptionsScreen::update(float dt, float mouseX, float mouseY) {
 
 	//Click on music volume bar
 	if (musicVolumeBox->TestPoint(mouseX, mouseY) && hge->Input_GetKeyState(HGEK_LBUTTON)) {
-		gameInfo.musicVolume = ((514.0 - mouseY) / 36) * 10;
+		gameInfo.musicVolume = ((514.0 - mouseY - 25) / 36) * 10;
 		hge->Channel_SetVolume(musicChannel, gameInfo.musicVolume);
 		hge->Ini_SetInt("Options", "musicVolume", gameInfo.musicVolume);
 	}
 
 	//Click on sound volume bar
 	if (soundVolumeBox->TestPoint(mouseX, mouseY) && hge->Input_GetKeyState(HGEK_LBUTTON)) {
-		gameInfo.soundVolume = ((514.0 - mouseY) / 36) * 10;
+		gameInfo.soundVolume = ((514.0 - mouseY - 25) / 36) * 10;
 		hge->Ini_SetInt("Options", "soundVolume", gameInfo.soundVolume);
 	}
 	
