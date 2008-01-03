@@ -13,6 +13,7 @@ StatsPage *statsPage;
 ItemManager *itemManager;
 std::string botonoidNames[3];
 Song songs[NUM_SONGS];
+hgeAnimation *itemAnimations[10];
 
 //Sounds
 HCHANNEL musicChannel;
@@ -40,51 +41,6 @@ void loadResources() {
 	resources = new hgeResourceManager("Data/resources.res");
 	hge->Resource_AttachPack("Data/Sounds.zip");
 
-	//Selectable songs
-	strcpy(songs[0].fileName, "stStyle");
-	strcpy(songs[0].songName, "ST-Style");
-
-	strcpy(songs[1].fileName, "mtalking");
-	strcpy(songs[1].songName, "Modern Talking");
-
-	strcpy(songs[2].fileName, "her11");
-	strcpy(songs[2].songName, "Her 11");
-
-	strcpy(songs[3].fileName, "trainer5");
-	strcpy(songs[3].songName, "Trainer 5");
-
-	strcpy(songs[4].fileName, "heidi7");
-	strcpy(songs[4].songName, "Heidi #7");
-
-	strcpy(songs[5].fileName, "aSadTouch");
-	strcpy(songs[5].songName, "A Sad Touch");
-
-	strcpy(songs[6].fileName, "noMercy");
-	strcpy(songs[6].songName, "No Mercy");
-
-	strcpy(songs[7].fileName, "saturn");
-	strcpy(songs[7].songName, "Saturn");
-
-	strcpy(songs[8].fileName, "moskito");
-	strcpy(songs[8].songName, "Moskito");
-
-	strcpy(songs[9].fileName, "jttimarsuEdit");
-	strcpy(songs[9].songName, "Jttimarsu Edit");
-
-	strcpy(songs[10].fileName, "demag");
-	strcpy(songs[10].songName, "Demag");
-
-	strcpy(songs[11].fileName, "sierain2");
-	strcpy(songs[11].songName, "Sierain 2");
-
-	strcpy(songs[12].fileName, "puzzler");
-	strcpy(songs[12].songName, "Classic Puzzler");
-
-	//Botonoid names
-	botonoidNames[0] = "Alphanoid";
-	botonoidNames[1] = "Barvinoid";
-	botonoidNames[2] = "Herbonoid";
-
 	//Load textures
 	botonoidsTexture = resources->GetTexture("botonoids");
 	tilesTexture = resources->GetTexture("tiles");
@@ -97,6 +53,20 @@ void loadResources() {
 	botonoidGraphics[2] = resources->GetAnimation("silverBotonoid");
 	botonoidGraphics[2]->Play();
 
+	//Load item animations
+	for (int i = 0; i < 10; i++) {
+		itemAnimations[i] = new hgeAnimation(resources->GetTexture("items"),
+											 32,		//frames
+											 20,		//FPS
+											 0,			//x
+											 i*32,		//y
+											 32.0f,		//w
+											 32.0f);	//h
+		itemAnimations[i]->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
+		itemAnimations[i]->SetHotSpot(16.0f, 16.0f);
+		itemAnimations[i]->Play();
+	}
+
 	//Load tile sprites
 	for (int i = 0; i < NUM_COLORS; i++) {
 		tileSprites[i] = new hgeSprite(tilesTexture,0,i*32,32,32);
@@ -108,6 +78,39 @@ void loadResources() {
 		}
 	}
 
+	//Selectable songs
+	strcpy(songs[0].fileName, "stStyle");
+	strcpy(songs[0].songName, "ST-Style");
+	strcpy(songs[1].fileName, "mtalking");
+	strcpy(songs[1].songName, "Modern Talking");
+	strcpy(songs[2].fileName, "her11");
+	strcpy(songs[2].songName, "Her 11");
+	strcpy(songs[3].fileName, "trainer5");
+	strcpy(songs[3].songName, "Trainer 5");
+	strcpy(songs[4].fileName, "heidi7");
+	strcpy(songs[4].songName, "Heidi #7");
+	strcpy(songs[5].fileName, "aSadTouch");
+	strcpy(songs[5].songName, "A Sad Touch");
+	strcpy(songs[6].fileName, "noMercy");
+	strcpy(songs[6].songName, "No Mercy");
+	strcpy(songs[7].fileName, "saturn");
+	strcpy(songs[7].songName, "Saturn");
+	strcpy(songs[8].fileName, "moskito");
+	strcpy(songs[8].songName, "Moskito");
+	strcpy(songs[9].fileName, "jttimarsuEdit");
+	strcpy(songs[9].songName, "Jttimarsu Edit");
+	strcpy(songs[10].fileName, "demag");
+	strcpy(songs[10].songName, "Demag");
+	strcpy(songs[11].fileName, "sierain2");
+	strcpy(songs[11].songName, "Sierain 2");
+	strcpy(songs[12].fileName, "puzzler");
+	strcpy(songs[12].songName, "Classic Puzzler");
+	
+	//Botonoid names
+	botonoidNames[0] = "Alphanoid";
+	botonoidNames[1] = "Barvinoid";
+	botonoidNames[2] = "Herbonoid";
+
 }
 
 /**
@@ -117,6 +120,7 @@ void deleteResources() {
 	delete resources;
 	if (input) delete input;
 	if (itemManager) delete itemManager;
+	for (int i = 0; i < 10; i++) delete itemAnimations[i];
 }
 
 bool FrameFunc() {
@@ -242,11 +246,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Load shit
 		loadResources();
 		
-		//Defaults
+		//Settings
 		gameInfo.timeLimit = 300.0f;
-		gameInfo.musicVolume = 100.0f;
-		gameInfo.soundVolume = 100.0f;
+		gameInfo.musicVolume = hge->Ini_GetInt("Options", "musicVolume", 100);
+		gameInfo.soundVolume = hge->Ini_GetInt("Options", "soundVolume", 100);
 		gameInfo.boardSize = LARGE;
+		loadItemFrequencies();
 
 		//Create Game Objects
 		menu = new Menu();
@@ -260,7 +265,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Let's rock now!
 		hge->System_Start();
 
-		//Free shit
+		//Free stuff
 		input->saveInputs();
 		deleteResources();
 		

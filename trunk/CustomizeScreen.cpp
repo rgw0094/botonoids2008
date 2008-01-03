@@ -8,6 +8,7 @@ extern GameInfo gameInfo;
 extern bool menuMusicPlaying;
 extern int mode;
 extern Song songs[NUM_SONGS];
+extern hgeAnimation *itemAnimations[10];
 
 #define BACK_BUTTON 0
 #define NEXT_BUTTON 1
@@ -59,6 +60,15 @@ CustomizeScreen::CustomizeScreen() {
 	for (int i = 0; i < 4; i++) {
 		boardSizeBoxes[i] = new hgeRect(guiX+567.0 + i*80.0, guiY+37.0, guiX+567.0+77.0+i*80.0, guiY+37.0+35.0);
 	}
+
+	//Item frequency bars
+	for (int i = 0; i < 10; i++) {
+		int x = (i < 5 ? 321 : 639);
+		itemBars[i] = new hgeRect(x, 223 + 60*(i%5), x+112, 268 + 60*(i%5));
+	}
+	
+
+
 }
 
 /**
@@ -77,10 +87,9 @@ CustomizeScreen::~CustomizeScreen() {
  * Draw the botonoid select screen.
  */
 void CustomizeScreen::draw(float dt) {
-
-	resources->GetSprite("titlescreen")->Render(0.0f, 0.0f);
 	
-	//Draw GUI
+	//Draw background and GUI
+	resources->GetSprite("titlescreen")->Render(0.0f, 0.0f);
 	resources->GetSprite("customizeGUI")->Render(guiX, guiY);
 
 	//Draw buttons
@@ -115,7 +124,6 @@ void CustomizeScreen::draw(float dt) {
 
 	//Song selection
 	resources->GetFont("timer")->printf(193.0, 138.0, HGETEXT_CENTER, "%s", songs[selectedSong].songName);
-	
 	if (playSongBox->TestPoint(mouseX, mouseY)) {
 		resources->GetFont("smallBattlefield")->SetColor(ARGB(255, 230, 0, 0));
 		resources->GetFont("smallBattlefield")->printf(193.0, 182.0, HGETEXT_CENTER, "Play Song");
@@ -123,11 +131,22 @@ void CustomizeScreen::draw(float dt) {
 		resources->GetFont("smallBattlefield")->SetColor(ARGB(255, 255, 255, 255));
 		resources->GetFont("smallBattlefield")->printf(193.0, 182.0, HGETEXT_CENTER, "Play Song");
 	}
-	
-	//drawCollisionBox(playSongBox, 255, 255, 255);
-	//drawCollisionBox(previousSongBox, 255, 255, 255);
-	//drawCollisionBox(nextSongBox, 255, 255, 255);
 
+	//Draw item frequency bars
+	for (int i = 0; i < 10; i++) {
+		//Draw black boxes over the squares that aren't be filled
+		for (int j = 5; j > 0; j--) {
+			if (gameInfo.itemFrequencies[i] < j) {
+				resources->GetSprite("blackbox")->RenderStretch(itemBars[i]->x1 + (j-1) * (112/5) + 1, 
+																itemBars[i]->y1 + 1,
+																itemBars[i]->x1 + (j-1) * (112/5) + 112/5,
+																itemBars[i]->y1 + 1 + 42);
+			}
+		}
+		//Spinning icon
+		itemAnimations[i]->Update(dt);
+		itemAnimations[i]->Render(itemBars[i]->x2 + 21, itemBars[i]->y1 + 21);
+	}
 
 }
 
@@ -152,6 +171,14 @@ bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
 	for (int i = 0; i < 4; i++) {
 		if (hge->Input_KeyDown(HGEK_LBUTTON) && boardSizeBoxes[i]->TestPoint(mouseX, mouseY)) {
 			gameInfo.boardSize = i;
+		}
+	}
+
+	//Click on item frequency bars
+	for (int i = 0; i < 10; i++) {
+		if (itemBars[i]->TestPoint(mouseX, mouseY) && hge->Input_GetKeyState(HGEK_LBUTTON)) {
+			gameInfo.itemFrequencies[i] = (mouseX - itemBars[i]->x1 + 12) / (112/5);
+			saveItemFrequencies();
 		}
 	}
 

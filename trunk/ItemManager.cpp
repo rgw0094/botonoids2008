@@ -6,6 +6,7 @@ extern hgeResourceManager *resources;
 extern Grid *grid;
 extern Player *players[3];
 extern GameInfo gameInfo;
+extern hgeAnimation *itemAnimations[10];
 
 /**
  * Constructor.
@@ -109,13 +110,7 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 	Item newItem;
 	newItem.itemCode = item;
 	newItem.radius = 13.0f;
-	newItem.animation = new hgeAnimation(resources->GetTexture("items"),
-											 32,		//frames
-											 32,		//FPS
-											 0,			//x
-											 item*32,	//y
-											 32.0f,		//w
-											 32.0f);	//h
+	newItem.animation = new hgeAnimation(*itemAnimations[item]);
 	newItem.animation->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
 	newItem.animation->SetHotSpot(16.0f, 16.0f);
 	newItem.animation->Play();

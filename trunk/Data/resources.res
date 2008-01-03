@@ -241,7 +241,7 @@ Sprite optionsGUI {
 }
 Sprite volumeBlock {
  texture="Data/Graphics/barBlocks.png"
- rect=0,0,59,35s
+ rect=0,0,59,35
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
