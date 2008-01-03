@@ -39,7 +39,8 @@ void setMusic(char *music) {
 	menuMusicPlaying = (strcmp(music, "menu") == 0);
 	hge->Channel_Stop(musicChannel);
 	hge->Music_SetPos(resources->GetMusic(music),0,0);
-	musicChannel = hge->Music_Play(resources->GetMusic(music), true, gameInfo.musicVolume);
+	gameInfo.currentMusic = resources->GetMusic(music);
+	musicChannel = hge->Music_Play(gameInfo.currentMusic, true, gameInfo.musicVolume);
 }
 
 void stopMusic() {
@@ -204,5 +205,3 @@ int minInt(int num1, int num2, int num3) {
 	}
 
 }
-
-

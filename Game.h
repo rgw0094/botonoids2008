@@ -65,6 +65,7 @@ struct GameInfo {
 	float timeLimit;
 	int selectedBotonoid[3];
 	int boardSize;
+	HMUSIC currentMusic;
 };
 
 //Global functions
