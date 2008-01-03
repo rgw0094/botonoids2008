@@ -239,6 +239,13 @@ Sprite optionsGUI {
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
+Sprite volumeBlock {
+ texture="Data/Graphics/barBlocks.png"
+ rect=0,0,59,35s
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1 
+}
 
 ;//**********************
 ;//******** FONTS *******

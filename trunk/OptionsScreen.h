@@ -21,7 +21,7 @@ public:
 
 	//Objects
 	Button *buttons[2];
-	hgeRect *inputBox;
+	hgeRect *inputBox, *soundVolumeBox, *musicVolumeBox;
 
 };
 
