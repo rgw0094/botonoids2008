@@ -65,6 +65,7 @@ struct GameInfo {
 	float timeLimit;
 	int selectedBotonoid[3];
 	int boardSize;
+	int itemFrequencies[10];
 	HMUSIC currentMusic;
 };
 
@@ -81,5 +82,7 @@ void endGame();
 std::string formatTime(int seconds);
 int maxInt(int num1, int num2, int num3);
 int minInt(int num1, int num2, int num3);
+void loadItemFrequencies();
+void saveItemFrequencies();
 
 #endif

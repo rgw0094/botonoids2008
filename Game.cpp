@@ -205,3 +205,30 @@ int minInt(int num1, int num2, int num3) {
 	}
 
 }
+
+/**
+ * Loads the previously saved item frequencies from the INI file
+ */
+void loadItemFrequencies() {
+	std::string param;
+	char num[5];
+	for (int i = 0; i < 10; i++) {
+		param = "itemFreq";
+		param += itoa(i, num, 10);
+		gameInfo.itemFrequencies[i] = hge->Ini_GetInt("Options", param.c_str(), 5);
+	}
+}
+
+/**
+ * Saves currently set item frequencies to the INI file
+ */
+void saveItemFrequencies() {
+	std::string param;
+	char num[5];
+	for (int i = 0; i < 10; i++) {
+		param = "itemFreq";
+		param += itoa(i, num, 10);
+		hge->Ini_SetInt("Options", param.c_str(), gameInfo.itemFrequencies[i]);
+	}
+}
+

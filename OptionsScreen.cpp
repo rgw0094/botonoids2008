@@ -28,6 +28,8 @@ OptionsScreen::OptionsScreen() {
 	musicVolumeBox = new hgeRect(752.0, 152.0, 813.0, 514.0);
 	soundVolumeBox = new hgeRect(832.0, 152.0, 893.0, 514.0);
 
+	
+
 }	
 
 /**
@@ -93,10 +95,6 @@ void OptionsScreen::draw(float dt) {
 		}
 	}
 
-	
-	//drawCollisionBox(soundVolumeBox, 0, 255, 0);
-	//drawCollisionBox(musicVolumeBox, 0, 255, 0);
-
 }
 
 /**
@@ -115,6 +113,13 @@ bool OptionsScreen::update(float dt, float mouseX, float mouseY) {
 	if (musicVolumeBox->TestPoint(mouseX, mouseY) && hge->Input_GetKeyState(HGEK_LBUTTON)) {
 		gameInfo.musicVolume = ((514.0 - mouseY) / 36) * 10;
 		hge->Channel_SetVolume(musicChannel, gameInfo.musicVolume);
+		hge->Ini_SetInt("Options", "musicVolume", gameInfo.musicVolume);
+	}
+
+	//Click on sound volume bar
+	if (soundVolumeBox->TestPoint(mouseX, mouseY) && hge->Input_GetKeyState(HGEK_LBUTTON)) {
+		gameInfo.soundVolume = ((514.0 - mouseY) / 36) * 10;
+		hge->Ini_SetInt("Options", "soundVolume", gameInfo.soundVolume);
 	}
 	
 	//Click Cancel Button
