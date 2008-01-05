@@ -38,7 +38,7 @@ void Menu::draw(float dt) {
 	screens[currentScreen]->draw(dt);
 
 	//Draw the mouse
-	resources->GetSprite("mouse")->Render(mouseX, mouseY);
+	if (hge->Input_IsMouseOver()) resources->GetSprite("mouse")->Render(mouseX, mouseY);
 
 }
 
