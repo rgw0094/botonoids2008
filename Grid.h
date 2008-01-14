@@ -32,6 +32,8 @@ public:
 	bool inBounds(float x, float y);
 	int numFoundations(int player);
 	void placeSillyPad(int gridX, int gridY, int player);
+	void placeSuperWall(int gridX, int gridY, int player);
+	void placeSuperFlower(int gridX, int gridY, int player);
 
 	//Variables
 	int height, width, xOffset, yOffset;
@@ -45,6 +47,8 @@ public:
 	int gardens[32][32];			//Which player gardens belong to
 	int sillyPads[32][32];			//Owner of silly pad
 	float sillyPadsPlaced[32][32];	//Time silly pad placed
+	int superWalls[32][32];
+	int superFlowers[32][32];
 
 	bool wallsTouched[4];			//Which walls have been touched in the garden
 									// finding algorithm.
@@ -53,7 +57,7 @@ public:
 	//Objects
 	HGE *hge;
 	hgeParticleManager *dustClouds;
-	hgeSprite *sillyPadSprites[3];
+	hgeSprite *sillyPadSprites[3], *superFlowerSprites[3], *superWallSprites[3];
 
 };
 
