@@ -524,9 +524,17 @@ void Player::useItem(float dt) {
 	//Silly Pad
 	if (item == ITEM_SILLY_PAD) {
 		grid->placeSillyPad(gridX, gridY, playerNum);
+	
+	//Super Wall
+	} else if (item == ITEM_SUPER_WALL) {
+		grid->placeSuperWall(gridX, gridY, playerNum);
+
+	//Super Flower
+	} else if (item == ITEM_SUPER_FLOWER) {
+		grid->placeSuperFlower(gridX, gridY, playerNum);
 	}
 
-	//Decrease quantity
+	//Decrease quantity of whatever item was just used
 	if (item != EMPTY) {
 		if (itemSlots[TOP_SLOT].quantity == 1) {
 			itemSlots[TOP_SLOT].quantity = 0;

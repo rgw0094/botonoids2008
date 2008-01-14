@@ -30,6 +30,8 @@ Grid::Grid(int _width, int _height) {
 			gardens[i][j] = -1;
 			sillyPads[i][j] = -1;
 			sillyPadsPlaced[i][j] = - 10.0f;
+			superWalls[i][j] = -1;
+			superFlowers[i][j] = -1;
 		}
 	}
 	resetVisited();
@@ -45,9 +47,11 @@ Grid::Grid(int _width, int _height) {
 	//Particle managers
 	dustClouds = new hgeParticleManager();
 
-	//Load silly pad graphics
+	//Load special tiles
 	for (int i = 0; i < 3; i++) {
-		sillyPadSprites[i] = new hgeSprite(resources->GetTexture("tiles"), 32.0f, 96.0f, 32.0f, 32.0f);
+		sillyPadSprites[i] = new hgeSprite(resources->GetTexture("tiles"), 32.0 + 32.0*i, 96.0, 32.0, 32.0);
+		superFlowerSprites[i] = new hgeSprite(resources->GetTexture("tiles"), 32.0 + 32.0*i, 128.0, 32.0, 32.0);
+		superWallSprites[i] = new hgeSprite(resources->GetTexture("tiles"), 32.0 + 32.0*i, 160.0, 32.0, 32.0);
 	}
 
 }
@@ -56,7 +60,11 @@ Grid::Grid(int _width, int _height) {
  * Destructor
  */
 Grid::~Grid() {
-	for (int i = 0; i < 3; i++) delete sillyPadSprites[i];
+	for (int i = 0; i < 3; i++) {
+		delete sillyPadSprites[i];
+		delete superWallSprites[i];
+		delete superFlowerSprites[i];
+	}
 }
 
 void Grid::draw(float dt) {
@@ -102,6 +110,16 @@ void Grid::draw(float dt) {
 
 			}
 
+			//Super walls
+			if (superWalls[i][j] != -1) {
+				superWallSprites[players[superWalls[i][j]]->whichBotonoid]->Render(tileX, tileY);
+			}
+
+			//Super flowers
+			if (superFlowers[i][j] != -1) {
+				superFlowerSprites[players[superFlowers[i][j]]->whichBotonoid]->Render(tileX, tileY);
+			}
+
 			//Silly pads
 			float timeSincePlaced, alpha;
 			if (sillyPads[i][j] != -1) {
@@ -143,6 +161,7 @@ void Grid::draw(float dt) {
  * Update the grid.
  */ 
 void Grid::update(float dt) {
+
 	doColorChanges(dt);
 
 	//Loop through each grid square
@@ -582,9 +601,26 @@ int Grid::numFoundations(int player) {
 }
 
 /**
- * Places a silly pad at square
+ * Places a silly pad on the grid
  */ 
 void Grid::placeSillyPad(int gridX, int gridY, int player) {
 	sillyPads[gridX][gridY] = player;
 	sillyPadsPlaced[gridX][gridY] = hge->Timer_GetTime();
 }
+
+/**
+ * Places a super wall on the grid
+ */
+void Grid::placeSuperWall(int gridX, int gridY, int player) {
+	superWalls[gridX][gridY] = player;
+}
+
+/**
+ * Places a super flower on the grid
+ */
+void Grid::placeSuperFlower(int gridX, int gridY, int player) {
+	superFlowers[gridX][gridY] = player;
+}
+
+
+

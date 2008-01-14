@@ -8,7 +8,7 @@ extern GameInfo gameInfo;
 extern bool menuMusicPlaying;
 extern int mode;
 extern Song songs[NUM_SONGS];
-extern hgeAnimation *itemAnimations[10];
+extern hgeAnimation *itemAnimations[10], *botonoidGraphics[NUM_BOTONOIDS];
 
 #define BACK_BUTTON 0
 #define NEXT_BUTTON 1
@@ -95,6 +95,11 @@ void CustomizeScreen::draw(float dt) {
 	//Draw buttons
 	for (int i = 0; i < 2; i++) {
 		buttons[i]->draw(dt);
+	}
+
+	//Draw handicap areas
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
+		
 	}
 
 	//Draw tooltips
