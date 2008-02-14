@@ -1,9 +1,5 @@
 #include "Input.h"
 
-#include <windows.h>
-#include <basetsd.h>
-#include <dinput.h>
-#include "resource.h"
 #include "game.h"
 #include "input.h"
 
@@ -26,7 +22,6 @@ Input::Input() {
 
 	g_pDI=NULL;
 	g_pJoystick=NULL;
-	useGamePad = false;
 	
 	//Initialize input states
 	for (int player = 0; player < 3; player++) {
@@ -36,7 +31,7 @@ Input::Input() {
 		}
 	}
 
-	//Load controls
+	//Load controls from .INI file
 	loadInputs();
 
 	//Set control names
@@ -57,6 +52,17 @@ Input::Input() {
 			inputs[j][i].editMode = false;	
 		}
 	}
+
+	//Set game pad button states to unpressed
+	for (int i = 0; i < 256; i++) gamePadButtons[i] = false;
+	for (int i = 0; i < 4; i++) {
+		joystickState[i] = false;
+		previousJoystickState[i] = false;
+	}
+
+	//Initialize input - gets pointer to DirectInput interface and
+	//registers the input device.
+	InitInput(hge->System_GetState(HGE_HWND));
 
 }
 
@@ -105,7 +111,6 @@ void Input::UpdateInput() {
 				hr = g_pJoystick->Acquire();
 				while( hr == DIERR_INPUTLOST ) 
 					hr = g_pJoystick->Acquire();
-		
 				// hr may be DIERR_OTHERAPPHASPRIO or other errors.  This
 				// may occur when the app is minimized or in the process of 
 				// switching, so just try again later 
@@ -115,40 +120,46 @@ void Input::UpdateInput() {
 		//Get the input's device state
 		if(FAILED(hr = g_pJoystick->GetDeviceState( sizeof(DIJOYSTATE2), &js ))) return;
 
+		//Save gamepad button states so they can be referenced later
+		for (int i = 0; i < 256; i++) gamePadButtons[i] = js.rgbButtons[i];
+		updateJoystickDirection(js);
+
 	}
 
-		//Update inputs for each player
-		for (int player = 0; player < 3; player++) {
+	//Update inputs for each player
+	for (int player = 0; player < 3; player++) {
 
-			//Update each input
-			for (int i = 0; i < NUM_INPUTS; i++) {
+		//Update each input
+		for (int i = 0; i < NUM_INPUTS; i++) {
 
-				//Keyboard
-				if (inputs[player][i].keyboard) {
-					inputs[player][i].pressed = hge->Input_GetKeyState(inputs[player][i].code);
+			//Keyboard
+			if (inputs[player][i].keyboard) {
+				inputs[player][i].pressed = hge->Input_GetKeyState(inputs[player][i].code);
 				
-				//Gamepad
-				} else {
+			//Gamepad
+			} else {
 					
-					int code = inputs[player][i].code;
-
-					if (code == JOYSTICK_LEFT) 
-						inputs[player][INPUT_LEFT].pressed = (js.lX < AXIS_MINCLICK);
-					else if (code == JOYSTICK_RIGHT) 
-						inputs[player][INPUT_RIGHT].pressed = (js.lX > AXIS_MAXCLICK);
-					else if (code == JOYSTICK_UP)
-						inputs[player][INPUT_UP].pressed = (js.lY < AXIS_MINCLICK);
-					else if (code == JOYSTICK_DOWN)
-						inputs[player][INPUT_DOWN].pressed = (js.lY > AXIS_MAXCLICK);
-					else
-						inputs[player][i].pressed = js.rgbButtons[inputs[player][i].code];
-
-				}
-
+				int code = inputs[player][i].code;
+					
+				//Joystick directions are a special case because the joystick
+				//is polled seperately from the gamepad buttons.
+				if (code == JOYSTICK_LEFT) 
+					inputs[player][i].pressed = (joystickDirection == INPUT_LEFT);
+				else if (code == JOYSTICK_RIGHT) 
+					inputs[player][i].pressed = (joystickDirection == INPUT_RIGHT);
+				else if (code == JOYSTICK_UP)
+					inputs[player][i].pressed = (joystickDirection == INPUT_UP);
+				else if (code == JOYSTICK_DOWN)
+					inputs[player][i].pressed = (joystickDirection == INPUT_DOWN);
+				else
+					inputs[player][i].pressed = gamePadButtons[inputs[player][i].code];
 
 			}
 
+
 		}
+
+	}
 
 }
 
@@ -174,13 +185,12 @@ HRESULT Input::InitDirectInput( HWND hDlg ) {
 
     // Make sure we got a joystick
 	if( NULL == g_pJoystick ) {
-		toggleGamePad();
         MessageBox( NULL, "Input Device not found.", 
-                    "Smiley's Maze Hunt 3", 
+                    "Botonoids 2008", 
                     MB_ICONERROR | MB_OK );
         EndDialog( hDlg, 0 );
         return S_OK;
-    }
+	}
 
     // Set the data format to "simple joystick" - a predefined data format 
     //
@@ -266,7 +276,6 @@ BOOL CALLBACK EnumAxesCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pCont
     diprg.diph.dwObj        = pdidoi->dwType; // Specify the enumerated axis
     diprg.lMin              = -1000; 
     diprg.lMax              = +1000; 
-
 	
 	// Set the range for the axis
 	if( FAILED( g_pJoystick->SetProperty( DIPROP_RANGE, &diprg.diph ) ) )
@@ -287,22 +296,6 @@ bool Input::buttonDown(int key, int player) {
  */
 bool Input::buttonPressed(int key, int player) {
 	return (inputs[player][key].pressed && !inputs[player][key].prevPressed);
-}
-
-//-----------------------------------------------------------------------------
-// Name: toggleGamePad()
-// Desc: Toggles between game pad and keyboard.
-//-----------------------------------------------------------------------------
-void Input::toggleGamePad() {
-	useGamePad = !useGamePad;
-	//Initialize gamepad
-	if (useGamePad) {
-		InitInput(hge->System_GetState(HGE_HWND));
-	//Release gamepad
-	} else {
-		FreeDirectInput();
-	}
-	UpdateInput();
 }
 
 //-----------------------------------------------------------------------------
@@ -450,4 +443,107 @@ void Input::setEditMode(int whichPlayer, int whichInput) {
 			inputs[i][j].editMode = (i == whichPlayer && j == whichInput);
 		}
 	}
+}
+
+/**
+ * Listens for the next input from the player (either keyboard or gamepad) and saves
+ * that as the button for the specified control.
+ */
+void Input::listenForNewInput(int player, int control) {
+
+	//Check keyboard buttons
+	for (int i = 0; i < 255; i++) {
+		if (hge->Input_KeyDown(i) && i != HGEK_LBUTTON && i != HGEK_ESCAPE) {
+			//Save new control
+			inputs[player][control].code = i;
+			inputs[player][control].keyboard = true;
+			//Turn edit mode off
+			setEditMode(-1, -1);
+		}
+	}
+
+	//Check joystick
+	if (joystickDirection ==  INPUT_LEFT) {
+		inputs[player][control].code = JOYSTICK_LEFT;
+		inputs[player][control].keyboard = false;
+		setEditMode(-1, -1);
+	} else if (joystickDirection ==  INPUT_RIGHT) {
+		inputs[player][control].code = JOYSTICK_RIGHT;
+		inputs[player][control].keyboard = false;
+		setEditMode(-1, -1);
+	} else if (joystickDirection ==  INPUT_DOWN) {
+		inputs[player][control].code = JOYSTICK_DOWN;
+		inputs[player][control].keyboard = false;
+		setEditMode(-1, -1);
+	} else if (joystickDirection ==  INPUT_UP) {
+		inputs[player][control].code = JOYSTICK_UP;
+		inputs[player][control].keyboard = false;
+		setEditMode(-1, -1);
+	}
+
+	//Check gamepad buttons
+	for (int i = 0; i < 225; i++) {
+		if (gamePadButtons[i]) {
+			//Save new control
+			inputs[player][control].code = i;
+			inputs[player][control].keyboard = false;
+			//Turn edit mode off
+			setEditMode(-1, -1);
+		}
+	}
+
+}
+
+/**
+ * Sets the current joystick direction in a way that improves handling by taking
+ * into consideration what the player probably wants to do when multiple directions
+ * are pressed at once.
+ */
+void Input::updateJoystickDirection(DIJOYSTATE2 js) {
+		
+	//Update previous states
+	for (int i = 0; i < 4; i++) {
+		previousJoystickState[i] = joystickState[i];
+	}
+
+	//Update current states
+	joystickState[INPUT_LEFT] = (js.lX < AXIS_MINCLICK);
+	joystickState[INPUT_RIGHT] = (js.lX > AXIS_MAXCLICK);
+	joystickState[INPUT_UP] = (js.lY < AXIS_MINCLICK);
+	joystickState[INPUT_DOWN] = (js.lY > AXIS_MAXCLICK);
+
+	//Determine if the joystick state has changed since last frame
+	bool stateChange = false;
+	for (int i = 0; i < 4; i++) {
+		if (joystickState[i] != previousJoystickState[i]) stateChange = true;
+	}
+
+	if (stateChange) {
+
+		//Give preference to the most recenty pressed direction so that
+		//if the player is going one direction then presses an additonal
+		//direction, the botonoid will move in the newest direction.
+		//Example - frame 1 the player is going 100% right, then frame 2
+		//		hes going 100% up right, the botonoid should move up.
+		joystickDirection = -1;
+		bool newDirection = false;
+		for (int i = 0; i < 4; i++) {
+			if (joystickState[i] && !previousJoystickState[i]) {
+				joystickDirection = i;
+				newDirection = true;
+			}
+		}
+
+		//If no new direction was found this turn use the direction
+		//returned by DirectInput in case the player released a direction.
+		//Example - afer the previous example the player lets go of up and is
+		//		only pressing right, the Botonoid should return to moving right.
+		if (!newDirection) {
+			for (int i = 0; i < 4; i++) {
+				if (joystickState[i]) joystickDirection = i;
+			}
+		}
+
+	}
+
 }

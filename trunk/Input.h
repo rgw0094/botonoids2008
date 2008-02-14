@@ -5,6 +5,8 @@
 #include <windows.h>
 #include <basetsd.h>
 #include <dinput.h>
+#include <commctrl.h>
+#include <dinput.h>
 #include "resource.h"
 
 #define SAFE_DELETE(p)  { if(p) { delete (p);     (p)=NULL; } }
@@ -56,10 +58,15 @@ public:
 	void saveInputs();
 	void loadInputs();
 	void setEditMode(int player, int whichInput);
+	void listenForNewInput(int player, int control);
+	void updateJoystickDirection(DIJOYSTATE2 js);
 
 	//Variables
 	InputStruct inputs[3][NUM_INPUTS];
-	bool useGamePad;
+	bool joystickState[4];
+	bool previousJoystickState[4];
+	int joystickDirection;
+	bool gamePadButtons[256];
 	bool acquiredJoystick;
 	bool deviceConnected;	//Whether or not there is an extra input device connected.
 
