@@ -78,7 +78,7 @@ void OptionsScreen::draw(float dt) {
 			//If the control is using the gamepad
 			} else {
 				resources->GetFont("input")->SetColor(ARGB(255,20,20,255));
-				//...
+				resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, "Button %d", input->inputs[player][control].code);
 			}
 
 		}
@@ -153,14 +153,9 @@ bool OptionsScreen::update(float dt, float mouseX, float mouseY) {
 
 			//If the control is in edit mode, listen for the new input
 			if (input->inputs[player][control].editMode) {
-				for (int i = 0; i < 255; i++) {
-					if (hge->Input_KeyDown(i) && i != HGEK_LBUTTON && i != HGEK_ESCAPE) {
-						//Save new control
-						input->inputs[player][control].code = i;
-						//Turn edit mode off
-						input->setEditMode(-1, -1);
-					}
-				}
+
+				input->listenForNewInput(player, control);
+
 			}
 
 		}
