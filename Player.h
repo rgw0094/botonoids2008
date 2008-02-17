@@ -9,7 +9,7 @@
 #define BOTTOM_SLOT 2
 #define LEFT_SLOT 3
 #define PI 3.1415926f
-#define SPIN_TIME 0.15f
+#define SPIN_TIME .2f
 
 struct ItemSlot {
 	int code;
@@ -39,6 +39,8 @@ public:
 	bool addItem(int item);
 	void useItem(float dt);
 	int itemInSlot(int slot);
+	int getItemQuantityPerToken(int item);
+	int numEmptyItemSlots();
 
 	//Variables
 	int gridX, gridY, lastGridX, lastGridY;
@@ -59,7 +61,6 @@ public:
 	float startedMoving;
 	float timeToMove;
 	float endedColorChange;
-	float timeChangedItem;
 
 	//State variables
 	bool colorChangeMode;

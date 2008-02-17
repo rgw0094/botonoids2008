@@ -28,7 +28,8 @@ OptionsScreen::OptionsScreen() {
 	musicVolumeBox = new hgeRect(752.0, 152.0, 813.0, 514.0);
 	soundVolumeBox = new hgeRect(832.0, 152.0, 893.0, 514.0);
 
-	
+	musicBarPressed = false;
+	soundBarPressed = false;
 
 }	
 
@@ -65,21 +66,15 @@ void OptionsScreen::draw(float dt) {
 			float x = 280.0 + player*154.0;
 			float y = 190.0 + control*45.0;
 			
-			//If the control is in edit mode
+			//Set the text color - edit mode is brighter
 			if (input->inputs[player][control].editMode) {
 				resources->GetFont("input")->SetColor(ARGB(255,255,255,255));
-				resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, "Press Button");
-
-			//If the control is using the keyboard
-			} else if (input->inputs[player][control].keyboard) {
-				resources->GetFont("input")->SetColor(ARGB(255,200,200,200));
-				resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, hge->Input_GetKeyName(input->inputs[player][control].code));
-			
-			//If the control is using the gamepad
 			} else {
-				resources->GetFont("input")->SetColor(ARGB(255,20,20,255));
-				resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, "Button %d", input->inputs[player][control].code);
+				resources->GetFont("input")->SetColor(ARGB(255,200,200,200));
 			}
+
+			//Display the currently selected control
+			resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, input->getInputDescription(player, control));
 
 		}
 	}
@@ -87,11 +82,11 @@ void OptionsScreen::draw(float dt) {
 	//Draw volume bars
 	for (int i = 100; i > 0; i -= 10) {
 		//Music volume
-		if (gameInfo.musicVolume >= (i - 10)) {
+		if (gameInfo.musicVolume >= (i - 10) && gameInfo.musicVolume > 0) {
 			resources->GetSprite("volumeBlock")->Render(musicVolumeBox->x1 + 1.0, 153.0 + 36.0*(10-i/10));
 		}
 		//Sound volume
-		if (gameInfo.soundVolume >= (i - 10)) {
+		if (gameInfo.soundVolume >= (i - 10) && gameInfo.soundVolume > 0) {
 			resources->GetSprite("volumeBlock")->Render(soundVolumeBox->x1 + 1.0, 153.0 + 36.0*(10-i/10));
 		}
 	}
@@ -111,15 +106,25 @@ bool OptionsScreen::update(float dt, float mouseX, float mouseY) {
 	}
 
 	//Click on music volume bar
-	if (musicVolumeBox->TestPoint(mouseX, mouseY) && hge->Input_GetKeyState(HGEK_LBUTTON)) {
+	if (musicVolumeBox->TestPoint(mouseX, mouseY) && hge->Input_KeyDown(HGEK_LBUTTON)) {
+		musicBarPressed = true;
+	}
+	if (!hge->Input_GetKeyState(HGEK_LBUTTON)) musicBarPressed = false;
+	if (musicBarPressed) {
 		gameInfo.musicVolume = ((514.0 - mouseY - 25) / 36) * 10;
+		if (gameInfo.musicVolume < 0) gameInfo.musicVolume = 0;
 		hge->Channel_SetVolume(musicChannel, gameInfo.musicVolume);
 		hge->Ini_SetInt("Options", "musicVolume", gameInfo.musicVolume);
 	}
 
 	//Click on sound volume bar
-	if (soundVolumeBox->TestPoint(mouseX, mouseY) && hge->Input_GetKeyState(HGEK_LBUTTON)) {
+	if (soundVolumeBox->TestPoint(mouseX, mouseY) && hge->Input_KeyDown(HGEK_LBUTTON)) {
+		soundBarPressed = true;
+	}
+	if (!hge->Input_GetKeyState(HGEK_LBUTTON)) soundBarPressed = false;
+	if (soundBarPressed) {
 		gameInfo.soundVolume = ((514.0 - mouseY - 25) / 36) * 10;
+		if (gameInfo.soundVolume < 0) gameInfo.soundVolume = 0;
 		hge->Ini_SetInt("Options", "soundVolume", gameInfo.soundVolume);
 	}
 	

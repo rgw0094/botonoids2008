@@ -81,6 +81,10 @@ void Grid::draw(float dt) {
 				int index = players[foundations[i][j]]->whichBotonoid*4;
 				specialTiles[index]->Render(tileX, tileY);
 
+			//Super flowers
+			} else if (superFlowers[i][j] != -1) {
+				superFlowerSprites[players[superFlowers[i][j]]->whichBotonoid]->Render(tileX, tileY);
+
 			//Garden
 			} else if (gardens[i][j] >= 0) {
 				int index = players[gardens[i][j]]->whichBotonoid*4 + 2;
@@ -108,17 +112,7 @@ void Grid::draw(float dt) {
 
 				}
 
-			}
-
-			//Super walls
-			if (superWalls[i][j] != -1) {
-				superWallSprites[players[superWalls[i][j]]->whichBotonoid]->Render(tileX, tileY);
-			}
-
-			//Super flowers
-			if (superFlowers[i][j] != -1) {
-				superFlowerSprites[players[superFlowers[i][j]]->whichBotonoid]->Render(tileX, tileY);
-			}
+			}		
 
 			//Silly pads
 			float timeSincePlaced, alpha;
@@ -144,12 +138,14 @@ void Grid::draw(float dt) {
 	dustClouds->Update(dt);
 	dustClouds->Render();
 
-	//Draw Walls
+	//Draw Walls after dust clouds
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			if (walls[i][j] >= 0) {
-				float tileX = xOffset + i*(GRID_SIZE+1);
-				float tileY = yOffset + j*(GRID_SIZE+1);
+			float tileX = xOffset + i*(GRID_SIZE+1);
+			float tileY = yOffset + j*(GRID_SIZE+1);
+			if (superWalls[i][j] != -1) {
+				superWallSprites[players[superWalls[i][j]]->whichBotonoid]->Render(tileX, tileY);
+			} else if (walls[i][j] >= 0) {
 				specialTiles[players[walls[i][j]]->whichBotonoid*4 + 1]->Render(tileX, tileY);
 			}
 		}
@@ -603,24 +599,47 @@ int Grid::numFoundations(int player) {
 /**
  * Places a silly pad on the grid
  */ 
-void Grid::placeSillyPad(int gridX, int gridY, int player) {
-	sillyPads[gridX][gridY] = player;
-	sillyPadsPlaced[gridX][gridY] = hge->Timer_GetTime();
+bool Grid::placeSillyPad(int gridX, int gridY, int player) {
+	//Silly pads can't be placed on squares that already have silly pads
+	if (sillyPads[gridX][gridY] == -1) {
+		sillyPads[gridX][gridY] = player;
+		sillyPadsPlaced[gridX][gridY] = hge->Timer_GetTime();
+		return true;
+	}
+	return false;
 }
 
 /**
  * Places a super wall on the grid
  */
-void Grid::placeSuperWall(int gridX, int gridY, int player) {
-	superWalls[gridX][gridY] = player;
+bool Grid::placeSuperWall(int gridX, int gridY, int player) {
+	//Super walls can only be placed on the player's wall
+	if (walls[gridX][gridY] == player) {
+		superWalls[gridX][gridY] = player;
+		return true;
+	}
+	return false;
 }
 
 /**
  * Places a super flower on the grid
  */
-void Grid::placeSuperFlower(int gridX, int gridY, int player) {
-	superFlowers[gridX][gridY] = player;
+bool Grid::placeSuperFlower(int gridX, int gridY, int player) {
+	//Super flowers can only be placed on the player's gardens
+	if (gardens[gridX][gridY] == player) {
+		superFlowers[gridX][gridY] = player;
+		return true;
+	}
+	return false;
 }
 
-
-
+/** 
+ * Returns whether or not there is a wall at (x,y) that belongs to
+ * someone other than player
+ */
+bool Grid::isOtherPlayersWallAt(int x, int y, int player) {
+	if (x < 0 || x > width-1) return false;
+	if (y < 0 || y > height-1) return false;
+	if (walls[x][y] != -1 && walls[x][y] != player) return true;
+	return false;
+}

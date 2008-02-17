@@ -29,11 +29,12 @@ public:
 	int numWallsTouched();	
 	int countVisited();
 	bool isWallAt(float x, float y);
+	bool isOtherPlayersWallAt(int x, int y, int player);
 	bool inBounds(float x, float y);
 	int numFoundations(int player);
-	void placeSillyPad(int gridX, int gridY, int player);
-	void placeSuperWall(int gridX, int gridY, int player);
-	void placeSuperFlower(int gridX, int gridY, int player);
+	bool placeSillyPad(int gridX, int gridY, int player);
+	bool placeSuperWall(int gridX, int gridY, int player);
+	bool placeSuperFlower(int gridX, int gridY, int player);
 
 	//Variables
 	int height, width, xOffset, yOffset;

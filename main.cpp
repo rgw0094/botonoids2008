@@ -1,4 +1,5 @@
 #include "game.h"
+#include "WallBreakerManager.h"
 
 HGE *hge=0;
 Grid *grid;
@@ -11,6 +12,8 @@ MiniMenu *minimenu;
 Input *input;
 StatsPage *statsPage;
 ItemManager *itemManager;
+WallBreakerManager *wallBreakerManager;
+
 std::string botonoidNames[3];
 Song songs[NUM_SONGS];
 hgeAnimation *itemAnimations[10];
@@ -120,6 +123,7 @@ void deleteResources() {
 	delete resources;
 	if (input) delete input;
 	if (itemManager) delete itemManager;
+	if (wallBreakerManager) delete wallBreakerManager;
 	for (int i = 0; i < 10; i++) delete itemAnimations[i];
 }
 
@@ -174,6 +178,7 @@ bool FrameFunc() {
 			for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->update(dt);
 			gui->update(dt);
 			itemManager->update(dt);
+			wallBreakerManager->update(dt);
 
 			//Press ESC to open exit/continue menu
 			if (hge->Input_KeyDown(HGEK_ESCAPE)) minimenu->active = true;
@@ -203,10 +208,12 @@ bool RenderFunc() {
 
 		grid->draw(dt);
 		gui->draw(dt);
+		wallBreakerManager->draw(dt);
 		for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->draw(dt);
 		itemManager->draw(dt);
 		minimenu->draw(dt);
 		statsPage->draw(dt);
+		
 
 		//Draw countdown
 		if (countDown == 3) resources->GetSprite("countdown3")->Render(400,300);
