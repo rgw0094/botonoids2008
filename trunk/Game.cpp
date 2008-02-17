@@ -265,3 +265,13 @@ char *intToString(int dickens) {
 	itoa(dickens, intString,10);
 	return intString;
 }
+
+/**
+ * Returns the distance between 2 points
+ */
+float dist(float x1, float y1, float x2, float y2) {
+	return sqrt(pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2));
+}
+
+
+

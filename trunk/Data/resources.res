@@ -670,3 +670,7 @@ Texture sillypads {
  filename="Data/Graphics/sillypads.png"
  resgroup=1
 }
+Texture particleTex {
+ filename="Data/Graphics/particles.png"
+ resgroup=1
+}

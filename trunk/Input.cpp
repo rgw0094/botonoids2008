@@ -565,7 +565,7 @@ char * Input::getInputDescription(int player, int control) {
 	//One of the gamepads - use terrible C string functions
 	} else {
 
-		char * desc = (char*)malloc(20);
+		char * desc = (char*)malloc(25);
 		strcpy(desc, "\0");
 
 		//Gamepad number
@@ -591,7 +591,7 @@ char * Input::getInputDescription(int player, int control) {
 		}
 
 		//Button number
-		strcat(desc, " B");
+		strcat(desc, " Button ");
 		strcat(desc, intToString(inputs[player][control].code));
 
 		return desc;

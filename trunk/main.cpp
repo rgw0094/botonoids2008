@@ -26,7 +26,7 @@ HTEXTURE botonoidsTexture, tilesTexture;
 
 //Sprites
 hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
-hgeSprite *specialTiles[3*4], *tileSprites[NUM_COLORS];
+hgeSprite *specialTiles[3*4], *tileSprites[NUM_COLORS], *particleSprites[16];
 
 //Variables
 GameInfo gameInfo;
@@ -55,6 +55,15 @@ void loadResources() {
 	botonoidGraphics[1]->Play();
 	botonoidGraphics[2] = resources->GetAnimation("silverBotonoid");
 	botonoidGraphics[2]->Play();
+
+	//Load particle sprites
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			particleSprites[i*4+j] = new hgeSprite(resources->GetTexture("particleTex"), i*32, j*32, 32, 32);
+			particleSprites[i*4+j]->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
+			particleSprites[i*4+j]->SetHotSpot(16,16);
+		}
+	}
 
 	//Load item animations
 	for (int i = 0; i < 10; i++) {
@@ -125,6 +134,7 @@ void deleteResources() {
 	if (itemManager) delete itemManager;
 	if (wallBreakerManager) delete wallBreakerManager;
 	for (int i = 0; i < 10; i++) delete itemAnimations[i];
+	for (int i = 0; i < 16; i++) delete particleSprites[i];
 }
 
 bool FrameFunc() {
