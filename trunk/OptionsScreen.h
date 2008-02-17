@@ -18,6 +18,8 @@ public:
 	//Variables
 	float guiX, guiY;
 	float mouseX, mouseY;
+	bool musicBarPressed;
+	bool soundBarPressed;
 
 	//Objects
 	Button *buttons[2];

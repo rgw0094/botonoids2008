@@ -27,7 +27,7 @@ Input::Input() {
 	for (int player = 0; player < 3; player++) {
 		for (int i = 0; i < NUM_INPUTS; i++) {
 			inputs[player][i].pressed = inputs[player][i].prevPressed = false;
-			inputs[player][i].keyboard = true;
+			inputs[player][i].whichDevice = DEVICE_KEYBOARD;
 		}
 	}
 
@@ -133,7 +133,7 @@ void Input::UpdateInput() {
 		for (int i = 0; i < NUM_INPUTS; i++) {
 
 			//Keyboard
-			if (inputs[player][i].keyboard) {
+			if (inputs[player][i].whichDevice == DEVICE_KEYBOARD) {
 				inputs[player][i].pressed = hge->Input_GetKeyState(inputs[player][i].code);
 				
 			//Gamepad
@@ -278,8 +278,9 @@ BOOL CALLBACK EnumAxesCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pCont
     diprg.lMax              = +1000; 
 	
 	// Set the range for the axis
-	if( FAILED( g_pJoystick->SetProperty( DIPROP_RANGE, &diprg.diph ) ) )
+	if( FAILED( g_pJoystick->SetProperty( DIPROP_RANGE, &diprg.diph ) ) ) {
 		return DIENUM_STOP;
+	}
 
     return DIENUM_CONTINUE;
 }
@@ -314,14 +315,14 @@ void Input::saveInputs() {
 	hge->Ini_SetInt("Controls", "p1PreviousItem", inputs[0][INPUT_LAST_ITEM].code);
 	hge->Ini_SetInt("Controls", "p1NextItem", inputs[0][INPUT_NEXT_ITEM].code);
 
-	hge->Ini_SetInt("Controls", "p1LeftK", inputs[0][INPUT_LEFT].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p1RightK", inputs[0][INPUT_RIGHT].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p1UpK", inputs[0][INPUT_UP].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p1DownK", inputs[0][INPUT_DOWN].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p1ActionK", inputs[0][INPUT_ACTION].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p1ItemK", inputs[0][INPUT_ITEM].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p1PreviousItemK", inputs[0][INPUT_LAST_ITEM].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p1NextItemK", inputs[0][INPUT_NEXT_ITEM].keyboard ? 1 : 0);
+	hge->Ini_SetInt("Controls", "p1LeftK", inputs[0][INPUT_LEFT].whichDevice);
+	hge->Ini_SetInt("Controls", "p1RightK", inputs[0][INPUT_RIGHT].whichDevice);
+	hge->Ini_SetInt("Controls", "p1UpK", inputs[0][INPUT_UP].whichDevice);
+	hge->Ini_SetInt("Controls", "p1DownK", inputs[0][INPUT_DOWN].whichDevice);
+	hge->Ini_SetInt("Controls", "p1ActionK", inputs[0][INPUT_ACTION].whichDevice);
+	hge->Ini_SetInt("Controls", "p1ItemK", inputs[0][INPUT_ITEM].whichDevice);
+	hge->Ini_SetInt("Controls", "p1PreviousItemK", inputs[0][INPUT_LAST_ITEM].whichDevice);
+	hge->Ini_SetInt("Controls", "p1NextItemK", inputs[0][INPUT_NEXT_ITEM].whichDevice);
 
 
 	//Player 2
@@ -335,14 +336,14 @@ void Input::saveInputs() {
 	hge->Ini_SetInt("Controls", "p2NextItem", inputs[1][INPUT_NEXT_ITEM].code);
 
 
-	hge->Ini_SetInt("Controls", "p2LeftK", inputs[1][INPUT_LEFT].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p2RightK", inputs[1][INPUT_RIGHT].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p2UpK", inputs[1][INPUT_UP].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p2DownK", inputs[1][INPUT_DOWN].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p2ActionK", inputs[1][INPUT_ACTION].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p2ItemK", inputs[1][INPUT_ITEM].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p2PreviousItemK", inputs[1][INPUT_LAST_ITEM].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p2NextItemK", inputs[1][INPUT_NEXT_ITEM].keyboard ? 1 : 0);
+	hge->Ini_SetInt("Controls", "p2LeftK", inputs[1][INPUT_LEFT].whichDevice);
+	hge->Ini_SetInt("Controls", "p2RightK", inputs[1][INPUT_RIGHT].whichDevice);
+	hge->Ini_SetInt("Controls", "p2UpK", inputs[1][INPUT_UP].whichDevice);
+	hge->Ini_SetInt("Controls", "p2DownK", inputs[1][INPUT_DOWN].whichDevice);
+	hge->Ini_SetInt("Controls", "p2ActionK", inputs[1][INPUT_ACTION].whichDevice);
+	hge->Ini_SetInt("Controls", "p2ItemK", inputs[1][INPUT_ITEM].whichDevice);
+	hge->Ini_SetInt("Controls", "p2PreviousItemK", inputs[1][INPUT_LAST_ITEM].whichDevice);
+	hge->Ini_SetInt("Controls", "p2NextItemK", inputs[1][INPUT_NEXT_ITEM].whichDevice);
 
 
 	//Player 3
@@ -355,14 +356,14 @@ void Input::saveInputs() {
 	hge->Ini_SetInt("Controls", "p3PreviousItem", inputs[2][INPUT_LAST_ITEM].code);
 	hge->Ini_SetInt("Controls", "p3NextItem", inputs[2][INPUT_NEXT_ITEM].code);
 
-	hge->Ini_SetInt("Controls", "p3LeftK", inputs[2][INPUT_LEFT].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p3RightK", inputs[2][INPUT_RIGHT].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p3UpK", inputs[2][INPUT_UP].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p3DownK", inputs[2][INPUT_DOWN].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p3ActionK", inputs[2][INPUT_ACTION].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p3ItemK", inputs[2][INPUT_ITEM].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p3PreviousItemK", inputs[2][INPUT_LAST_ITEM].keyboard ? 1 : 0);
-	hge->Ini_SetInt("Controls", "p3NextItemK", inputs[2][INPUT_NEXT_ITEM].keyboard ? 1 : 0);
+	hge->Ini_SetInt("Controls", "p3LeftK", inputs[2][INPUT_LEFT].whichDevice);
+	hge->Ini_SetInt("Controls", "p3RightK", inputs[2][INPUT_RIGHT].whichDevice);
+	hge->Ini_SetInt("Controls", "p3UpK", inputs[2][INPUT_UP].whichDevice);
+	hge->Ini_SetInt("Controls", "p3DownK", inputs[2][INPUT_DOWN].whichDevice);
+	hge->Ini_SetInt("Controls", "p3ActionK", inputs[2][INPUT_ACTION].whichDevice);
+	hge->Ini_SetInt("Controls", "p3ItemK", inputs[2][INPUT_ITEM].whichDevice);
+	hge->Ini_SetInt("Controls", "p3PreviousItemK", inputs[2][INPUT_LAST_ITEM].whichDevice);
+	hge->Ini_SetInt("Controls", "p3NextItemK", inputs[2][INPUT_NEXT_ITEM].whichDevice);
 
 }
 
@@ -382,14 +383,14 @@ void Input::loadInputs() {
 	inputs[0][INPUT_LAST_ITEM].code = hge->Ini_GetInt("Controls", "p1PreviousItem", HGEK_Z);
 	inputs[0][INPUT_NEXT_ITEM].code = hge->Ini_GetInt("Controls", "p1NextItem", HGEK_X);
 
-	inputs[0][INPUT_LEFT].keyboard = (hge->Ini_GetInt("Controls", "p1LeftK", 1) == 1);
-	inputs[0][INPUT_RIGHT].keyboard = (hge->Ini_GetInt("Controls", "p1RightK", 1) == 1);
-	inputs[0][INPUT_UP].keyboard = (hge->Ini_GetInt("Controls", "p1UpK", 1) == 1);
-	inputs[0][INPUT_DOWN].keyboard = (hge->Ini_GetInt("Controls", "p1DownK", 1) == 1);
-	inputs[0][INPUT_ACTION].keyboard = (hge->Ini_GetInt("Controls", "p1ActionK", 1) == 1);
-	inputs[0][INPUT_ITEM].keyboard = (hge->Ini_GetInt("Controls", "p1ItemK", 1) == 1);
-	inputs[0][INPUT_LAST_ITEM].keyboard = (hge->Ini_GetInt("Controls", "p1PreviousItemK", 1) == 1);
-	inputs[0][INPUT_NEXT_ITEM].keyboard = (hge->Ini_GetInt("Controls", "p1NextItemK", 1) == 1);
+	inputs[0][INPUT_LEFT].whichDevice = hge->Ini_GetInt("Controls", "p1LeftK", 1);
+	inputs[0][INPUT_RIGHT].whichDevice = hge->Ini_GetInt("Controls", "p1RightK", 1);
+	inputs[0][INPUT_UP].whichDevice = hge->Ini_GetInt("Controls", "p1UpK", 1);
+	inputs[0][INPUT_DOWN].whichDevice = hge->Ini_GetInt("Controls", "p1DownK", 1);
+	inputs[0][INPUT_ACTION].whichDevice = hge->Ini_GetInt("Controls", "p1ActionK", 1);
+	inputs[0][INPUT_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p1ItemK", 1);
+	inputs[0][INPUT_LAST_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p1PreviousItemK", 1);
+	inputs[0][INPUT_NEXT_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p1NextItemK", 1);
 
 
 	//Player 2
@@ -402,14 +403,14 @@ void Input::loadInputs() {
 	inputs[1][INPUT_LAST_ITEM].code = hge->Ini_GetInt("Controls", "p2PreviousItem", HGEK_N);
 	inputs[1][INPUT_NEXT_ITEM].code = hge->Ini_GetInt("Controls", "p2NextItem", HGEK_M);
 
-	inputs[1][INPUT_LEFT].keyboard = (hge->Ini_GetInt("Controls", "p2LeftK", 1) == 1);
-	inputs[1][INPUT_RIGHT].keyboard = (hge->Ini_GetInt("Controls", "p2RightK", 1) == 1);
-	inputs[1][INPUT_UP].keyboard = (hge->Ini_GetInt("Controls", "p2UpK", 1) == 1);
-	inputs[1][INPUT_DOWN].keyboard = (hge->Ini_GetInt("Controls", "p2DownK", 1) == 1);
-	inputs[1][INPUT_ACTION].keyboard = (hge->Ini_GetInt("Controls", "p2ActionK", 1) == 1);
-	inputs[1][INPUT_ITEM].keyboard = (hge->Ini_GetInt("Controls", "p2ItemK", 1) == 1);
-	inputs[1][INPUT_LAST_ITEM].keyboard = (hge->Ini_GetInt("Controls", "p2PreviousItemK", 1) == 1);
-	inputs[1][INPUT_NEXT_ITEM].keyboard = (hge->Ini_GetInt("Controls", "p2NextItemK", 1) == 1);
+	inputs[1][INPUT_LEFT].whichDevice = hge->Ini_GetInt("Controls", "p2LeftK", 1);
+	inputs[1][INPUT_RIGHT].whichDevice = hge->Ini_GetInt("Controls", "p2RightK", 1);
+	inputs[1][INPUT_UP].whichDevice = hge->Ini_GetInt("Controls", "p2UpK", 1);
+	inputs[1][INPUT_DOWN].whichDevice = hge->Ini_GetInt("Controls", "p2DownK", 1);
+	inputs[1][INPUT_ACTION].whichDevice = hge->Ini_GetInt("Controls", "p2ActionK", 1);
+	inputs[1][INPUT_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p2ItemK", 1);
+	inputs[1][INPUT_LAST_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p2PreviousItemK", 1);
+	inputs[1][INPUT_NEXT_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p2NextItemK", 1);
 
 
 	//Player 3
@@ -422,14 +423,14 @@ void Input::loadInputs() {
 	inputs[2][INPUT_LAST_ITEM].code = hge->Ini_GetInt("Controls", "p3PreviousItem", HGEK_T);
 	inputs[2][INPUT_NEXT_ITEM].code = hge->Ini_GetInt("Controls", "p3NextItem", HGEK_Y);
 
-	inputs[2][INPUT_LEFT].keyboard = (hge->Ini_GetInt("Controls", "p3LeftK", 1) == 1);
-	inputs[2][INPUT_RIGHT].keyboard = (hge->Ini_GetInt("Controls", "p3RightK", 1) == 1);
-	inputs[2][INPUT_UP].keyboard = (hge->Ini_GetInt("Controls", "p3UpK", 1) == 1);
-	inputs[2][INPUT_DOWN].keyboard = (hge->Ini_GetInt("Controls", "p3DownK", 1) == 1);
-	inputs[2][INPUT_ACTION].keyboard = (hge->Ini_GetInt("Controls", "p3ActionK", 1) == 1);
-	inputs[2][INPUT_ITEM].keyboard = (hge->Ini_GetInt("Controls", "p3ItemK", 1) == 1);
-	inputs[2][INPUT_LAST_ITEM].keyboard = (hge->Ini_GetInt("Controls", "p3PreviousItemK", 1) == 1);
-	inputs[2][INPUT_NEXT_ITEM].keyboard = (hge->Ini_GetInt("Controls", "p3NextItemK", 1) == 1);
+	inputs[2][INPUT_LEFT].whichDevice = hge->Ini_GetInt("Controls", "p3LeftK", 1);
+	inputs[2][INPUT_RIGHT].whichDevice = hge->Ini_GetInt("Controls", "p3RightK", 1);
+	inputs[2][INPUT_UP].whichDevice = hge->Ini_GetInt("Controls", "p3UpK", 1);
+	inputs[2][INPUT_DOWN].whichDevice = hge->Ini_GetInt("Controls", "p3DownK", 1);
+	inputs[2][INPUT_ACTION].whichDevice = hge->Ini_GetInt("Controls", "p3ActionK", 1);
+	inputs[2][INPUT_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p3ItemK", 1);
+	inputs[2][INPUT_LAST_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p3PreviousItemK", 1);
+	inputs[2][INPUT_NEXT_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p3NextItemK", 1);
 
 }
 
@@ -456,7 +457,7 @@ void Input::listenForNewInput(int player, int control) {
 		if (hge->Input_KeyDown(i) && i != HGEK_LBUTTON && i != HGEK_ESCAPE) {
 			//Save new control
 			inputs[player][control].code = i;
-			inputs[player][control].keyboard = true;
+			inputs[player][control].whichDevice = DEVICE_KEYBOARD;
 			//Turn edit mode off
 			setEditMode(-1, -1);
 		}
@@ -465,19 +466,19 @@ void Input::listenForNewInput(int player, int control) {
 	//Check joystick
 	if (joystickDirection ==  INPUT_LEFT) {
 		inputs[player][control].code = JOYSTICK_LEFT;
-		inputs[player][control].keyboard = false;
+		inputs[player][control].whichDevice = DEVICE_GAMEPAD1;
 		setEditMode(-1, -1);
 	} else if (joystickDirection ==  INPUT_RIGHT) {
 		inputs[player][control].code = JOYSTICK_RIGHT;
-		inputs[player][control].keyboard = false;
+		inputs[player][control].whichDevice = DEVICE_GAMEPAD1;
 		setEditMode(-1, -1);
 	} else if (joystickDirection ==  INPUT_DOWN) {
 		inputs[player][control].code = JOYSTICK_DOWN;
-		inputs[player][control].keyboard = false;
+		inputs[player][control].whichDevice = DEVICE_GAMEPAD1;
 		setEditMode(-1, -1);
 	} else if (joystickDirection ==  INPUT_UP) {
 		inputs[player][control].code = JOYSTICK_UP;
-		inputs[player][control].keyboard = false;
+		inputs[player][control].whichDevice = DEVICE_GAMEPAD1;
 		setEditMode(-1, -1);
 	}
 
@@ -486,7 +487,7 @@ void Input::listenForNewInput(int player, int control) {
 		if (gamePadButtons[i]) {
 			//Save new control
 			inputs[player][control].code = i;
-			inputs[player][control].keyboard = false;
+			inputs[player][control].whichDevice = DEVICE_GAMEPAD1;
 			//Turn edit mode off
 			setEditMode(-1, -1);
 		}
@@ -543,6 +544,57 @@ void Input::updateJoystickDirection(DIJOYSTATE2 js) {
 				if (joystickState[i]) joystickDirection = i;
 			}
 		}
+
+	}
+
+}
+
+/**
+ * Returns a short description of a player's control
+ */
+char * Input::getInputDescription(int player, int control) {
+	
+	//Edit mode
+	if (inputs[player][control].editMode) {
+		return "Press Button";
+	
+	//Keyboard - use HGE function
+	} else if (inputs[player][control].whichDevice == DEVICE_KEYBOARD) {
+		return hge->Input_GetKeyName(inputs[player][control].code);
+	
+	//One of the gamepads - use terrible C string functions
+	} else {
+
+		char * desc = (char*)malloc(20);
+		strcpy(desc, "\0");
+
+		//Gamepad number
+		switch (inputs[player][control].whichDevice) {
+			case DEVICE_GAMEPAD1:
+				strcat(desc, "GP1\0"); break;
+			case DEVICE_GAMEPAD2:
+				strcat(desc, "GP2\0"); break;
+			case DEVICE_GAMEPAD3:
+				strcat(desc, "GP3\0"); break;
+		}
+
+		//Special case - direction pad
+		switch (inputs[player][control].code) {
+			case JOYSTICK_LEFT:
+				strcat(desc, " Left\0"); return desc;
+			case JOYSTICK_RIGHT:
+				strcat(desc, " Right\0"); return desc;
+			case JOYSTICK_UP:
+				strcat(desc, " Up\0"); return desc;
+			case JOYSTICK_DOWN:
+				strcat(desc, " Down\0"); return desc;
+		}
+
+		//Button number
+		strcat(desc, " B");
+		strcat(desc, intToString(inputs[player][control].code));
+
+		return desc;
 
 	}
 

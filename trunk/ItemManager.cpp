@@ -183,3 +183,4 @@ void ItemManager::reset() {
 		i = itemList.erase(i);
 	}
 }
+

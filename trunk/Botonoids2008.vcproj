@@ -156,6 +156,9 @@
 			<File
 				RelativePath=".\TitleScreen.cpp">
 			</File>
+			<File
+				RelativePath=".\WallBreakerManager.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -205,6 +208,9 @@
 			</File>
 			<File
 				RelativePath=".\TitleScreen.h">
+			</File>
+			<File
+				RelativePath=".\WallBreakerManager.h">
 			</File>
 		</Filter>
 		<Filter

@@ -85,5 +85,6 @@ int minFloat(float num1, float num2, float num3, float num4);
 int minInt(int num1, int num2, int num3);
 void loadItemFrequencies();
 void saveItemFrequencies();
+char* intToString(int num);
 
 #endif

@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "WallBreakerManager.h"
 
 extern HGE *hge;
 extern HCHANNEL musicChannel;
@@ -10,7 +11,9 @@ extern Menu *menu;
 extern MiniMenu *minimenu;
 extern Player *players[3];
 extern StatsPage *statsPage;
+extern WallBreakerManager *wallBreakerManager;
 extern ItemManager *itemManager;
+extern hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
 extern int mode;
 extern float timer;
 extern float countDownTimer;
@@ -112,6 +115,12 @@ void startGame() {
 	statsPage = new StatsPage();
 	if (itemManager) delete itemManager;
 	itemManager = new ItemManager();
+	if (wallBreakerManager) delete wallBreakerManager;
+	wallBreakerManager = new WallBreakerManager();
+
+	for (int i = 0; i < 3; i++) {
+		botonoidGraphics[i]->SetSpeed(20);
+	}
 
 }
 
@@ -247,3 +256,12 @@ void saveItemFrequencies() {
 	}
 }
 
+/**
+ * Returns the specified integer as a string because for the designers of C were too 
+ * distracted by their beards to write a lanague that doESNT SUCK ASS FUCK SHIT
+ */
+char *intToString(int dickens) {
+	char * intString = (char*)malloc(10);
+	itoa(dickens, intString,10);
+	return intString;
+}

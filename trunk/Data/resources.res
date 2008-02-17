@@ -472,6 +472,10 @@ Particle dust {
  filename="Data/particle8.psi"
  sprite=particleGraphic0
 }
+Particle explosion {
+ filename="Data/particle1.psi"
+ sprite=particleGraphic0
+}
 
 ;****************************
 ;******** STATS PAGE ********
@@ -569,6 +573,13 @@ Sprite emptySlotWhite {
  resgroup=1
 }
 
+Sprite wallbreaker {
+ texture="Data/Graphics/wallbreaker.png"
+ rect=0,0,28,28
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
 
 ;***********************
 ;******** MUSIC ********

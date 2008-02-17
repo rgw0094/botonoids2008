@@ -99,7 +99,9 @@ void CustomizeScreen::draw(float dt) {
 
 	//Draw handicap areas
 	for (int i = 0; i < gameInfo.numPlayers; i++) {
-		
+		botonoidGraphics[i]->SetSpeed(14);
+		botonoidGraphics[i]->Update(dt);
+		botonoidGraphics[i]->Render(113.0, 315.0 + 120.0 * (float)i);
 	}
 
 	//Draw tooltips
@@ -142,7 +144,7 @@ void CustomizeScreen::draw(float dt) {
 		//Draw black boxes over the squares that aren't be filled
 		for (int j = 5; j > 0; j--) {
 			if (gameInfo.itemFrequencies[i] < j) {
-				resources->GetSprite("blackbox")->RenderStretch(itemBars[i]->x1 + (j-1) * (112/5) + 1, 
+				resources->GetSprite("blackbox")->RenderStretch(itemBars[i]->x1 + (j-1) * (112/5) + 2, 
 																itemBars[i]->y1 + 1,
 																itemBars[i]->x1 + (j-1) * (112/5) + 112/5,
 																itemBars[i]->y1 + 1 + 42);

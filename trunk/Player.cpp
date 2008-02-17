@@ -1,4 +1,5 @@
 #include "game.h"
+#include "WallBreakerManager.h"
 
 //Global stuff
 extern HGE *hge;
@@ -10,6 +11,7 @@ extern hgeFont *debugFont;
 extern Input *input;
 extern StatsPage *statsPage;
 extern GameInfo gameInfo;
+extern WallBreakerManager *wallBreakerManager;
 extern ItemManager *itemManager;
 extern Player *players[3];
 
@@ -32,7 +34,6 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	colorChangeMode = foundationMode = buildWallPressed = false;
 	startedMoving = -10.0f;
 	endedColorChange = -10.0f;
-	timeChangedItem = -10.0f;
 	timeToMove = (GRID_SIZE+1) / speed;
 	collisionBox = new hgeRect();
 	collisionBox->SetRadius(x,y,14.0f);
@@ -250,6 +251,9 @@ void Player::doStats(float dt) {
 				score += 2;
 				statsPage->stats[playerNum].gardensBuilt++;
 			}
+			if (grid->superFlowers[i][j] == playerNum) {
+				score += 15;
+			}
 		}
 	}
 
@@ -369,7 +373,7 @@ bool Player::addItem(int item) {
 	//Loop through the item wheel. If a slot already has the item, add to its quantity
 	for (int i = 0; i < 4; i++) {
 		if (itemSlots[i].code == item) {
-			itemSlots[i].quantity++;
+			itemSlots[i].quantity += getItemQuantityPerToken(item);
 			return true;
 		}
 	}
@@ -378,7 +382,7 @@ bool Player::addItem(int item) {
 	for (int i = 0; i < 4; i++) {
 		if (itemSlots[i].code == EMPTY) {
 			itemSlots[i].code = item;
-			itemSlots[i].quantity = 1;
+			itemSlots[i].quantity = getItemQuantityPerToken(item);
 			return true;
 		}
 	}
@@ -398,8 +402,16 @@ void Player::updateItemSlots(float dt) {
 	int currentSlot = 0;
 	bool keepTurning = true;
 
-	//Change to next item
-	if (input->buttonPressed(INPUT_NEXT_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + SPIN_TIME) {
+	//Determine if the player is allowed to spin the wheel right now. Don't allow them
+	//to if it is already spinning, or if there is only one item and its already
+	//selected.
+	bool allowSpin = true;
+	if (itemSlots[0].angle != itemSlots[0].targetAngle) allowSpin = false;
+	if (numEmptyItemSlots() == 3 && itemInSlot(TOP_SLOT) != EMPTY) allowSpin = false;
+	if (numEmptyItemSlots() == 4) allowSpin = false;
+
+	//Handle change item input
+	if (allowSpin && input->buttonDown(INPUT_NEXT_ITEM, playerNum)) {
 
 		//Determine how many turns to get to the next item
 		currentSlot = LEFT_SLOT;
@@ -422,11 +434,10 @@ void Player::updateItemSlots(float dt) {
 				itemSlots[i].targetAngle += (PI/2.0f);
 			}
 		}
-		timeChangedItem = hge->Timer_GetTime() + SPIN_TIME*(float)numChanges;
 	}
 
 	//Change to previous item
-	if (input->buttonPressed(INPUT_LAST_ITEM, playerNum) && hge->Timer_GetTime() > timeChangedItem + SPIN_TIME) {
+	if (allowSpin && input->buttonDown(INPUT_LAST_ITEM, playerNum)) {
 
 		//Determine how many turns to get to the next item
 		currentSlot = RIGHT_SLOT;
@@ -449,31 +460,36 @@ void Player::updateItemSlots(float dt) {
 				itemSlots[i].targetAngle -= (PI/2.0f);
 			}
 		}
-		timeChangedItem = hge->Timer_GetTime();
 	}
 
 	//Update angles
-	float speed = (PI/2.0f)/SPIN_TIME;
-	float angle, targetAngle;
+	float moveDist = ((PI/2.0)/SPIN_TIME) * dt;
+
+	//We only need to look at one item slot because they all move together.
+	//Spin right
+	if (itemSlots[0].angle < itemSlots[0].targetAngle) {
+		for (int i = 0; i < 4; i++) itemSlots[i].angle += moveDist;
+		//Once one item slot gets to the target angle, the rest of them
+		//should be there too
+		if (itemSlots[0].angle >= itemSlots[0].targetAngle) {
+			for (int i = 0; i < 4; i++) itemSlots[i].angle = itemSlots[i].targetAngle;
+		}
+	}
+
+	//Spin left
+	if (itemSlots[0].angle > itemSlots[0].targetAngle) {
+		for (int i = 0; i < 4; i++) itemSlots[i].angle -= moveDist;
+		//Once one item slot gets to the target angle, the rest of them
+		//should be there too
+		if (itemSlots[0].angle <= itemSlots[0].targetAngle) {
+			for (int i = 0; i < 4; i++) itemSlots[i].angle = itemSlots[i].targetAngle;
+		}
+	}
+
+	//Update the new x,y coordinates of each itemslot
 	for (int i = 0; i < 4; i++) {
 
-		angle = itemSlots[i].angle;
-		targetAngle = itemSlots[i].targetAngle;
-
-		//Set to target angle once its close
-		if (angle > targetAngle - 0.05f && angle < targetAngle + 0.05f) {
-			itemSlots[i].angle = itemSlots[i].targetAngle;
-
-		//Spin right
-		} else if (angle < targetAngle) {
-			itemSlots[i].angle += speed*dt;
-
-		//Spin left
-		} else if (angle > targetAngle) {
-			itemSlots[i].angle -= speed*dt;
-		}
-
-		itemSlots[i].x = itemWheelX+ 35.0f * cos(itemSlots[i].angle);
+		itemSlots[i].x = itemWheelX + 35.0f * cos(itemSlots[i].angle);
 		itemSlots[i].y = itemWheelY + 25.0f * sin(itemSlots[i].angle);
 
 	}
@@ -508,6 +524,7 @@ void Player::drawItemWheel(float dt) {
 		}
 
 	}
+
 } //end drawItemWheel()
 
 /**
@@ -515,33 +532,62 @@ void Player::drawItemWheel(float dt) {
  */
 void Player::useItem(float dt) {
 
-	//Determine which item is in the top slot
+	//Whether or not the item was successfully used.
+	bool itemUsed = false;
+
+	int topSlot;
 	int item;
 	for (int i = 0; i < 4; i++) {
-		if (itemSlots[i].position == TOP_SLOT) item = itemSlots[i].code;
+		if (itemSlots[i].position == TOP_SLOT) {
+			topSlot = i;		
+			item = itemSlots[i].code;
+		}
 	}
 
 	//Silly Pad
 	if (item == ITEM_SILLY_PAD) {
-		grid->placeSillyPad(gridX, gridY, playerNum);
+		itemUsed = grid->placeSillyPad(gridX, gridY, playerNum);
 	
 	//Super Wall
 	} else if (item == ITEM_SUPER_WALL) {
-		grid->placeSuperWall(gridX, gridY, playerNum);
+		itemUsed = grid->placeSuperWall(gridX, gridY, playerNum);
 
 	//Super Flower
 	} else if (item == ITEM_SUPER_FLOWER) {
-		grid->placeSuperFlower(gridX, gridY, playerNum);
+		itemUsed = grid->placeSuperFlower(gridX, gridY, playerNum);
+
+	//Wall Breaker
+	} else if (item == ITEM_WALLBREAKER) {
+		if (facing == LEFT && grid->isOtherPlayersWallAt(gridX-1, gridY, playerNum)) {
+			wallBreakerManager->addWallBreaker(playerNum, gridX-1, gridY);
+			itemUsed = true;
+		} else if (facing == RIGHT && grid->isOtherPlayersWallAt(gridX+1, gridY, playerNum)) {
+			wallBreakerManager->addWallBreaker(playerNum, gridX+1, gridY);
+			itemUsed = true;
+		} else if (facing == UP && grid->isOtherPlayersWallAt(gridX, gridY-1, playerNum)) {
+			wallBreakerManager->addWallBreaker(playerNum, gridX, gridY-1);
+			itemUsed = true;
+		} else if (facing == DOWN && grid->isOtherPlayersWallAt(gridX, gridY+1, playerNum)) {
+			wallBreakerManager->addWallBreaker(playerNum, gridX, gridY+1);
+			itemUsed = true;
+		}
 	}
 
-	//Decrease quantity of whatever item was just used
-	if (item != EMPTY) {
-		if (itemSlots[TOP_SLOT].quantity == 1) {
-			itemSlots[TOP_SLOT].quantity = 0;
-			itemSlots[TOP_SLOT].code = EMPTY;
-		} else {
-			itemSlots[TOP_SLOT].quantity--;
+	if (itemUsed) {
+
+		//Count item used
+		statsPage->stats[playerNum].numItemsUsed++;
+
+		//Decrease quantity of whatever item was just used
+		if (item != EMPTY) {
+			if (itemSlots[topSlot].quantity == 1) {
+				itemSlots[topSlot].quantity = 0;
+				itemSlots[topSlot].code = EMPTY;
+			} else {
+				itemSlots[topSlot].quantity--;
+			}
 		}
+
 	}
 
 } //end useItem()
@@ -556,3 +602,28 @@ int Player::itemInSlot(int slot) {
 	return EMPTY;
 }
 
+/**
+ * Returns the number of each item the player gets when they pick up
+ * the token representing the item.
+ */
+int Player::getItemQuantityPerToken(int item) {
+	switch (item) {
+		case ITEM_SILLY_PAD:
+			return 5;
+		case ITEM_SUPER_WALL:
+			return 5;
+		default:
+			return 1;
+	}
+}
+
+/**
+ * Returns the number of item slots that are currently empty.
+ */
+int Player::numEmptyItemSlots() {
+	int num = 0;
+	for (int i = 0; i < 4; i++) {
+		if (itemInSlot(i) == EMPTY) num++;
+	}
+	return num;
+}

@@ -8,6 +8,7 @@
 #include <commctrl.h>
 #include <dinput.h>
 #include "resource.h"
+#include <string.h>
 
 #define SAFE_DELETE(p)  { if(p) { delete (p);     (p)=NULL; } }
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
@@ -34,9 +35,15 @@
 #define INPUT_LAST_ITEM 6
 #define INPUT_NEXT_ITEM 7
 
+//Device types
+#define DEVICE_KEYBOARD 1
+#define DEVICE_GAMEPAD1 2
+#define DEVICE_GAMEPAD2 3
+#define DEVICE_GAMEPAD3 4
+
 struct InputStruct {
 	bool pressed, prevPressed, editMode;
-	bool keyboard;
+	int whichDevice;
 	int code;
 	char name[30];
 };
@@ -60,6 +67,7 @@ public:
 	void setEditMode(int player, int whichInput);
 	void listenForNewInput(int player, int control);
 	void updateJoystickDirection(DIJOYSTATE2 js);
+	char* getInputDescription(int player, int control);
 
 	//Variables
 	InputStruct inputs[3][NUM_INPUTS];
