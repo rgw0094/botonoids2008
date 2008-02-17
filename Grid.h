@@ -4,6 +4,8 @@
 #include "include/hge.h"
 #include "include/hgeresource.h"
 
+#define GARDEN_FADE_TIME .5
+#define GARDEN_FADE_DELAY 0.2
 
 class Grid {
 
@@ -26,6 +28,7 @@ public:
 	void clearFoundations(int player);
 	void countReachableWalls(int x, int y, int player);
 	void fillGarden(int x, int y, int player);
+	void unFillGarden(int x, int y);
 	int numWallsTouched();	
 	int countVisited();
 	bool isWallAt(float x, float y);
@@ -35,9 +38,11 @@ public:
 	bool placeSillyPad(int gridX, int gridY, int player);
 	bool placeSuperWall(int gridX, int gridY, int player);
 	bool placeSuperFlower(int gridX, int gridY, int player);
+	void breakWallAt(int x, int y);
 
 	//Variables
 	int height, width, xOffset, yOffset;
+	int gardenStartX, gardenStartY;
 
 	int tiles[32][32];
 	float startedColorChange[32][32];
@@ -50,7 +55,7 @@ public:
 	float sillyPadsPlaced[32][32];	//Time silly pad placed
 	int superWalls[32][32];
 	int superFlowers[32][32];
-
+	float timeToFadeGarden[32][32];
 	bool wallsTouched[4];			//Which walls have been touched in the garden
 									// finding algorithm.
 

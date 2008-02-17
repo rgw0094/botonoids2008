@@ -32,6 +32,7 @@ Grid::Grid(int _width, int _height) {
 			sillyPadsPlaced[i][j] = - 10.0f;
 			superWalls[i][j] = -1;
 			superFlowers[i][j] = -1;
+			timeToFadeGarden[i][j] = -10.0;
 		}
 	}
 	resetVisited();
@@ -84,14 +85,12 @@ void Grid::draw(float dt) {
 			//Super flowers
 			} else if (superFlowers[i][j] != -1) {
 				superFlowerSprites[players[superFlowers[i][j]]->whichBotonoid]->Render(tileX, tileY);
+			} 
 
-			//Garden
-			} else if (gardens[i][j] >= 0) {
-				int index = players[gardens[i][j]]->whichBotonoid*4 + 2;
-				specialTiles[index]->Render(tileX, tileY);
-
-			//Colored tile
-			} else if (walls[i][j] == -1) {
+			//Colored tile - don't draw if it is covered by a special tile unless its
+			//a garden that is fading.
+			if (walls[i][j] == -1 && foundations[i][j] == -1 &&
+					(gardens[i][j] == -1 || timeToFadeGarden[i][j] > 0)) {
 
 				//Non-changing tile
 				tileSprites[tiles[i][j]]->Render(tileX, tileY);
@@ -113,6 +112,31 @@ void Grid::draw(float dt) {
 				}
 
 			}		
+
+			//Gardens
+			if (gardens[i][j] >= 0) {
+
+				int index = players[gardens[i][j]]->whichBotonoid*4 + 2;
+				float gardenAlpha = -255.0;
+
+				//Garden is still fading
+				if (timeToFadeGarden[i][j] > -1 && gameTime < timeToFadeGarden[i][j] + GARDEN_FADE_TIME) {
+					gardenAlpha = 255.0 * ((timeToFadeGarden[i][j] - gameTime) / GARDEN_FADE_TIME);
+					if (gardenAlpha < 1) gardenAlpha = 0.0;
+					if (gardenAlpha > 255) gardenAlpha = 255.0;
+					specialTiles[index]->SetColor(ARGB(gardenAlpha,255,255,255));
+				} 
+				
+				//Garden is done fading
+				if (timeToFadeGarden[i][j] > 0 && timeToFadeGarden[i][j] <= gameTime + 0.01) {
+					gardens[i][j] = -1;
+					timeToFadeGarden[i][j] = -10.0;
+				}
+
+				specialTiles[index]->Render(tileX, tileY);
+				specialTiles[index]->SetColor(ARGB(255,255,255,255));
+			
+			}
 
 			//Silly pads
 			float timeSincePlaced, alpha;
@@ -643,3 +667,87 @@ bool Grid::isOtherPlayersWallAt(int x, int y, int player) {
 	if (walls[x][y] != -1 && walls[x][y] != player) return true;
 	return false;
 }
+
+/**
+ * Destroys the wall at grid position (x,y) and kills any gardens that
+ * touch it.
+ */
+void Grid::breakWallAt(int x, int y) {
+
+	//Don't break super walls
+	if (superWalls[x][y] != -1) return;
+
+	//Destroy the wall and foundation
+	walls[x][y] = -1;
+	foundations[x][y] = -1;
+
+	//Flood unfill any touching gardens
+	//Left
+	resetVisited();
+	gardenStartX = x-1;
+	gardenStartY = y;
+	unFillGarden(x-1, y);
+
+	//Right
+	resetVisited();
+	gardenStartX = x+1;
+	gardenStartY = y;
+	unFillGarden(x+1, y);
+	
+	//Up
+	resetVisited();
+	gardenStartX = x;
+	gardenStartY = y-1;
+	unFillGarden(x, y-1);
+
+	//Down
+	resetVisited();
+	gardenStartX = x;
+	gardenStartY = y+1;
+	unFillGarden(x, y+1);
+	
+}
+
+
+
+
+/**
+ * Flood unfills an area with a garden starting at (x,y)
+ */
+void Grid::unFillGarden(int x, int y) {
+
+	//Stop recursing if this square is not a garden or off the grid
+	if (x < 0 || x >  width-1) return;
+	if (y < 0 || y > height-1) return;
+	if (walls[x][y] != -1 || gardens[x][y] == -1) return;
+
+	//Remove the garden in this spot
+    //gardens[x][y] = -1;
+    visited[x][y] = true;
+	
+	//Mark this garden as fading
+	timeToFadeGarden[x][y] = gameTime + dist(gardenStartX, gardenStartY, x, y) * GARDEN_FADE_DELAY;	
+
+	//Recurse right
+	if (!visited[x+1][y]) {
+		unFillGarden(x+1, y);
+	}
+
+	//Recurse left
+	if (!visited[x-1][y]) {
+		unFillGarden(x-1, y);
+	}
+
+	//Recurse up
+	if (!visited[x][y-1]) {
+		unFillGarden(x, y-1);
+	}
+
+	//Recurse down
+	if (!visited[x][y+1]) {
+		unFillGarden(x, y+1);
+	}
+
+}
+
+

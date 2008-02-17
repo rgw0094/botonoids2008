@@ -85,6 +85,7 @@ int minFloat(float num1, float num2, float num3, float num4);
 int minInt(int num1, int num2, int num3);
 void loadItemFrequencies();
 void saveItemFrequencies();
+float dist(float x1, float y1, float x2, float y2);
 char* intToString(int num);
 
 #endif
