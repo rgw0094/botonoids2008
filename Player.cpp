@@ -1,5 +1,6 @@
 #include "game.h"
 #include "WallBreakerManager.h"
+#include "MissileManager.h"
 
 //Global stuff
 extern HGE *hge;
@@ -12,6 +13,7 @@ extern Input *input;
 extern StatsPage *statsPage;
 extern GameInfo gameInfo;
 extern WallBreakerManager *wallBreakerManager;
+extern MissileManager *missileManager;
 extern ItemManager *itemManager;
 extern Player *players[3];
 
@@ -64,8 +66,8 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	}
 
 	//temp
-	itemSlots[0].code = ITEM_SILLY_PAD;
-	itemSlots[0].quantity = 10;
+	itemSlots[0].code = ITEM_MISSILE;
+	itemSlots[0].quantity = 200;
 
 }
 
@@ -556,6 +558,12 @@ void Player::useItem(float dt) {
 	} else if (item == ITEM_SUPER_FLOWER) {
 		itemUsed = grid->placeSuperFlower(gridX, gridY, playerNum);
 
+	//Missile
+	} else if (item == ITEM_MISSILE) {
+		itemUsed = true;
+		missileManager->addMissile(playerNum, gridX, gridY);
+		hge->Effect_Play(resources->GetEffect("snd_missile"));
+
 	//Wall Breaker
 	} else if (item == ITEM_WALLBREAKER) {
 		if (facing == LEFT && grid->isOtherPlayersWallAt(gridX-1, gridY, playerNum)) {
@@ -627,3 +635,5 @@ int Player::numEmptyItemSlots() {
 	}
 	return num;
 }
+
+

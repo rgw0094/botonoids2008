@@ -87,5 +87,7 @@ void loadItemFrequencies();
 void saveItemFrequencies();
 float dist(float x1, float y1, float x2, float y2);
 char* intToString(int num);
+bool isInBounds(float x, float y);
+void createExplosionAt(float x, float y);
 
 #endif

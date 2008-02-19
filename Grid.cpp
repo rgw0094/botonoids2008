@@ -23,16 +23,17 @@ Grid::Grid(int _width, int _height) {
 	//Set beginning grid info
 	for (int i = 0; i < 32; i++) {
 		for (int j = 0; j < 32; j++) {
-			startedColorChange[i][j] = 0.0f;
+			startedColorChange[i][j] = 0.0;
 			alpha[i][j] = 0.0f;
 			foundations[i][j] = -1;
 			walls[i][j] = -1;
 			gardens[i][j] = -1;
 			sillyPads[i][j] = -1;
-			sillyPadsPlaced[i][j] = - 10.0f;
+			sillyPadsPlaced[i][j] = - 10.0;
 			superWalls[i][j] = -1;
 			superFlowers[i][j] = -1;
 			timeToFadeGarden[i][j] = -10.0;
+			timeGardenCreated[i][j] = -10.0;
 		}
 	}
 	resetVisited();
@@ -90,7 +91,8 @@ void Grid::draw(float dt) {
 			//Colored tile - don't draw if it is covered by a special tile unless its
 			//a garden that is fading.
 			if (walls[i][j] == -1 && foundations[i][j] == -1 &&
-					(gardens[i][j] == -1 || timeToFadeGarden[i][j] > 0)) {
+					(gardens[i][j] == -1 || timeToFadeGarden[i][j] > 0 || 
+					 timeGardenCreated[i][j] < gameTime + GARDEN_FADE_IN_TIME)) {
 
 				//Non-changing tile
 				tileSprites[tiles[i][j]]->Render(tileX, tileY);
@@ -119,19 +121,28 @@ void Grid::draw(float dt) {
 				int index = players[gardens[i][j]]->whichBotonoid*4 + 2;
 				float gardenAlpha = -255.0;
 
-				//Garden is still fading
-				if (timeToFadeGarden[i][j] > -1 && gameTime < timeToFadeGarden[i][j] + GARDEN_FADE_TIME) {
-					gardenAlpha = 255.0 * ((timeToFadeGarden[i][j] - gameTime) / GARDEN_FADE_TIME);
-					if (gardenAlpha < 1) gardenAlpha = 0.0;
+				//If Garden is fading in
+				if (gameTime - timeGardenCreated[i][j] < GARDEN_FADE_IN_TIME) {
+					gardenAlpha = 255.0 * ((gameTime - timeGardenCreated[i][j]) / GARDEN_FADE_IN_TIME);
+					specialTiles[index]->SetColor(ARGB(gardenAlpha,255,255,255));
+				}
+
+				//If Garden is still fading out
+				if (timeToFadeGarden[i][j] > -1 && gameTime < timeToFadeGarden[i][j] + GARDEN_FADE_IN_TIME) {
+					gardenAlpha = 255.0 * ((timeToFadeGarden[i][j] - gameTime) / GARDEN_FADE_IN_TIME);
+					if (gardenAlpha < 0) gardenAlpha = 0.0;
 					if (gardenAlpha > 255) gardenAlpha = 255.0;
 					specialTiles[index]->SetColor(ARGB(gardenAlpha,255,255,255));
+
+					//Garden is done fading out
+					if (gardenAlpha <= 0) {				
+						gardens[i][j] = -1;
+						timeToFadeGarden[i][j] = -10.0;
+					}
+
 				} 
 				
-				//Garden is done fading
-				if (timeToFadeGarden[i][j] > 0 && timeToFadeGarden[i][j] <= gameTime + 0.01) {
-					gardens[i][j] = -1;
-					timeToFadeGarden[i][j] = -10.0;
-				}
+				
 
 				specialTiles[index]->Render(tileX, tileY);
 				specialTiles[index]->SetColor(ARGB(255,255,255,255));
@@ -530,9 +541,8 @@ void Grid::fillGarden(int x, int y, int player) {
     gardens[x][y] = player;
 	foundations[x][y] = -1;
     startedColorChange[x][y] = 0.0f;
+	timeGardenCreated[x][y] = gameTime;
     visited[x][y] = true;
-
-    //gardenSound.play(); 
             
 	//Recurse right
 	if (x < width-1 && !visited[x+1][y]) {
@@ -726,7 +736,7 @@ void Grid::unFillGarden(int x, int y) {
     visited[x][y] = true;
 	
 	//Mark this garden as fading
-	timeToFadeGarden[x][y] = gameTime + dist(gardenStartX, gardenStartY, x, y) * GARDEN_FADE_DELAY;	
+	timeToFadeGarden[x][y] = gameTime + dist(gardenStartX, gardenStartY, x, y) * GARDEN_FADE_OUT_DELAY;	
 
 	//Recurse right
 	if (!visited[x+1][y]) {

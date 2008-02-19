@@ -1,5 +1,6 @@
 #include "WallBreakerManager.h"
 
+extern HGE *hge;
 extern hgeResourceManager *resources;
 extern Grid *grid;
 extern float gameTime;
@@ -16,7 +17,7 @@ WallBreakerManager::WallBreakerManager() {
  * Destructor.
  */
 WallBreakerManager::~WallBreakerManager() {
-	//reset();
+	reset();
 }
 
 /**
@@ -47,7 +48,7 @@ void WallBreakerManager::update(float dt) {
 		
 		//Explode after a couple seconds
 		if (!i->exploded && gameTime > i->timeCreated + 2.0) {
-			i->explosion = new hgeParticleSystem("Data/particle1.psi", particleSprites[0]);
+			i->explosion = new hgeParticleSystem("Data/explosion.psi", particleSprites[0]);
 			i->explosion->FireAt(i->x + 14.0, i->y + 14.0);
 			i->exploded = true;
 			grid->breakWallAt(i->gridX, i->gridY);

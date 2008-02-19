@@ -145,6 +145,9 @@
 				RelativePath=".\minimenu.cpp">
 			</File>
 			<File
+				RelativePath=".\MissileManager.cpp">
+			</File>
+			<File
 				RelativePath=".\OptionsScreen.cpp">
 			</File>
 			<File
@@ -196,6 +199,9 @@
 			</File>
 			<File
 				RelativePath=".\minimenu.h">
+			</File>
+			<File
+				RelativePath=".\MissileManager.h">
 			</File>
 			<File
 				RelativePath=".\OptionsScreen.h">

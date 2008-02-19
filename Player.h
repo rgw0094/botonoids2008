@@ -66,6 +66,7 @@ public:
 	bool colorChangeMode;
 	bool foundationMode;
 	bool buildWallPressed;
+	bool lockedOnByMissile;
 
 	//Objects
 	hgeRect *collisionBox;
