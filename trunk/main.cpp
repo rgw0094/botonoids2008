@@ -1,5 +1,6 @@
 #include "game.h"
 #include "WallBreakerManager.h"
+#include "MissileManager.h"
 
 HGE *hge=0;
 Grid *grid;
@@ -13,6 +14,8 @@ Input *input;
 StatsPage *statsPage;
 ItemManager *itemManager;
 WallBreakerManager *wallBreakerManager;
+MissileManager *missileManager;
+hgeParticleManager *explosionManager;
 
 std::string botonoidNames[3];
 Song songs[NUM_SONGS];
@@ -189,6 +192,8 @@ bool FrameFunc() {
 			gui->update(dt);
 			itemManager->update(dt);
 			wallBreakerManager->update(dt);
+			missileManager->update(dt);
+			explosionManager->Update(dt);
 
 			//Press ESC to open exit/continue menu
 			if (hge->Input_KeyDown(HGEK_ESCAPE)) minimenu->active = true;
@@ -220,11 +225,12 @@ bool RenderFunc() {
 		gui->draw(dt);
 		wallBreakerManager->draw(dt);
 		for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->draw(dt);
+		missileManager->draw(dt);
 		itemManager->draw(dt);
+		explosionManager->Render();
 		minimenu->draw(dt);
 		statsPage->draw(dt);
-		
-
+	
 		//Draw countdown
 		if (countDown == 3) resources->GetSprite("countdown3")->Render(400,300);
 		if (countDown == 2) resources->GetSprite("countdown2")->Render(400,300);

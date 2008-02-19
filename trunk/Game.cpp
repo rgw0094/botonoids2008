@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "WallBreakerManager.h"
+#include "MissileManager.h"
 
 extern HGE *hge;
 extern HCHANNEL musicChannel;
@@ -12,7 +13,9 @@ extern MiniMenu *minimenu;
 extern Player *players[3];
 extern StatsPage *statsPage;
 extern WallBreakerManager *wallBreakerManager;
+extern MissileManager *missileManager;
 extern ItemManager *itemManager;
+extern hgeParticleManager *explosionManager;
 extern hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
 extern int mode;
 extern float timer;
@@ -117,6 +120,10 @@ void startGame() {
 	itemManager = new ItemManager();
 	if (wallBreakerManager) delete wallBreakerManager;
 	wallBreakerManager = new WallBreakerManager();
+	if (missileManager) delete missileManager;
+	missileManager = new MissileManager();
+	if (explosionManager) delete explosionManager;
+	explosionManager = new hgeParticleManager();
 
 	for (int i = 0; i < 3; i++) {
 		botonoidGraphics[i]->SetSpeed(20);
@@ -273,5 +280,23 @@ float dist(float x1, float y1, float x2, float y2) {
 	return sqrt(pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2));
 }
 
+/**
+ * Returns whether or not point (x,y) is in bounds.
+ */
+bool isInBounds(float x, float y) {
+	return (x > grid->xOffset &&
+			x < grid->xOffset + 33.0 * grid->width &&
+		    y > grid->yOffset &&
+			y < grid->yOffset + 33.0 * grid->height);
+}
 
+/**
+ * Creates an explosion at point (x,y) and plays a random explosion sound effect.
+ */
+void createExplosionAt(float x, float y) {
+	//Play a random explosion sound
+	explosionManager->SpawnPS(&resources->GetParticleSystem("explosion")->info, x, y);
+	if (rand() % 1000 < 500) hge->Effect_Play(resources->GetEffect("snd_explosion1"));
+	else hge->Effect_Play(resources->GetEffect("snd_explosion2"));
+}
 

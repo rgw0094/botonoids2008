@@ -4,8 +4,9 @@
 #include "include/hge.h"
 #include "include/hgeresource.h"
 
-#define GARDEN_FADE_TIME .5
-#define GARDEN_FADE_DELAY 0.2
+#define GARDEN_FADE_IN_TIME 0.5
+#define GARDEN_FADE_OUT_TIME 0.5
+#define GARDEN_FADE_OUT_DELAY 0.2
 
 class Grid {
 
@@ -56,6 +57,7 @@ public:
 	int superWalls[32][32];
 	int superFlowers[32][32];
 	float timeToFadeGarden[32][32];
+	float timeGardenCreated[32][32];
 	bool wallsTouched[4];			//Which walls have been touched in the garden
 									// finding algorithm.
 

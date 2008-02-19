@@ -27,11 +27,6 @@ public:
 	//Variables
 	std::list<WallBreaker> wallBreakerList;
 
-	//Objects
-	HGE *hge;
-	hgeParticleManager *dustClouds;
-	hgeSprite *sillyPadSprites[3], *superFlowerSprites[3], *superWallSprites[3];
-
 };
 
 #endif

@@ -458,7 +458,7 @@ Sprite particleGraphic0 {
  texture="Data/Graphics/particles.png"
  rect=0,0,32,32
  hotspot=16,16
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ blendmode=COLORMUL,ALPHAADD,NOZWRITE
  resgroup=1
 }
 Sprite particleGraphic5 {
@@ -473,7 +473,7 @@ Particle dust {
  sprite=particleGraphic0
 }
 Particle explosion {
- filename="Data/particle1.psi"
+ filename="Data/explosion.psi"
  sprite=particleGraphic0
 }
 
@@ -574,9 +574,23 @@ Sprite emptySlotWhite {
 }
 
 Sprite wallbreaker {
- texture="Data/Graphics/wallbreaker.png"
+ texture="Data/Graphics/items.png"
  rect=0,0,28,28
  hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite missile {
+ texture="Data/Graphics/items.png"
+ rect=29,0,32,21
+ hotspot=16,10
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite crosshair {
+ texture="Data/Graphics/items.png"
+ rect=0,29,32,32
+ hotspot=16,16
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
@@ -660,6 +674,18 @@ Music sierain2 {
 ;************************
 Sound snd_countdown {
  filename="countDownSound.wav"
+ resgroup=1
+}
+Sound snd_missile {
+ filename="missile.mp3"
+ resgroup=1
+}
+Sound snd_explosion1 {
+ filename="explosion1.wav"
+ resgroup=1
+}
+Sound snd_explosion2 {
+ filename="explosion2.wav"
  resgroup=1
 }
 
