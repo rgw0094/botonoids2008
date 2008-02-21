@@ -38,7 +38,7 @@ CustomizeScreen::CustomizeScreen() {
 	float yOffset = 118.0f;
 	for (int i = 0; i < 6; i += 2) {
 		strcpy(tooltips[i].text, "Points Per Wall");
-		tooltips[i].collisionBox = new hgeRect(guiX + 100.0f, guiY + 176.0f + yOffset*count, guiX + 216.0f, guiY + 212.0f + yOffset*count);
+		tooltips[i].collisionBox = new hgeRect(guiX + 114.0f, guiY + 176.0f + yOffset*count, guiX + 230.0f, guiY + 212.0f + yOffset*count);
 		tooltips[i].textX = guiX + 102.0f;
 		tooltips[i].textY = guiY + 148.0f + yOffset*count;
 		tooltips[i].mouseOver = false;
@@ -49,7 +49,7 @@ CustomizeScreen::CustomizeScreen() {
 	count = 0;
 	for (int i = 1; i < 6; i += 2) {
 		strcpy(tooltips[i].text, "Points Per Garden");
-		tooltips[i].collisionBox = new hgeRect(guiX + 100.0f , guiY + 212.0f + yOffset*count, guiX + 216.0f, guiY + 247.0f + yOffset*count);
+		tooltips[i].collisionBox = new hgeRect(guiX + 114.0f , guiY + 212.0f + yOffset*count, guiX + 230.0f, guiY + 247.0f + yOffset*count);
 		tooltips[i].textX = guiX + 102.0f;
 		tooltips[i].textY = guiY + 148.0f + yOffset*count;
 		tooltips[i].mouseOver = false;
@@ -65,10 +65,10 @@ CustomizeScreen::CustomizeScreen() {
 	for (int i = 0; i < 10; i++) {
 		int x = (i < 5 ? 321 : 639);
 		itemBars[i] = new hgeRect(x, 223 + 60*(i%5), x+112, 268 + 60*(i%5));
+		itemBarClicked[i] = false;
+		gameInfo.itemFrequencies[i] = 0;
 	}
 	
-
-
 }
 
 /**
@@ -155,6 +155,11 @@ void CustomizeScreen::draw(float dt) {
 		itemAnimations[i]->Render(itemBars[i]->x2 + 21, itemBars[i]->y1 + 21);
 	}
 
+	//Black out the handicap area for the 3rd player if there are only 2 players!
+	if (gameInfo.numPlayers < 3) {
+		resources->GetSprite("blackbox")->RenderStretch(75,455, 305,565);
+	}
+
 }
 
 /**
@@ -183,8 +188,14 @@ bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
 
 	//Click on item frequency bars
 	for (int i = 0; i < 10; i++) {
-		if (itemBars[i]->TestPoint(mouseX, mouseY) && hge->Input_GetKeyState(HGEK_LBUTTON)) {
+
+		if (itemBars[i]->TestPoint(mouseX, mouseY) && hge->Input_KeyDown(HGEK_LBUTTON)) {
+			itemBarClicked[i] = true;
+		}
+		if (!hge->Input_GetKeyState(HGEK_LBUTTON)) itemBarClicked[i] = false;
+		if (itemBarClicked[i]) {
 			gameInfo.itemFrequencies[i] = (mouseX - itemBars[i]->x1 + 12) / (112/5);
+			if (gameInfo.itemFrequencies[i] < 0) gameInfo.itemFrequencies[i] = 0;
 			saveItemFrequencies();
 		}
 	}

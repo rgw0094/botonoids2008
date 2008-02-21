@@ -11,6 +11,10 @@
 #define PI 3.1415926f
 #define SPIN_TIME .2f
 
+#define SPEED 150.0
+#define SLOWED_SPEED 75.0
+#define SLOW_DURATION 10.0
+
 struct ItemSlot {
 	int code;
 	int quantity;
@@ -41,11 +45,12 @@ public:
 	int itemInSlot(int slot);
 	int getItemQuantityPerToken(int item);
 	int numEmptyItemSlots();
+	void dealDamage(float damage);
+	void slowPlayer();
 
 	//Variables
 	int gridX, gridY, lastGridX, lastGridY;
 	float x,y;
-	float speed;
 	int score;
 	int whichBotonoid;		//Which botonoid character
 	int playerNum;
@@ -59,18 +64,20 @@ public:
 
 	//Time variables
 	float startedMoving;
-	float timeToMove;
 	float endedColorChange;
+	float timeSlowed;
 
 	//State variables
 	bool colorChangeMode;
 	bool foundationMode;
 	bool buildWallPressed;
 	bool lockedOnByMissile;
+	bool slowed;
 
 	//Objects
 	hgeRect *collisionBox;
 	hgeSprite *emptyItemSlot;
+	hgeParticleSystem *slowEffectParticle;
 	ItemSlot itemSlots[4];
 
 };
