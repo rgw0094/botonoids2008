@@ -33,6 +33,7 @@ public:
 	//Objects
 	Button *buttons[2];
 	ToolTip tooltips[6];
+	bool itemBarClicked[10];
 	hgeRect *boardSizeBoxes[4], *nextSongBox, *previousSongBox, *playSongBox, *itemBars[10];
 
 };

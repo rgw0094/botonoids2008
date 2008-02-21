@@ -454,11 +454,24 @@ Sprite countdown1 {
 ;**************************
 ;******** PARTICLE ********
 ;**************************
+Sprite dustParticleSpr {
+ texture="Data/Graphics/particles.png"
+ rect=0,0,32,32
+ hotspot=16,16
+ resgroup=1
+}
 Sprite particleGraphic0 {
  texture="Data/Graphics/particles.png"
  rect=0,0,32,32
  hotspot=16,16
  blendmode=COLORMUL,ALPHAADD,NOZWRITE
+ resgroup=1
+}
+Sprite particleGraphic4 {
+ texture="Data/Graphics/particles.png"
+ rect=0,32,32,32
+ hotspot=16,16
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite particleGraphic5 {
@@ -468,13 +481,24 @@ Sprite particleGraphic5 {
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
+Sprite particleGraphic11 {
+ texture="Data/Graphics/particles.png"
+ rect=96,64,32,32
+ hotspot=16,16
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
 Particle dust {
  filename="Data/particle8.psi"
- sprite=particleGraphic0
+ sprite=dustParticleSpr
 }
 Particle explosion {
  filename="Data/explosion.psi"
  sprite=particleGraphic0
+}
+Particle slow {
+ filename="Data/slow.psi"
+ sprite=particleGraphic11
 }
 
 ;****************************

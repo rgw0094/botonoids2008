@@ -95,7 +95,8 @@ void ItemManager::update(float dt) {
 }
 
 /**
- * Generates a new random item. The bigger the garden the better the items!!!
+ * Generates a new random item based on item frequencies selected in 
+ * the Customize screen.
  */
 void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 		
@@ -103,6 +104,8 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 	int totalItemFreq = 0;
 	for (int i = 0; i < 10; i++) totalItemFreq += gameInfo.itemFrequencies[i];
 	if (totalItemFreq == 0) return;
+
+	hge->System_Log("%d", totalItemFreq);
 
 	//Return if garden is not at least ??? squares large
 	if (gardenSize < 1) return;

@@ -9,6 +9,7 @@ extern GUI *gui;
 extern hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
 extern hgeResourceManager *resources;
 extern hgeFont *debugFont;
+extern hgeSprite *particleSprites[16];
 extern Input *input;
 extern StatsPage *statsPage;
 extern GameInfo gameInfo;
@@ -16,6 +17,7 @@ extern WallBreakerManager *wallBreakerManager;
 extern MissileManager *missileManager;
 extern ItemManager *itemManager;
 extern Player *players[3];
+extern float gameTime;
 
 /**
  * Constructor
@@ -30,15 +32,14 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	playerNum = _playerNum;
 	whichBotonoid = _whichBotonoid;
 	facing = DOWN;
-	speed = 150.0f;
 	score = 0;
 	health = 3;
 	colorChangeMode = foundationMode = buildWallPressed = false;
 	startedMoving = -10.0f;
 	endedColorChange = -10.0f;
-	timeToMove = (GRID_SIZE+1) / speed;
 	collisionBox = new hgeRect();
 	collisionBox->SetRadius(x,y,14.0f);
+	slowed = false;
 
 	//Center of the wheel
 	itemWheelX = 928.0f;
@@ -68,6 +69,10 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	//temp
 	itemSlots[0].code = ITEM_MISSILE;
 	itemSlots[0].quantity = 200;
+	itemSlots[1].code = ITEM_HEALTH;
+	itemSlots[1].quantity = 10;
+	itemSlots[2].code = ITEM_SLOW;
+	itemSlots[2].quantity = 50;
 
 }
 
@@ -77,6 +82,7 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 Player::~Player() {
 	delete collisionBox;
 	delete emptyItemSlot;
+	delete slowEffectParticle;
 }
 
 /**
@@ -134,9 +140,12 @@ void Player::update(float dt) {
 		}
 	}
 
-	//Use Item key
-	if (input->buttonPressed(INPUT_ITEM, playerNum)) {
-		useItem(dt);
+	//Use Item
+	if (input->buttonPressed(INPUT_ITEM, playerNum)) useItem(dt);
+
+	//Update state
+	if (slowed && gameTime > timeSlowed + SLOW_DURATION) {
+		slowed = false;
 	}
 
 	//temp debug input
@@ -151,6 +160,13 @@ void Player::update(float dt) {
 } //end update()
 
 void Player::draw(float dt) {
+
+	//Draw the slowed particle effect
+	if (slowed) {
+		slowEffectParticle->MoveTo(x,y);
+		slowEffectParticle->Update(dt);
+		slowEffectParticle->Render();
+	}
 
 	//Draw the botonoid animation. Only update the animation if it is not set to the frame
 	// corresponding to the botonoid's correct direction. This makes the botonoid turn to
@@ -287,6 +303,9 @@ void Player::doStats(float dt) {
 void Player::doMovement(float dt) {
 
 	//Update movement
+	float speed = (slowed ? SLOWED_SPEED : SPEED);
+	float timeToMove = (GRID_SIZE+1) / speed;
+	
 	if (hge->Timer_GetTime() < startedMoving + timeToMove) {
 		switch (movingDirection) {
 			case UP: y -= speed*dt; break;
@@ -298,6 +317,8 @@ void Player::doMovement(float dt) {
 	//Start movement
 	} else {
 
+		//Make sure the player is centered in their current grid square because 
+		//they are done their last move.
 		x = grid->xOffset + gridX*(GRID_SIZE+1) + (GRID_SIZE+1)/2;
 		y = grid->yOffset + gridY*(GRID_SIZE+1) + (GRID_SIZE+1)/2;
 
@@ -550,6 +571,20 @@ void Player::useItem(float dt) {
 	if (item == ITEM_SILLY_PAD) {
 		itemUsed = grid->placeSillyPad(gridX, gridY, playerNum);
 	
+	//Heart
+	} else if (item == ITEM_HEALTH) {
+		if (health < 3.0) {
+			health += 1.0;
+			itemUsed = true;
+		}
+
+	//Enemy slow
+	} else if (item == ITEM_SLOW) {
+		itemUsed = true;
+		for (int i = 0; i < gameInfo.numPlayers; i++) {
+			if (playerNum != i) players[i]->slowPlayer();
+		}
+
 	//Super Wall
 	} else if (item == ITEM_SUPER_WALL) {
 		itemUsed = grid->placeSuperWall(gridX, gridY, playerNum);
@@ -635,5 +670,34 @@ int Player::numEmptyItemSlots() {
 	}
 	return num;
 }
+
+/**
+ * Deals the specified amount of damage to the player.
+ */
+void Player::dealDamage(float damage) {
+
+	health -= damage;
+
+	if (health <= 0.0) {
+		health = 0.0;
+		//die();
+	}
+
+}
+
+/**
+ * Uses the slow player item on this player
+ */
+void Player::slowPlayer() {
+
+	//Create the slow effect particle
+	slowEffectParticle = new hgeParticleSystem(&resources->GetParticleSystem("slow")->info);
+	slowEffectParticle->FireAt(x, y);
+
+	slowed = true;
+	timeSlowed = gameTime;
+	
+}
+
 
 
