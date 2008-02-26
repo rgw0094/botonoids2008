@@ -14,6 +14,8 @@
 #define SPEED 150.0
 #define SLOWED_SPEED 75.0
 #define SLOW_DURATION 10.0
+#define PUNCH_DELAY 0.4
+#define GHOST_DURATION 25.0
 
 struct ItemSlot {
 	int code;
@@ -47,6 +49,9 @@ public:
 	int numEmptyItemSlots();
 	void dealDamage(float damage);
 	void slowPlayer();
+	void die();
+	void updatePunchingGlove(float dt);
+	int findClosestEnemy();
 
 	//Variables
 	int gridX, gridY, lastGridX, lastGridY;
@@ -61,11 +66,17 @@ public:
 	int health;
 	float positionAngles[4];	//angles corresponding to position in item wheel
 	float itemWheelX, itemWheelY;
+	bool collisionAt(int x, int y);
+
+	float punchingGloveAngle;
+	int punchingGloveTarget;
 
 	//Time variables
 	float startedMoving;
 	float endedColorChange;
 	float timeSlowed;
+	float timePunched;
+	float timeGhosted;
 
 	//State variables
 	bool colorChangeMode;
@@ -73,11 +84,15 @@ public:
 	bool buildWallPressed;
 	bool lockedOnByMissile;
 	bool slowed;
+	bool punching;
+	bool ghostMode;
+	bool dead;
 
 	//Objects
 	hgeRect *collisionBox;
 	hgeSprite *emptyItemSlot;
 	hgeParticleSystem *slowEffectParticle;
+	hgeAnimation *punchingGlove;
 	ItemSlot itemSlots[4];
 
 };

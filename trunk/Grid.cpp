@@ -82,11 +82,7 @@ void Grid::draw(float dt) {
 			if (foundations[i][j] >= 0) {
 				int index = players[foundations[i][j]]->whichBotonoid*4;
 				specialTiles[index]->Render(tileX, tileY);
-
-			//Super flowers
-			} else if (superFlowers[i][j] != -1) {
-				superFlowerSprites[players[superFlowers[i][j]]->whichBotonoid]->Render(tileX, tileY);
-			} 
+			}
 
 			//Colored tile - don't draw if it is covered by a special tile unless its
 			//a garden that is fading.
@@ -132,20 +128,32 @@ void Grid::draw(float dt) {
 					gardenAlpha = 255.0 * ((timeToFadeGarden[i][j] - gameTime) / GARDEN_FADE_IN_TIME);
 					if (gardenAlpha < 0) gardenAlpha = 0.0;
 					if (gardenAlpha > 255) gardenAlpha = 255.0;
-					specialTiles[index]->SetColor(ARGB(gardenAlpha,255,255,255));
+
+					if (superFlowers[i][j] != -1) {
+						superFlowerSprites[players[superFlowers[i][j]]->whichBotonoid]->SetColor(ARGB(gardenAlpha,255,255,255));
+					} else {
+						specialTiles[index]->SetColor(ARGB(gardenAlpha,255,255,255));
+					}
 
 					//Garden is done fading out
 					if (gardenAlpha <= 0) {				
 						gardens[i][j] = -1;
+						superFlowers[i][j] = -1;
 						timeToFadeGarden[i][j] = -10.0;
 					}
 
 				} 
 				
+				//Draw the garden or super flower
+				if (superFlowers[i][j] != -1) {
+					superFlowerSprites[players[superFlowers[i][j]]->whichBotonoid]->Render(tileX, tileY);
+					superFlowerSprites[players[superFlowers[i][j]]->whichBotonoid]->SetColor(ARGB(255,255,255,255));
+				} else {
+					specialTiles[index]->Render(tileX, tileY);	
+					specialTiles[index]->SetColor(ARGB(255,255,255,255));
+				}
 				
-
-				specialTiles[index]->Render(tileX, tileY);
-				specialTiles[index]->SetColor(ARGB(255,255,255,255));
+				
 			
 			}
 
@@ -732,7 +740,6 @@ void Grid::unFillGarden(int x, int y) {
 	if (walls[x][y] != -1 || gardens[x][y] == -1) return;
 
 	//Remove the garden in this spot
-    //gardens[x][y] = -1;
     visited[x][y] = true;
 	
 	//Mark this garden as fading

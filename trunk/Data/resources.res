@@ -619,6 +619,17 @@ Sprite crosshair {
  resgroup=1
 }
 
+Animation punchingglove {
+ texture="Data/Graphics/punchingglove.png"
+ rect=0,0,64,20
+ frames=9
+ fps=45.0
+ mode=FORWARD,PINGPONG,LOOP
+ hotspot=0,10
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+
 ;***********************
 ;******** MUSIC ********
 ;***********************
@@ -710,6 +721,18 @@ Sound snd_explosion1 {
 }
 Sound snd_explosion2 {
  filename="explosion2.wav"
+ resgroup=1
+}
+Sound snd_alphanoidSelect {
+ filename="Alphanoid.wav"
+ resgroup=1
+}
+Sound snd_herbanoidSelect {
+ filename="Herbanoid.wav"
+ resgroup=1
+}
+Sound snd_barvinoidSelect {
+ filename="Barvinoid.wav"
  resgroup=1
 }
 

@@ -7,8 +7,6 @@ struct WallBreaker {
 	int player,gridX, gridY;
 	float x, y;
 	float timeCreated;
-	bool exploded;
-	hgeParticleSystem *explosion;
 };
 
 class WallBreakerManager {

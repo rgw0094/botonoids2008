@@ -5,14 +5,13 @@
 #include "button.h"
 #include <string>
 
-struct ToolTip {
+struct HandicapBar {
 	float textX, textY;
 	hgeRect *collisionBox;
-	char text[20];
-	bool mouseOver;
+	hgeRect *bar;
+	char tooltipText[20];
+	bool mouseOver, clicked;
 };
-
-
 
 class CustomizeScreen : public MenuScreen {
 
@@ -24,6 +23,7 @@ public:
 	//Draw methods
 	void draw(float dt);
 	bool update(float dt, float mouseX, float mouseY);
+	void saveHandicaps();
 
 	//Variables
 	float guiX, guiY;
@@ -32,7 +32,7 @@ public:
 
 	//Objects
 	Button *buttons[2];
-	ToolTip tooltips[6];
+	HandicapBar handicapBars[6];
 	bool itemBarClicked[10];
 	hgeRect *boardSizeBoxes[4], *nextSongBox, *previousSongBox, *playSongBox, *itemBars[10];
 
