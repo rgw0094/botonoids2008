@@ -11,13 +11,13 @@ Build Log
 </h3>
 </pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
 Command Lines
-</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Debug\RSP000029.rsp" with contents
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Debug\RSP000044.rsp" with contents
 [
 /Od /AI "C:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\\" /D "WIN32" /D "_DEBUG" /D "_MBCS" /FD /EHsc /MTd /GS /Fo"Debug/" /Fd"Debug/vc70.pdb" /W3 /c /Zi /clr /TP
-".\CustomizeScreen.cpp"
+".\Player.cpp"
 ]
-Creating command line "cl.exe @"c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Debug\RSP000029.rsp" /nologo"
-Creating temporary file "c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Debug\RSP00002A.rsp" with contents
+Creating command line "cl.exe @"c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Debug\RSP000044.rsp" /nologo"
+Creating temporary file "c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Debug\RSP000045.rsp" with contents
 [
 /OUT:"C:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\\Botonoids2008.exe" /INCREMENTAL /NOLOGO /IGNOREIDL /DEBUG /ASSEMBLYDEBUG /PDB:"C:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\/Botonoids2008.pdb" /FIXED:No hge.lib hgehelp.lib dinput8.lib dxguid.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
 ".\Debug\BotonoidSelectScreen.obj"
@@ -38,28 +38,40 @@ Creating temporary file "c:\Documents and Settings\Rob\Desktop\Programming\Boton
 ".\Debug\TitleScreen.obj"
 ".\Debug\WallBreakerManager.obj"
 ]
-Creating command line "link.exe @"c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Debug\RSP00002A.rsp""
+Creating command line "link.exe @"c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Debug\RSP000045.rsp""
 </pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
 Output Window
 </font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Compiling...
-CustomizeScreen.cpp
+Player.cpp
 c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Input.h(4) : warning C4005: 'STRICT' : macro redefinition
         C:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\PlatformSDK\Include\WinDef.h(15) : see previous definition of 'STRICT'
-CustomizeScreen.cpp(61) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-CustomizeScreen.cpp(61) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-CustomizeScreen.cpp(61) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-CustomizeScreen.cpp(61) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-CustomizeScreen.cpp(67) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-CustomizeScreen.cpp(67) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-CustomizeScreen.cpp(67) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-CustomizeScreen.cpp(67) : warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-CustomizeScreen.cpp(104) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-CustomizeScreen.cpp(197) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+Player.cpp(30) : warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+Player.cpp(31) : warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+Player.cpp(101) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+Player.cpp(102) : warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+Player.cpp(160) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+Player.cpp(345) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+Player.cpp(361) : warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+Player.cpp(362) : warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+Player.cpp(524) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+Player.cpp(563) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+Player.cpp(563) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+Player.cpp(574) : warning C4305: 'argument' : truncation from 'double' to 'float'
+Player.cpp(576) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+Player.cpp(576) : warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+Player.cpp(631) : warning C4244: '+=' : conversion from 'double' to 'int', possible loss of data
+Player.cpp(741) : warning C4244: '-=' : conversion from 'float' to 'int', possible loss of data
+Player.cpp(744) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+Player.cpp(783) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+Player.cpp(828) : warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+Player.cpp(828) : warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+Player.cpp(828) : warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+Player.cpp(828) : warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
 Linking...
 LINK : warning LNK4098: defaultlib 'LIBC' conflicts with use of other libs; use /NODEFAULTLIB:library
 </pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
 Results
 </font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
 Build log was saved at "file://c:\Documents and Settings\Rob\Desktop\Programming\Botonoids2008\Debug\BuildLog.htm"
-Botonoids2008 - 0 error(s), 12 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+Botonoids2008 - 0 error(s), 24 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
 </font></table></body></html>

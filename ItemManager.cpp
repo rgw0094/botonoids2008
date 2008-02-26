@@ -100,78 +100,85 @@ void ItemManager::update(float dt) {
  */
 void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 		
+	//Return if garden is not at least ??? squares large
+	if (gardenSize < 1) return;
+
 	//Return if items are all turned off!!!
 	int totalItemFreq = 0;
 	for (int i = 0; i < 10; i++) totalItemFreq += gameInfo.itemFrequencies[i];
 	if (totalItemFreq == 0) return;
 
-	hge->System_Log("%d", totalItemFreq);
+	//Determine the number of items to generate based on garden size
+	int numItems = 0;
+	if (gardenSize >= 5) numItems = 1;
+	if (gardenSize >= 18) numItems = 2;
+	if (gardenSize >= 35) numItems = 3;
 
-	//Return if garden is not at least ??? squares large
-	if (gardenSize < 1) return;
+	//Generate the items
+	for (int itemNum = 0; itemNum < numItems; itemNum++) {
 
-	//Determine what item to generate
-	int item, itemRand, cumFreq;
-	bool itemSelected = false;
-	while (!itemSelected) {
-		itemRand = rand() % 50000;
-		cumFreq = 0;
-		for (int i = 0; i < 10; i++) {
-			cumFreq += gameInfo.itemFrequencies[i];
-			if (!itemSelected && (itemRand/1000) < cumFreq) {
-				itemSelected = true;
-				item = i;
-			}
-		}
-	}
-
-
-
-	//Create the new item
-	Item newItem;
-	newItem.itemCode = item;
-	newItem.radius = 13.0f;
-	newItem.animation = new hgeAnimation(*itemAnimations[item]);
-	newItem.animation->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
-	newItem.animation->SetHotSpot(16.0f, 16.0f);
-	newItem.animation->Play();
-
-	//Randomly choose a square marked by the grid->visited[][] array to spawn the item in.
-	int randNum = rand() % 10000;
-	int range = 10000 / gardenSize;
-	int lowerBound;
-	int upperBound;
-	int count = 0;
-	for (int i = 0; i < grid->width; i++) {
-		for (int j = 0; j < grid->height; j++) {
-			if (grid->visited[i][j]) {
-				lowerBound = count*range;
-				upperBound = lowerBound + range;
-				if (randNum >= lowerBound && randNum < upperBound) {
-					newItem.x = i*33+16 + grid->xOffset;
-					newItem.y = j*33+16 + grid->yOffset;
+		//Determine what item to generate
+		int item, itemRand, cumFreq;
+		bool itemSelected = false;
+		while (!itemSelected) {
+			itemRand = rand() % 50000;
+			cumFreq = 0;
+			for (int i = 0; i < 10; i++) {
+				cumFreq += gameInfo.itemFrequencies[i];
+				if (!itemSelected && (itemRand/1000) < cumFreq) {
+					itemSelected = true;
+					item = i;
 				}
-				count++;
 			}
 		}
+
+		//Create the new item
+		Item newItem;
+		newItem.itemCode = item;
+		newItem.radius = 13.0f;
+		newItem.animation = new hgeAnimation(*itemAnimations[item]);
+		newItem.animation->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
+		newItem.animation->SetHotSpot(16.0f, 16.0f);
+		newItem.animation->Play();
+
+		//Randomly choose a square marked by the grid->visited[][] array to spawn the item in.
+		int randNum = rand() % 10000;
+		int range = 10000 / gardenSize;
+		int lowerBound;
+		int upperBound;
+		int count = 0;
+		for (int i = 0; i < grid->width; i++) {
+			for (int j = 0; j < grid->height; j++) {
+				if (grid->visited[i][j]) {
+					lowerBound = count*range;
+					upperBound = lowerBound + range;
+					if (randNum >= lowerBound && randNum < upperBound) {
+						newItem.x = i*33+16 + grid->xOffset;
+						newItem.y = j*33+16 + grid->yOffset;
+					}
+					count++;
+				}
+			}
+		}
+
+		//Set collision box
+		newItem.collisionBox = new hgeRect();
+		newItem.collisionBox->SetRadius(newItem.x, newItem.y, 12.0f);
+
+		//Create particle trail
+		newItem.trail = new hgeParticleSystem("Data/particle9.psi", resources->GetSprite("particleGraphic5"));
+		newItem.trail->FireAt(newItem.x, newItem.y);
+
+		//Generate random initial direction
+		int degrees = rand() % 360;
+		float radians = (float)degrees * (PI / 180.0f);
+		newItem.dx = 100.0f * cos(radians);
+		newItem.dy = 100.0f * sin(radians);
+
+		//Add it to the item list
+		itemList.push_back(newItem);
+
 	}
-
-	//Set collision box
-	newItem.collisionBox = new hgeRect();
-	newItem.collisionBox->SetRadius(newItem.x, newItem.y, 12.0f);
-
-	//Create particle trail
-	newItem.trail = new hgeParticleSystem("Data/particle9.psi", resources->GetSprite("particleGraphic5"));
-	newItem.trail->FireAt(newItem.x, newItem.y);
-
-	//Generate random initial direction
-	int degrees = rand() % 360;
-	float radians = (float)degrees * (PI / 180.0f);
-	newItem.dx = 100.0f * cos(radians);
-	newItem.dy = 100.0f * sin(radians);
-
-	//Add it to the item list
-	itemList.push_back(newItem);
 
 }
 

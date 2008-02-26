@@ -7,7 +7,6 @@ Grid *grid;
 hgeResourceManager *resources;
 Player *players[3];
 GUI *gui;
-hgeFont *debugFont;
 Menu *menu;
 MiniMenu *minimenu;
 Input *input;
@@ -40,6 +39,7 @@ float countDownTimer;
 int mode = MENU_MODE;
 float gameTime;
 bool menuMusicPlaying;
+bool debugMode;
 
 void loadResources() {
 
@@ -144,11 +144,12 @@ bool FrameFunc() {
 
 	float dt=hge->Timer_GetDelta();
 
-	//Temp
-	if (hge->Input_KeyDown(HGEK_T)) timer = 1.0f;
-
 	//Always update input
 	input->UpdateInput();
+
+	//Toggle debug mode
+	if (hge->Input_KeyDown(HGEK_D)) debugMode = !debugMode;
+	if (hge->Input_KeyDown(HGEK_T)) timer = 1.0f;
 
 	//Update menu
 	if (mode == MENU_MODE) {
@@ -238,6 +239,10 @@ bool RenderFunc() {
 
 	}
 
+	if (debugMode) {
+		resources->GetFont("timer")->printf(5,5,HGETEXT_LEFT, "%f", 1.0/dt);
+	}
+
 	// End rendering and update the screen
 	hge->Gfx_EndScene();
 	return false;
@@ -265,6 +270,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		srand(time(NULL));
 		gameTime = 0.0f;	
+		debugMode = false;
 
 		//Load shit
 		loadResources();
@@ -283,7 +289,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//Start menu music
 		setMusic("menu");
-		debugFont = new hgeFont("Data/Fonts/debug.fnt");
 
 		//Let's rock now!
 		hge->System_Start();

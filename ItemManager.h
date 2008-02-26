@@ -3,7 +3,7 @@
 
 #include "game.h"
 
-#define NUM_ITEMS 10
+#define NUM_ITEMS 11
 #define ITEM_SILLY_PAD 0
 #define ITEM_WALLBREAKER 1
 #define ITEM_HEALTH 2
@@ -14,6 +14,7 @@
 #define ITEM_SLOW 7
 #define ITEM_SUPER_WALL 8
 #define ITEM_COLOR_BOMB 9
+#define ITEM_GHOST 10
 
 struct Item {
 	int itemCode;

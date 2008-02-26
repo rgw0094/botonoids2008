@@ -9,6 +9,7 @@ extern bool menuMusicPlaying;
 extern int mode;
 extern Song songs[NUM_SONGS];
 extern hgeAnimation *itemAnimations[10], *botonoidGraphics[NUM_BOTONOIDS];
+extern Player *players[3];
 
 #define BACK_BUTTON 0
 #define NEXT_BUTTON 1
@@ -33,27 +34,55 @@ CustomizeScreen::CustomizeScreen() {
 	guiX = (1024.0f-927.0f)/2.0f;
 	guiY = (768.0f-511.0f)/2.0f - 50.0f;
 
-	//Wall handicap tooltips
-	int count = 0;
-	float yOffset = 118.0f;
-	for (int i = 0; i < 6; i += 2) {
-		strcpy(tooltips[i].text, "Points Per Wall");
-		tooltips[i].collisionBox = new hgeRect(guiX + 114.0f, guiY + 176.0f + yOffset*count, guiX + 230.0f, guiY + 212.0f + yOffset*count);
-		tooltips[i].textX = guiX + 102.0f;
-		tooltips[i].textY = guiY + 148.0f + yOffset*count;
-		tooltips[i].mouseOver = false;
-		count++;
-	}
+	//Handicap bars
+	float yOffset = 117.0;
+	int player = 0;
+	char gay[10];
+	for (int i = 0; i < 6; i++) {
+		
+		handicapBars[i].textX = guiX + 102.0f;
+		handicapBars[i].textY = guiY + 148.0f + yOffset*player;
+		handicapBars[i].mouseOver = false;
 
-	//Garden handicap tooltips
-	count = 0;
-	for (int i = 1; i < 6; i += 2) {
-		strcpy(tooltips[i].text, "Points Per Garden");
-		tooltips[i].collisionBox = new hgeRect(guiX + 114.0f , guiY + 212.0f + yOffset*count, guiX + 230.0f, guiY + 247.0f + yOffset*count);
-		tooltips[i].textX = guiX + 102.0f;
-		tooltips[i].textY = guiY + 148.0f + yOffset*count;
-		tooltips[i].mouseOver = false;
-		count ++;
+		//Walls
+		if (i % 2 == 0) {
+
+			strcpy(handicapBars[i].tooltipText, "Points Per Wall");
+			handicapBars[i].collisionBox = new hgeRect(
+					guiX + 114.0f, 
+					guiY + 176.0f + yOffset*player, 
+					guiX + 230.0f, 
+					guiY + 212.0f + yOffset*player);
+			handicapBars[i].bar = new hgeRect(
+					guiX + 149.0f, 
+					guiY + 176.0f + yOffset*player, 
+					guiX + 230.0f, 
+					guiY + 207.0f + yOffset*player);
+			strcpy(gay, "pointsPerWall");
+			strcat(gay, intToString(player));
+			gameInfo.pointsPerWall[player] = hge->Ini_GetInt("Options", gay, 1);
+		
+		//Gardens
+		} else {
+
+			strcpy(handicapBars[i].tooltipText, "Points Per Garden");
+			handicapBars[i].collisionBox = new hgeRect(
+					guiX + 114.0f, 
+					guiY + 211.0f + yOffset*player, 
+					guiX + 230.0f, 
+					guiY + 247.0f + yOffset*player);
+			handicapBars[i].bar = new hgeRect(
+					guiX + 149.0f, 
+					guiY + 216.0f + yOffset*player, 
+					guiX + 230.0f, 
+					guiY + 247.0f + yOffset*player);
+			strcpy(gay, "pointsPerGarden");
+			strcat(gay, intToString(player));
+			gameInfo.pointsPerGarden[player] = hge->Ini_GetInt("Options", gay, 2);
+
+			player++;
+		}
+
 	}
 
 	//Board size collision boxes
@@ -66,8 +95,8 @@ CustomizeScreen::CustomizeScreen() {
 		int x = (i < 5 ? 321 : 639);
 		itemBars[i] = new hgeRect(x, 223 + 60*(i%5), x+112, 268 + 60*(i%5));
 		itemBarClicked[i] = false;
-		gameInfo.itemFrequencies[i] = 0;
 	}
+	loadItemFrequencies();
 	
 }
 
@@ -76,7 +105,10 @@ CustomizeScreen::CustomizeScreen() {
  */
 CustomizeScreen::~CustomizeScreen() {
 	for (int i = 0; i < 2; i++) delete buttons[i];
-	for (int i = 0; i < 6; i++) delete tooltips[i].collisionBox;
+	for (int i = 0; i < 3; i++) {
+		delete handicapBars[i].collisionBox;
+		delete handicapBars[i].bar;
+	}
 	for (int i = 0; i < 4; i++) delete boardSizeBoxes[i];
 	delete nextSongBox;
 	delete previousSongBox;
@@ -99,25 +131,42 @@ void CustomizeScreen::draw(float dt) {
 
 	//Draw handicap areas
 	for (int i = 0; i < gameInfo.numPlayers; i++) {
+
+		//Spinning botonoid
 		botonoidGraphics[i]->SetSpeed(14);
 		botonoidGraphics[i]->Update(dt);
 		botonoidGraphics[i]->Render(113.0, 315.0 + 120.0 * (float)i);
+
+		//Non-tool tip text
+		resources->GetFont("tooltip")->printf(handicapBars[i*2].textX, handicapBars[i*2].textY, HGETEXT_LEFT, 
+			"Player %d Handicap", i+1);
+
 	}
 
-	//Draw tooltips
-	for (int i = 0; i < 6; i++) {
-		//Non-tool tip text
-		if (i % 2 == 0) {
-			resources->GetFont("tooltip")->printf(tooltips[i].textX, tooltips[i].textY, HGETEXT_LEFT, "Player %d Handicap", (i/2)+1);
-		}
+	//Draw handicap bars
+	int player;
+	for (int i = 0; i < gameInfo.numPlayers*2; i++) {
+		
+		player = (i-i%2)/2;
+
 		//Tooltip text
-		if (tooltips[i].mouseOver) {
-			resources->GetSprite("blackbox")->RenderStretch(tooltips[i].textX, 
-															tooltips[i].textY, 
-															tooltips[i].textX + 150.0f,
-															tooltips[i].textY + 25.0f);
-			resources->GetFont("tooltip")->printf(tooltips[i].textX, tooltips[i].textY, HGETEXT_LEFT, tooltips[i].text);
+		if (handicapBars[i].mouseOver || handicapBars[i].clicked) {
+			resources->GetSprite("blackbox")->RenderStretch(handicapBars[i].textX, handicapBars[i].textY, handicapBars[i].textX + 150.0f, handicapBars[i].textY + 25.0f);
+			resources->GetFont("tooltip")->printf(handicapBars[i].textX, handicapBars[i].textY, HGETEXT_LEFT, handicapBars[i].tooltipText);
 		}
+
+		//Handicap bars
+		for (int j = 5; j > 0; j--) {
+			if (i % 2 == 0 && gameInfo.pointsPerWall[player] < j ||
+					i % 2 == 1 && gameInfo.pointsPerGarden[player] < j) {
+				resources->GetSprite("blackbox")->RenderStretch(
+						handicapBars[i].bar->x1 + (j-1) * (82/5) + 2, 
+						handicapBars[i].bar->y1 + 2,
+						handicapBars[i].bar->x1 + (j-1) * (82/5) + 82/5,
+						handicapBars[i].bar->y1 + 1 + 29);
+			}
+		}
+	
 	}
 
 	//Board size boxes
@@ -174,9 +223,27 @@ bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
 		buttons[i]->update(mouseX, mouseY);
 	}
 
-	//Update tooltips
-	for (int i = 0; i < 6; i++) {
-		tooltips[i].mouseOver = tooltips[i].collisionBox->TestPoint(mouseX, mouseY);
+	//Update handicap bars
+	int player;
+	for (int i = 0; i < gameInfo.numPlayers*2; i++) {
+		player = (i - i%2)/2;
+		handicapBars[i].mouseOver = handicapBars[i].collisionBox->TestPoint(mouseX, mouseY);
+		if (handicapBars[i].bar->TestPoint(mouseX, mouseY) && hge->Input_KeyDown(HGEK_LBUTTON))
+			handicapBars[i].clicked = true;
+		if (!hge->Input_GetKeyState(HGEK_LBUTTON)) 
+			handicapBars[i].clicked = false;
+		if (handicapBars[i].clicked) {
+			if (i % 2 == 0) {
+				gameInfo.pointsPerWall[player] = (mouseX - handicapBars[i].bar->x1 + 12) / (82/5);
+				if (gameInfo.pointsPerWall[player] < 0) gameInfo.pointsPerWall[player] = 0;
+				if (gameInfo.pointsPerWall[player] > 5) gameInfo.pointsPerWall[player] = 5;
+			} else {
+				gameInfo.pointsPerGarden[player] = (mouseX - handicapBars[i].bar->x1 + 12) / (82/5);
+				if (gameInfo.pointsPerGarden[player] < 0) gameInfo.pointsPerGarden[player] = 0;
+				if (gameInfo.pointsPerGarden[player] > 5) gameInfo.pointsPerGarden[player] = 5;
+			}
+			saveHandicaps();
+		}
 	}
 
 	//Select board size
@@ -189,13 +256,14 @@ bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
 	//Click on item frequency bars
 	for (int i = 0; i < 10; i++) {
 
-		if (itemBars[i]->TestPoint(mouseX, mouseY) && hge->Input_KeyDown(HGEK_LBUTTON)) {
+		if (itemBars[i]->TestPoint(mouseX, mouseY) && hge->Input_KeyDown(HGEK_LBUTTON))
 			itemBarClicked[i] = true;
-		}
-		if (!hge->Input_GetKeyState(HGEK_LBUTTON)) itemBarClicked[i] = false;
+		if (!hge->Input_GetKeyState(HGEK_LBUTTON)) 
+			itemBarClicked[i] = false;
 		if (itemBarClicked[i]) {
 			gameInfo.itemFrequencies[i] = (mouseX - itemBars[i]->x1 + 12) / (112/5);
 			if (gameInfo.itemFrequencies[i] < 0) gameInfo.itemFrequencies[i] = 0;
+			if (gameInfo.itemFrequencies[i] > 5) gameInfo.itemFrequencies[i] = 5;
 			saveItemFrequencies();
 		}
 	}
@@ -232,4 +300,22 @@ bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
 	}
 
 	return false;
+}
+
+
+/**
+ * Saves currently set handicaps to the INI file
+ */
+void CustomizeScreen::saveHandicaps() {
+	std::string param;
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
+		//Wall handicaps
+		param = "pointsPerWall";
+		param += intToString(i);
+		hge->Ini_SetInt("Options", param.c_str(), gameInfo.pointsPerWall[i]);
+		//Garden handicaps
+		param = "pointsPerGarden";
+		param += intToString(i);
+		hge->Ini_SetInt("Options", param.c_str(), gameInfo.pointsPerGarden[i]);
+	}
 }

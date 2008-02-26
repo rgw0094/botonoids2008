@@ -35,11 +35,17 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	score = 0;
 	health = 3;
 	colorChangeMode = foundationMode = buildWallPressed = false;
-	startedMoving = -10.0f;
-	endedColorChange = -10.0f;
+	startedMoving = -10.0;
+	endedColorChange = -10.0;
+	timePunched = -10.0;
+	timeGhosted = -10.0;
 	collisionBox = new hgeRect();
 	collisionBox->SetRadius(x,y,14.0f);
+	punchingGlove = resources->GetAnimation("punchingglove");
 	slowed = false;
+	punching = false;
+	ghostMode = false;
+	dead = false;
 
 	//Center of the wheel
 	itemWheelX = 928.0f;
@@ -66,14 +72,15 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 		emptyItemSlot = resources->GetSprite("emptySlotWhite");
 	}
 
-	//temp
-	itemSlots[0].code = ITEM_MISSILE;
-	itemSlots[0].quantity = 200;
-	itemSlots[1].code = ITEM_HEALTH;
-	itemSlots[1].quantity = 10;
-	itemSlots[2].code = ITEM_SLOW;
-	itemSlots[2].quantity = 50;
+	//Item slot 1 is always the GHOST
+	itemSlots[0].code = ITEM_GHOST;
+	itemSlots[0].quantity = 0;
 
+	//temp
+	itemSlots[1].code = ITEM_PUNCH_GLOVE;
+	itemSlots[1].quantity = 200;
+	itemSlots[2].code = ITEM_MISSILE;
+	itemSlots[2].quantity = 50;
 }
 
 /**
@@ -101,6 +108,7 @@ void Player::update(float dt) {
 	doMovement(dt);
 	doStats(dt);
 	updateItemSlots(dt);
+	updatePunchingGlove(dt);
 
 	//Update previous position - this must be done after doColorChanging() is called.
 	lastGridX = gridX;
@@ -144,11 +152,17 @@ void Player::update(float dt) {
 	if (input->buttonPressed(INPUT_ITEM, playerNum)) useItem(dt);
 
 	//Update state
-	if (slowed && gameTime > timeSlowed + SLOW_DURATION) {
-		slowed = false;
+	if (slowed && gameTime > timeSlowed + SLOW_DURATION) slowed = false;
+	if (ghostMode && gameTime > timeGhosted + GHOST_DURATION) {
+		ghostMode = false;
+		if (dead) {
+			dead = false;
+			health = 3.0;
+		}
 	}
 
-	//temp debug input
+
+	//----temp debug input------------
 	if (hge->Input_KeyDown(HGEK_G)) {
 		grid->foundations[gridX][gridY] = playerNum;
 		grid->buildWall(gridX, gridY, playerNum);
@@ -156,6 +170,7 @@ void Player::update(float dt) {
 	if (hge->Input_KeyDown(HGEK_F)) {
 		grid->foundations[gridX][gridY] = playerNum;
 	}
+	//--------------------------------
 
 } //end update()
 
@@ -168,13 +183,36 @@ void Player::draw(float dt) {
 		slowEffectParticle->Render();
 	}
 
+	//Draw Punch glove UP before the botonoid
+	/**
+	if (punching) {
+		if (facing == UP) {
+			punchingGlove->RenderEx(x-10.0, y+5.0, punchingGloveAngle);
+		}
+	}*/
+
 	//Draw the botonoid animation. Only update the animation if it is not set to the frame
 	// corresponding to the botonoid's correct direction. This makes the botonoid turn to
 	// its current direction then display a still image.
 	if (botonoidGraphics[whichBotonoid]->GetFrame() != facing*4) {
 		botonoidGraphics[whichBotonoid]->Update(dt);
 	}
+	if (ghostMode) botonoidGraphics[whichBotonoid]->SetColor(ARGB(125.0,255.0,255.0,255.0));
 	botonoidGraphics[whichBotonoid]->Render(x,y);
+	if (ghostMode) botonoidGraphics[whichBotonoid]->SetColor(ARGB(255.0,255.0,255.0,255.0));
+
+	//Draw Punch glove LEFT, RIGHT, DOWN after the botonoid
+	if (punching) {
+		punchingGlove->RenderEx(x,y, punchingGloveAngle);
+		/**
+		if (facing == LEFT ||) {
+			punchingGlove->RenderEx(x, y+10.0, PI);
+		} else if (facing == RIGHT) {
+			punchingGlove->Render(x,y-10.0);
+		} else if (facing == DOWN) {
+			punchingGlove->RenderEx(x+10.0, y+5.0, PI/2.0);
+		}*/
+	}
 
 	//Draw the number of color changes remaining to the left of the Botonoid
 	if (colorChangeMode) {
@@ -254,7 +292,7 @@ void Player::startFoundationMode(int _numWalls) {
  * every frame from the update() method.
  */
 void Player::doStats(float dt) {
-
+/**
 	//Count score and walls/gardens
 	score = 0;
 	statsPage->stats[playerNum].wallsBuilt = 0;
@@ -262,11 +300,12 @@ void Player::doStats(float dt) {
 	for (int i = 0; i < grid->width; i++) {
 		for (int j = 0; j < grid->height; j++) {
 			if (grid->walls[i][j] == playerNum) {
-				score += 1;
+				score += gameInfo.pointsPerWall[playerNum];
 				statsPage->stats[playerNum].wallsBuilt++;
 			}
 			if (grid->gardens[i][j] == playerNum) {
-				score += 2;
+				score += gameInfo.pointsPerGarden[playerNum];
+				hge->System_Log("%d", gameInfo.pointsPerGarden[playerNum]);
 				statsPage->stats[playerNum].gardensBuilt++;
 			}
 			if (grid->superFlowers[i][j] == playerNum) {
@@ -292,7 +331,7 @@ void Player::doStats(float dt) {
 	if (gameInfo.winner == playerNum) {
 		statsPage->stats[playerNum].timeWinning += dt;
 	}
-
+*/
 } //end doStats()
 
 /**
@@ -327,29 +366,25 @@ void Player::doMovement(float dt) {
 		//Left
 		if (input->buttonDown(INPUT_LEFT, playerNum)) {
 			facing = movingDirection = LEFT;
-			if (gridX > 0 && !(grid->walls[gridX-1][gridY] != -1 && grid->walls[gridX-1][gridY] != playerNum)
-					&& !(grid->sillyPads[gridX-1][gridY] != -1 && grid->sillyPads[gridX-1][gridY] != playerNum)) {
+			if (gridX > 0 && !collisionAt(gridX-1, gridY)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		//Right
 		} else if (input->buttonDown(INPUT_RIGHT, playerNum)) {
 			facing = movingDirection =  RIGHT;
-			if (gridX < grid->width-1 && !(grid->walls[gridX+1][gridY] != -1 && grid->walls[gridX+1][gridY] != playerNum)
-					&& !(grid->sillyPads[gridX+1][gridY] != -1 && grid->sillyPads[gridX+1][gridY] != playerNum)) {
+			if (gridX < grid->width-1 && !collisionAt(gridX + 1, gridY)) { 
 				startedMoving = hge->Timer_GetTime();
 			}
 		//Down
 		} else if (input->buttonDown(INPUT_DOWN, playerNum)) {
 			facing = movingDirection =  DOWN;
-			if (gridY < grid->height-1 && !(grid->walls[gridX][gridY+1] != -1 && grid->walls[gridX][gridY+1] != playerNum)
-					&& !(grid->sillyPads[gridX][gridY+1] != -1 && grid->sillyPads[gridX][gridY+1] != playerNum)) {
+			if (gridY < grid->height-1 && !collisionAt(gridX, gridY+1)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		//Up
 		} else if (input->buttonDown(INPUT_UP, playerNum)) {
 			facing = movingDirection =  UP;
-			if (gridY > 0 && !(grid->walls[gridX][gridY-1] != -1 && grid->walls[gridX][gridY-1] != playerNum)
-					&& !(grid->sillyPads[gridX][gridY-1] != -1 && grid->sillyPads[gridX][gridY-1] != playerNum)) {
+			if (gridY > 0 && !collisionAt(gridX, gridY-1)) {
 				startedMoving = hge->Timer_GetTime();
 			}
 		}
@@ -534,8 +569,16 @@ void Player::drawItemWheel(float dt) {
 		if (itemSlots[i].code != EMPTY) {
 			itemManager->itemSprites[itemSlots[i].code]->Render(itemSlots[i].x, itemSlots[i].y);
 			
-			//If there is more than 1 of this item, draw the quantity
-			if (itemSlots[i].quantity > 1) {
+			//If the slot holds the ghost display the ghost tim remaining
+			if (itemSlots[i].code == ITEM_GHOST && ghostMode) {
+				resources->GetFont("timer")->SetScale(0.8);
+				resources->GetFont("timer")->SetColor(ARGB(255,0,0,0));
+				resources->GetFont("timer")->printf(itemSlots[i].x+18.0, itemSlots[i].y + 10.0, HGETEXT_CENTER, "%d", (int)((timeGhosted + GHOST_DURATION) - gameTime));
+				resources->GetFont("timer")->SetScale(1.0);
+				resources->GetFont("timer")->SetColor(ARGB(255,255,255,255));
+
+			//Otherwise, if there is more than 1 of this item, draw the quantity
+			} else if (itemSlots[i].quantity > 1) {
 				resources->GetFont("timer")->SetScale(0.6f);
 				resources->GetFont("timer")->printf(itemSlots[i].x + 28.0f, itemSlots[i].y-4.0f, HGETEXT_LEFT, "%d", itemSlots[i].quantity);
 				resources->GetFont("timer")->SetScale(1.0f);
@@ -555,6 +598,9 @@ void Player::drawItemWheel(float dt) {
  */
 void Player::useItem(float dt) {
 
+	//You can't use items in ghost mode!
+	if (ghostMode) return;
+
 	//Whether or not the item was successfully used.
 	bool itemUsed = false;
 
@@ -571,6 +617,14 @@ void Player::useItem(float dt) {
 	if (item == ITEM_SILLY_PAD) {
 		itemUsed = grid->placeSillyPad(gridX, gridY, playerNum);
 	
+	//Ghost Mode
+	} else if (item == ITEM_GHOST) {
+		//Don't set itemUsed to true because the player has unlimited ghosts
+		if (!ghostMode) {
+			ghostMode = true;
+			timeGhosted = gameTime;
+		}
+
 	//Heart
 	} else if (item == ITEM_HEALTH) {
 		if (health < 3.0) {
@@ -593,11 +647,19 @@ void Player::useItem(float dt) {
 	} else if (item == ITEM_SUPER_FLOWER) {
 		itemUsed = grid->placeSuperFlower(gridX, gridY, playerNum);
 
+	//Punching Glove
+	} else if (item == ITEM_PUNCH_GLOVE) {
+		punchingGlove->SetFrame(0);
+		punchingGlove->Play();
+		timePunched = gameTime;
+		punchingGloveTarget = findClosestEnemy();
+		itemUsed = true;
+
 	//Missile
 	} else if (item == ITEM_MISSILE) {
 		itemUsed = true;
 		missileManager->addMissile(playerNum, gridX, gridY);
-		hge->Effect_Play(resources->GetEffect("snd_missile"));
+		hge->Effect_PlayEx(resources->GetEffect("snd_missile"), 50);
 
 	//Wall Breaker
 	} else if (item == ITEM_WALLBREAKER) {
@@ -680,7 +742,7 @@ void Player::dealDamage(float damage) {
 
 	if (health <= 0.0) {
 		health = 0.0;
-		//die();
+		die();
 	}
 
 }
@@ -699,5 +761,79 @@ void Player::slowPlayer() {
 	
 }
 
+/**
+ * Returns whether or not the player would collide with something at square (x,y)
+ */
+bool Player::collisionAt(int gX, int gY) {
+	if (ghostMode) return false;
+	return ((grid->walls[gX][gY] != -1 && 
+			grid->walls[gX][gY] != playerNum) || 
+			(grid->sillyPads[gX][gY] != -1 && 
+			grid->sillyPads[gX][gY] != playerNum));
+}
 
+/**
+ * Called when the player's health reached 0.
+ */
+void Player::die() {
+
+	//The player turns into a ghost when they die
+	ghostMode = true;
+	dead = true;
+	timeGhosted = gameTime + 15.0;
+
+	//hge->Effect_Play(resources->GetEffect("snd_explosion1"));
+}
+
+/**
+ * Calculates shit related to the punching glove
+ */
+void Player::updatePunchingGlove(float dt) {
+
+	//First determine if the player is currently punching
+	punching = (gameTime > timePunched  && gameTime < timePunched + PUNCH_DELAY);
+	if (!punching) return;
+
+	punchingGlove->Update(dt);
+
+	//Find the angle between the player and his target
+	punchingGloveAngle = atan((y - players[punchingGloveTarget]->y) /
+							  (x - players[punchingGloveTarget]->x));
+
+	if (x < players[punchingGloveTarget]->x) {
+		//Don't need to change anything!
+	} else if (x > players[punchingGloveTarget]->x) {
+		//To the right of the target, angle will be off by PI
+		punchingGloveAngle += PI;
+	} else if (players[punchingGloveTarget]->y < y) {
+		//Directly above target, angle will be off by PI
+		punchingGloveAngle += PI;
+	} else if (players[punchingGloveTarget]->y > y) {
+		//Directly below target, angle will be off by PI
+		punchingGloveAngle += PI;
+	}
+}
+
+/**
+ * Returns the number of the closest enemy player
+ */
+int Player::findClosestEnemy() {
+
+	float dist;
+	float minDistance = 999999.0;
+	int closestPlayer = -1;
+
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
+		if (i != playerNum) {
+			dist = distance(x, y, players[i]->x, players[i]->y);
+			if (dist < minDistance) {
+				minDistance = dist;
+				closestPlayer = i;
+			}
+		}
+	}
+
+	return closestPlayer;
+
+}
 

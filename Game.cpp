@@ -300,3 +300,9 @@ void createExplosionAt(float x, float y) {
 	else hge->Effect_Play(resources->GetEffect("snd_explosion2"));
 }
 
+/**
+ * Returns the distance between 2 points
+ */
+float distance(int x1, int y1, int x2, int y2) {
+	return sqrt(float((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1)));
+}

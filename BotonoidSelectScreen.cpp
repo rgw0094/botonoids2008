@@ -188,10 +188,23 @@ bool BotonoidSelectScreen::update(float dt, float mouseX, float mouseY) {
 		//Select current botonoid
 		if (input->buttonPressed(INPUT_ACTION, player)) {
 			if (selecters[player].selected) {
+				//Deselect
 				selecters[player].selected = false;
-			} else {
-				if (!botonoidSelected(selecters[player].selection)) {
-					selecters[player].selected = true;
+			} else if (!botonoidSelected(selecters[player].selection)) {
+				//Select
+				selecters[player].selected = true;
+
+				//Play selection sound
+				switch (selecters[player].selection) {
+					case ALPHANOID:
+						hge->Effect_Play(resources->GetEffect("snd_alphanoidSelect"));
+						break;
+					case BARVINOID:
+						hge->Effect_Play(resources->GetEffect("snd_barvinoidSelect"));
+						break;
+					case HERBANOID:
+						hge->Effect_Play(resources->GetEffect("snd_herbanoidSelect"));
+						break;
 				}
 			}
 		}

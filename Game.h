@@ -21,6 +21,9 @@
 
 #define NUM_PLAYER_GRAPHICS 4		//Number of graphics per player
 #define NUM_BOTONOIDS 3
+#define ALPHANOID 0
+#define BARVINOID 1
+#define HERBANOID 2
 #define PLAYER_1 0
 #define PLAYER_2 1
 #define DOWN 0
@@ -66,6 +69,8 @@ struct GameInfo {
 	int selectedBotonoid[3];
 	int boardSize;
 	int itemFrequencies[10];
+	int pointsPerWall[3];
+	int pointsPerGarden[3];
 	HMUSIC currentMusic;
 };
 
@@ -89,5 +94,6 @@ float dist(float x1, float y1, float x2, float y2);
 char* intToString(int num);
 bool isInBounds(float x, float y);
 void createExplosionAt(float x, float y);
+float distance(int x1, int y1, int x2, int y2);
 
 #endif
