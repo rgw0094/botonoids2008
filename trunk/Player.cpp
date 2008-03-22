@@ -292,46 +292,48 @@ void Player::startFoundationMode(int _numWalls) {
  * every frame from the update() method.
  */
 void Player::doStats(float dt) {
-/**
-	//Count score and walls/gardens
-	score = 0;
-	statsPage->stats[playerNum].wallsBuilt = 0;
-	statsPage->stats[playerNum].gardensBuilt = 0;
-	for (int i = 0; i < grid->width; i++) {
-		for (int j = 0; j < grid->height; j++) {
-			if (grid->walls[i][j] == playerNum) {
-				score += gameInfo.pointsPerWall[playerNum];
-				statsPage->stats[playerNum].wallsBuilt++;
-			}
-			if (grid->gardens[i][j] == playerNum) {
-				score += gameInfo.pointsPerGarden[playerNum];
-				hge->System_Log("%d", gameInfo.pointsPerGarden[playerNum]);
-				statsPage->stats[playerNum].gardensBuilt++;
-			}
-			if (grid->superFlowers[i][j] == playerNum) {
-				score += 15;
+
+	//Only recount every 50 frames for better performance
+
+		//Count score and walls/gardens
+		score = 0;
+		statsPage->stats[playerNum].wallsBuilt = 0;
+		statsPage->stats[playerNum].gardensBuilt = 0;
+		for (int i = 0; i < grid->width; i++) {
+			for (int j = 0; j < grid->height; j++) {
+				if (grid->walls[i][j] == playerNum) {
+					score += gameInfo.pointsPerWall[playerNum];
+					statsPage->stats[playerNum].wallsBuilt++;
+				}
+				if (grid->gardens[i][j] == playerNum) {
+					score += gameInfo.pointsPerGarden[playerNum];
+					hge->System_Log("%d", gameInfo.pointsPerGarden[playerNum]);
+					statsPage->stats[playerNum].gardensBuilt++;
+				}
+				if (grid->superFlowers[i][j] == playerNum) {
+					score += 15;
+				}
 			}
 		}
-	}
 
-	//Determine winner
-	int maxScore = -1;
-	for (int i = 0; i < gameInfo.numPlayers; i++) {
-		if (players[i]->score > maxScore) {
-			//Player i is the winner
-			gameInfo.winner = i;
-			maxScore = players[i]->score;
-		} else if (players[i]->score == maxScore) {
-			//Tie
-			gameInfo.winner = -1;
+		//Determine winner
+		int maxScore = -1;
+		for (int i = 0; i < gameInfo.numPlayers; i++) {
+			if (players[i]->score > maxScore) {
+				//Player i is the winner
+				gameInfo.winner = i;
+				maxScore = players[i]->score;
+			} else if (players[i]->score == maxScore) {
+				//Tie
+				gameInfo.winner = -1;
+			}
 		}
-	}
 
-	//Time winning
-	if (gameInfo.winner == playerNum) {
-		statsPage->stats[playerNum].timeWinning += dt;
-	}
-*/
+		//Time winning
+		if (gameInfo.winner == playerNum) {
+			statsPage->stats[playerNum].timeWinning += dt;
+		}
+
 } //end doStats()
 
 /**
