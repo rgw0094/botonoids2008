@@ -91,9 +91,10 @@ CustomizeScreen::CustomizeScreen() {
 	}
 
 	//Item frequency bars
-	for (int i = 0; i < 10; i++) {
-		int x = (i < 5 ? 321 : 639);
-		itemBars[i] = new hgeRect(x, 223 + 60*(i%5), x+112, 268 + 60*(i%5));
+	for (int i = 0; i < NUM_ITEMS-1; i++) {
+		int x = (i < 4 ? 326 : 644);
+		int y = 242 + 80*(i%4);
+		itemBars[i] = new hgeRect(x, y, x+112, y + 40);
 		itemBarClicked[i] = false;
 	}
 	loadItemFrequencies();
@@ -189,7 +190,7 @@ void CustomizeScreen::draw(float dt) {
 	}
 
 	//Draw item frequency bars
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < NUM_ITEMS-1; i++) {
 		//Draw black boxes over the squares that aren't be filled
 		for (int j = 5; j > 0; j--) {
 			if (gameInfo.itemFrequencies[i] < j) {
@@ -212,7 +213,7 @@ void CustomizeScreen::draw(float dt) {
 }
 
 /**
- * Update the botonoid select screen.
+ * Update the customize screen.
  */
 bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
 
@@ -254,7 +255,7 @@ bool CustomizeScreen::update(float dt, float _mouseX, float _mouseY) {
 	}
 
 	//Click on item frequency bars
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < NUM_ITEMS-1; i++) {
 
 		if (itemBars[i]->TestPoint(mouseX, mouseY) && hge->Input_KeyDown(HGEK_LBUTTON))
 			itemBarClicked[i] = true;

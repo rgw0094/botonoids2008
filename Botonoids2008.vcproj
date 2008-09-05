@@ -112,112 +112,123 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\BotonoidSelectScreen.cpp">
+				RelativePath=".\src\Game.cpp">
 			</File>
 			<File
-				RelativePath=".\Button.cpp">
+				RelativePath=".\src\Grid.cpp">
 			</File>
 			<File
-				RelativePath=".\CustomizeScreen.cpp">
+				RelativePath=".\src\GUI.cpp">
 			</File>
 			<File
-				RelativePath=".\Game.cpp">
+				RelativePath=".\src\Input.cpp">
 			</File>
 			<File
-				RelativePath=".\Grid.cpp">
+				RelativePath=".\src\ItemManager.cpp">
 			</File>
 			<File
-				RelativePath=".\GUI.cpp">
+				RelativePath=".\src\main.cpp">
 			</File>
 			<File
-				RelativePath=".\Input.cpp">
+				RelativePath=".\src\minimenu.cpp">
 			</File>
 			<File
-				RelativePath=".\ItemManager.cpp">
+				RelativePath=".\src\MissileManager.cpp">
 			</File>
 			<File
-				RelativePath=".\main.cpp">
+				RelativePath=".\src\Player.cpp">
 			</File>
 			<File
-				RelativePath=".\menu.cpp">
+				RelativePath=".\src\StatsPage.cpp">
 			</File>
 			<File
-				RelativePath=".\minimenu.cpp">
+				RelativePath=".\src\WallBreakerManager.cpp">
 			</File>
-			<File
-				RelativePath=".\MissileManager.cpp">
-			</File>
-			<File
-				RelativePath=".\OptionsScreen.cpp">
-			</File>
-			<File
-				RelativePath=".\Player.cpp">
-			</File>
-			<File
-				RelativePath=".\StatsPage.cpp">
-			</File>
-			<File
-				RelativePath=".\TitleScreen.cpp">
-			</File>
-			<File
-				RelativePath=".\WallBreakerManager.cpp">
-			</File>
+			<Filter
+				Name="Menu"
+				Filter="">
+				<File
+					RelativePath=".\src\BotonoidSelectScreen.cpp">
+				</File>
+				<File
+					RelativePath=".\src\Button.cpp">
+				</File>
+				<File
+					RelativePath=".\src\CustomizeScreen.cpp">
+				</File>
+				<File
+					RelativePath=".\src\menu.cpp">
+				</File>
+				<File
+					RelativePath=".\src\OptionsScreen.cpp">
+				</File>
+				<File
+					RelativePath=".\src\TitleScreen.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\BotonoidSelectScreen.h">
+				RelativePath=".\src\Game.h">
 			</File>
 			<File
-				RelativePath=".\Button.h">
+				RelativePath=".\src\Grid.h">
 			</File>
 			<File
-				RelativePath=".\CustomizeScreen.h">
+				RelativePath=".\src\GUI.h">
 			</File>
 			<File
-				RelativePath=".\Game.h">
+				RelativePath=".\src\Input.h">
 			</File>
 			<File
-				RelativePath=".\Grid.h">
+				RelativePath=".\src\ItemManager.h">
 			</File>
 			<File
-				RelativePath=".\GUI.h">
+				RelativePath=".\src\minimenu.h">
 			</File>
 			<File
-				RelativePath=".\Input.h">
+				RelativePath=".\src\MissileManager.h">
 			</File>
 			<File
-				RelativePath=".\ItemManager.h">
+				RelativePath=".\src\Player.h">
 			</File>
 			<File
-				RelativePath=".\menu.h">
+				RelativePath=".\src\resource.h">
 			</File>
 			<File
-				RelativePath=".\MenuScreen.h">
+				RelativePath=".\src\StatsPage.h">
 			</File>
 			<File
-				RelativePath=".\minimenu.h">
+				RelativePath=".\src\WallBreakerManager.h">
 			</File>
-			<File
-				RelativePath=".\MissileManager.h">
-			</File>
-			<File
-				RelativePath=".\OptionsScreen.h">
-			</File>
-			<File
-				RelativePath=".\Player.h">
-			</File>
-			<File
-				RelativePath=".\StatsPage.h">
-			</File>
-			<File
-				RelativePath=".\TitleScreen.h">
-			</File>
-			<File
-				RelativePath=".\WallBreakerManager.h">
-			</File>
+			<Filter
+				Name="Menu"
+				Filter="">
+				<File
+					RelativePath=".\src\BotonoidSelectScreen.h">
+				</File>
+				<File
+					RelativePath=".\src\Button.h">
+				</File>
+				<File
+					RelativePath=".\src\CustomizeScreen.h">
+				</File>
+				<File
+					RelativePath=".\src\menu.h">
+				</File>
+				<File
+					RelativePath=".\src\MenuScreen.h">
+				</File>
+				<File
+					RelativePath=".\src\OptionsScreen.h">
+				</File>
+				<File
+					RelativePath=".\src\TitleScreen.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
