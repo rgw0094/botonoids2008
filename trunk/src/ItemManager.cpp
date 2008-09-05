@@ -50,26 +50,28 @@ void ItemManager::update(float dt) {
 	std::list<Item>::iterator i;
 	for (i = itemList.begin(); i != itemList.end(); i++) {
 
-		//Update stuff
-		i->y += i->dy*dt;
-		i->x += i->dx*dt;
+		//Calculate the distance the item will move this frame.
+		float xDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dx + i->radius * (i->dx > 0.0f ? 1.0f : -1.0f);
+		float yDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dy + i->radius * (i->dy > 0.0f ? 1.0f : -1.0f);
+
+		//Check for walls horizontally
+		if (grid->isWallAt(i->x + xDist, i->y) || !grid->inBounds(i->x + xDist, i->y)) {
+			i->dx = -i->dx;
+		} else {
+			i->x += i->dx*dt;
+		}
+
+		//Check for walls vertically
+		if (grid->isWallAt(i->x, i->y + yDist) || !grid->inBounds(i->x, i->y + yDist)){
+			i->dy = -i->dy;
+		} else {
+			i->y += i->dy*dt;
+		}
+
 		i->trail->MoveTo(i->x, i->y);
 		i->trail->Update(dt);
 		i->collisionBox->SetRadius(i->x, i->y, i->radius);
 		i->animation->Update(dt);
-
-		float xDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dx + i->radius * (i->dx > 0.0f ? 1.0f : -1.0f);
-		float yDist = 3.0f * (dt < 0.01f ? 0.01f : dt) * i->dy + i->radius * (i->dy > 0.0f ? 1.0f : -1.0f);
-
-		//Horizontal collision
-		if (grid->isWallAt(i->x + xDist, i->y) || !grid->inBounds(i->x + xDist, i->y)) {
-			i->dx = -i->dx;
-		}
-
-		//Vertical collision
-		if (grid->isWallAt(i->x, i->y + yDist) || !grid->inBounds(i->x, i->y + yDist)){
-			i->dy = -i->dy;
-		}
 
 		//Check for collision with player
 		bool itemCollected = false;
@@ -123,7 +125,7 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 		while (!itemSelected) {
 			itemRand = rand() % 50000;
 			cumFreq = 0;
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < NUM_ITEMS-1; i++) {
 				cumFreq += gameInfo.itemFrequencies[i];
 				if (!itemSelected && (itemRand/1000) < cumFreq) {
 					itemSelected = true;
