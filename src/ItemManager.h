@@ -36,7 +36,6 @@ public:
 	void reset();
 
 	std::list<Item> itemList;
-	hgeSprite *itemSprites[NUM_ITEMS];
 
 };
 

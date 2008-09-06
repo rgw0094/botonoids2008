@@ -34,7 +34,7 @@ GUI::~GUI() { }
 void GUI::draw(float dt) {
 
 	//Draw GUI
-	resources->GetSprite("gui")->Render(860,0);
+	resources->GetSprite("gui")->RenderEx(860,768, -PI/2.0);
 
 	//Draw the timer
 	drawTimer(dt);

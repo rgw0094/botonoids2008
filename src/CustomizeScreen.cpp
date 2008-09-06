@@ -8,7 +8,7 @@ extern GameInfo gameInfo;
 extern bool menuMusicPlaying;
 extern int mode;
 extern Song songs[NUM_SONGS];
-extern hgeAnimation *itemAnimations[10], *botonoidGraphics[NUM_BOTONOIDS];
+extern hgeAnimation *itemAnimations[NUM_ITEMS-1], *botonoidGraphics[NUM_BOTONOIDS];
 extern Player *players[3];
 
 #define BACK_BUTTON 0

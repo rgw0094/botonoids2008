@@ -1,16 +1,24 @@
+;**************************
+;******** TEXTURES ********
+;**************************
+Texture sillypads {
+ filename="Data/Graphics/sillypads.png"
+ resgroup=1
+}
+Texture particleTex {
+ filename="Data/Graphics/particles.png"
+ resgroup=1
+}
+Texture mainTx1 {
+ filename="Data/Graphics/sprites1.png"
+ resgroup=1
+}
+
 ;//***********************
 ;//******** PLAYER *******
 ;//***********************
-Texture botonoids {
- filename="Data/Graphics/botonoids.png"
- resgroup=1
-}
-Texture tiles {
- filename="Data/Graphics/tiles.png"
- resgroup=1
-}
 Animation goldBotonoid {
- texture=botonoids
+ texture=mainTx1
  rect=0,0,38,36
  frames=16
  fps=20.0
@@ -20,7 +28,7 @@ Animation goldBotonoid {
  resgroup=1
 }
 Animation blackBotonoid {
- texture=botonoids
+ texture=mainTx1
  rect=0,36,32,46
  frames=16
  fps=20.0
@@ -30,7 +38,7 @@ Animation blackBotonoid {
  resgroup=1
 }
 Animation silverBotonoid {
- texture=botonoids
+ texture=mainTx1
  rect=0,82,33,38
  frames=16
  fps=20.0
@@ -39,8 +47,6 @@ Animation silverBotonoid {
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
-
-
 
 ;//********************************
 ;//******** BOTONOID SELECT *******
@@ -296,70 +302,55 @@ Sprite blackbox {
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
-Sprite tileorder {
- texture="Data/Graphics/colororder.png"
- rect=0,0,186,26
- hotspot=0,0
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
-}
 Sprite gui {
- texture="Data/Graphics/GUI.png"
- rect=0,0,164,768
+ texture=mainTx1
+ rect=0,604,768,164
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 
 ;//Bars
-Texture bars {
- filename=Data/Graphics/bars.png
- resgroup=1
-}
 Sprite goldBar {
- texture=bars
- rect=0,0,74,19
+ texture=mainTx1
+ rect=535,36,73,19
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite silverBar {
- texture=bars
- rect=0,19,74,19
+ texture=mainTx1
+ rect=535,55,73,19
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite blackBar {
- texture=bars
- rect=0,38,74,19
+ texture=mainTx1
+ rect=535,74,73,19
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 
 ;//Item windows
-Texture windows {
- filename=Data/Graphics/itemwindows.png
- resgroup=1
-}
 Sprite goldWindow {
- texture=windows
- rect=0,0,115,98
+ texture=mainTx1
+ rect=672,0,115,98
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite blackWindow {
- texture=windows
- rect=0,98,115,98
+ texture=mainTx1
+ rect=787,0,115,98
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite silverWindow {
- texture=windows
- rect=0,196,115,98
+ texture=mainTx1
+ rect=902,0,115,98
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
@@ -402,27 +393,45 @@ Animation silverFace {
 }
 
 ;//Health hypocycloids
-Texture health {
- filename=Data/Graphics/hypocycloids.png
- resgroup=1
-}
 Sprite goldHealth {
- texture=health
- rect=0,0,30,31
+ texture=mainTx1
+ rect=0,120,30,31
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite blackHealth {
- texture=health
- rect=30,0,30,31
+ texture=mainTx1
+ rect=30,120,30,31
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite silverHealth {
- texture=health
- rect=60,0,30,31
+ texture=mainTx1
+ rect=60,120,30,31
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+
+Sprite emptySlotGold {
+ texture=mainTx1
+ rect=608,0,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite emptySlotBlack {
+ texture=mainTx1
+ rect=608,32,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite emptySlotWhite {
+ texture=mainTx1
+ rect=608,64,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
@@ -512,50 +521,50 @@ Sprite statsPage {
  resgroup=1
 }
 Sprite wallIcon {
- texture="Data/Graphics/icons.png"
- rect=0,0,32,32
+ texture=mainTx1
+ rect=128,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite gardenIcon {
- texture="Data/Graphics/icons.png"
- rect=32,0,32,32
+ texture=mainTx1
+ rect=160,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite biggestComboIcon {
- texture="Data/Graphics/icons.png"
- rect=64,0,32,32
+ texture=mainTx1
+ rect=192,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite timeInFirstIcon {
- texture="Data/Graphics/icons.png"
- rect=96,0,32,32
+ texture=mainTx1
+ rect=224,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite itemsUsedIcon {
- texture="Data/Graphics/icons.png"
- rect=128,0,32,32
+ texture=mainTx1
+ rect=256,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite damageDealtIcon {
- texture="Data/Graphics/icons.png"
- rect=160,0,32,32
+ texture=mainTx1
+ rect=288,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite damageTakenIcon {
- texture="Data/Graphics/icons.png"
- rect=192,0,32,32
+ texture=mainTx1
+ rect=320,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
@@ -571,29 +580,16 @@ Sprite itemcursor {
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
+Sprite ghost {
+ texture=mainTx1
+ rect=344,120,32,32
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+
 Texture items {
  filename=Data/Graphics/itemTokens.png
- resgroup=1
-}
-Sprite emptySlotGold {
- texture="Data/Graphics/emptyspots.png"
- rect=0,0,32,32
- hotspot=0,0
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
-}
-Sprite emptySlotBlack {
- texture="Data/Graphics/emptyspots.png"
- rect=0,32,32,32
- hotspot=0,0
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
-}
-Sprite emptySlotWhite {
- texture="Data/Graphics/emptyspots.png"
- rect=0,64,32,32
- hotspot=0,0
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 
@@ -733,17 +729,5 @@ Sound snd_herbanoidSelect {
 }
 Sound snd_barvinoidSelect {
  filename="Barvinoid.wav"
- resgroup=1
-}
-
-;**************************
-;******** TEXTURES ********
-;**************************
-Texture sillypads {
- filename="Data/Graphics/sillypads.png"
- resgroup=1
-}
-Texture particleTex {
- filename="Data/Graphics/particles.png"
  resgroup=1
 }

@@ -6,25 +6,17 @@ extern hgeResourceManager *resources;
 extern Grid *grid;
 extern Player *players[3];
 extern GameInfo gameInfo;
-extern hgeAnimation *itemAnimations[10];
+extern hgeAnimation *itemAnimations[NUM_ITEMS-1];
 
 /**
  * Constructor.
  */
-ItemManager::ItemManager() {
-	//Load item sprites
-	for (int i = 0; i < NUM_ITEMS; i++) {
-		itemSprites[i] = new hgeSprite(resources->GetTexture("items"), 0, 32*i, 32, 32);
-	}
-}
+ItemManager::ItemManager() { }
 
 /**
  * Destructor.
  */
 ItemManager::~ItemManager() {
-	for (int i = 0; i < NUM_ITEMS; i++) {
-		delete itemSprites[i];
-	}
 	reset();
 }
 
