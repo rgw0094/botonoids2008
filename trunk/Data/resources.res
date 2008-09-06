@@ -39,7 +39,7 @@ Animation blackBotonoid {
 }
 Animation silverBotonoid {
  texture=mainTx1
- rect=0,82,33,38
+ rect=0,82,33,37
  frames=16
  fps=20.0
  mode=FORWARD,LOOP
