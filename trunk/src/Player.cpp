@@ -10,6 +10,7 @@ extern hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
 extern hgeResourceManager *resources;
 extern hgeFont *debugFont;
 extern hgeSprite *particleSprites[16];
+extern hgeAnimation *itemAnimations[NUM_ITEMS-1];
 extern Input *input;
 extern StatsPage *statsPage;
 extern GameInfo gameInfo;
@@ -564,20 +565,25 @@ void Player::drawItemWheel(float dt) {
 	//Loop through the slots
 	for (int i = 0; i < 4; i++) {
 
-		//If the slot isn't empty, draw the item in it.
-		if (itemSlots[i].code != EMPTY) {
-			itemManager->itemSprites[itemSlots[i].code]->Render(itemSlots[i].x, itemSlots[i].y);
-			
-			//If the slot holds the ghost display the ghost tim remaining
-			if (itemSlots[i].code == ITEM_GHOST && ghostMode) {
+		if (itemSlots[i].code == ITEM_GHOST) {
+
+			resources->GetSprite("ghost")->Render(itemSlots[i].x, itemSlots[i].y);
+
+			if (ghostMode) {
 				resources->GetFont("timer")->SetScale(0.8);
 				resources->GetFont("timer")->SetColor(ARGB(255,0,0,0));
 				resources->GetFont("timer")->printf(itemSlots[i].x+18.0, itemSlots[i].y + 10.0, HGETEXT_CENTER, "%d", (int)((timeGhosted + GHOST_DURATION) - gameTime));
 				resources->GetFont("timer")->SetScale(1.0);
 				resources->GetFont("timer")->SetColor(ARGB(255,255,255,255));
+			}
 
-			//Otherwise, if there is more than 1 of this item, draw the quantity
-			} else if (itemSlots[i].quantity > 1) {
+		} else if (itemSlots[i].code != EMPTY) {
+
+			itemAnimations[itemSlots[i].code]->SetFrame(0);
+			itemAnimations[itemSlots[i].code]->Render(itemSlots[i].x+16, itemSlots[i].y+16);
+			
+			//If there is more than 1 of this item, draw the quantity
+			if (itemSlots[i].quantity > 1) {
 				resources->GetFont("timer")->SetScale(0.6f);
 				resources->GetFont("timer")->printf(itemSlots[i].x + 28.0f, itemSlots[i].y-4.0f, HGETEXT_LEFT, "%d", itemSlots[i].quantity);
 				resources->GetFont("timer")->SetScale(1.0f);

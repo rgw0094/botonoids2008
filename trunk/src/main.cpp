@@ -19,13 +19,10 @@ hgeParticleManager *explosionManager;
 
 std::string botonoidNames[3];
 Song songs[NUM_SONGS];
-hgeAnimation *itemAnimations[10];
+hgeAnimation *itemAnimations[NUM_ITEMS-1];
 
 //Sounds
 HCHANNEL musicChannel;
-
-//Textures
-HTEXTURE botonoidsTexture, tilesTexture;
 
 //Sprites
 hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
@@ -48,10 +45,6 @@ void loadResources() {
 	resources = new hgeResourceManager("Data/resources.res");
 	hge->Resource_AttachPack("Data/Sounds.zip");
 
-	//Load textures
-	botonoidsTexture = resources->GetTexture("botonoids");
-	tilesTexture = resources->GetTexture("tiles");
-
 	//Load botonoid sprites
 	botonoidGraphics[0] = resources->GetAnimation("goldBotonoid");
 	botonoidGraphics[0]->Play();
@@ -70,12 +63,12 @@ void loadResources() {
 	}
 
 	//Load item animations
-	for (int i = 0; i < 10; i++) {
-		itemAnimations[i] = new hgeAnimation(resources->GetTexture("items"),
+	for (int i = 0; i < NUM_ITEMS-1; i++) {
+		itemAnimations[i] = new hgeAnimation(resources->GetTexture("mainTx1"),
 											 32,		//frames
 											 20,		//FPS
 											 0,			//x
-											 i*32,		//y
+											 151.0+i*32,//y
 											 32.0f,		//w
 											 32.0f);	//h
 		itemAnimations[i]->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
@@ -85,12 +78,13 @@ void loadResources() {
 
 	//Load tile sprites
 	for (int i = 0; i < NUM_COLORS; i++) {
-		tileSprites[i] = new hgeSprite(tilesTexture,0,i*32,32,32);
+		tileSprites[i] = new hgeSprite(resources->GetTexture("mainTx1"),0,407.0+i*32,32,32);
 	}
+
 	//Load special tiles
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 4; j++) {
-			specialTiles[i*4 + j] = new hgeSprite(tilesTexture,32 + 32*i, 32*j, 32,32);
+			specialTiles[i*4 + j] = new hgeSprite(resources->GetTexture("mainTx1"), 32 + 32*i, 407.0+32*j, 32,32);
 		}
 	}
 
