@@ -1,6 +1,7 @@
 #include "GUI.h"
 #include "game.h"
 
+extern HGE *hge;
 extern hgeResourceManager *resources;
 extern Player *players[3];
 extern GameInfo gameInfo;
@@ -34,7 +35,8 @@ GUI::~GUI() { }
 void GUI::draw(float dt) {
 
 	//Draw GUI
-	resources->GetSprite("gui")->RenderEx(860,768, -PI/2.0);
+	resources->GetSprite("guiTop")->Render(860.0, 0.0);
+	resources->GetSprite("guiBottom")->Render(860.0, 384.0);
 
 	//Draw the timer
 	drawTimer(dt);
@@ -92,9 +94,14 @@ void GUI::update(float dt) {
 	
 	//Update timer
 	timer -= dt;
+
+	if (hge->Input_KeyDown(HGEK_T)) timer = -1.0;
 	
 	//When the timer reaches 0 the game is over
-	if (timer < 0.0f) endGame();
+	if (timer < 0.0) {
+		timer = 0.0;
+		endGame();
+	}
 
 }
 

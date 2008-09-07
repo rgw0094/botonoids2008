@@ -78,8 +78,7 @@ void StatsPage::draw(float dt) {
 	hgeFont *f = resources->GetFont("timer");
 
 	//Draw window
-	resources->GetSprite("blackbox")->RenderStretch(x,y, x + 285.0, y + 610.0);
-	resources->GetSprite("statsPage")->Render(x - 10.0, y - 15.0);
+	resources->GetSprite("statsPage")->RenderEx(x - 10.0, y - 15.0 + 630.0, -PI/2.0);
 
 	//Draw winner
 	if (gameInfo.winner == -1) {
