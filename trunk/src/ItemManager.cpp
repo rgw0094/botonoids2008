@@ -160,7 +160,7 @@ void ItemManager::generateItem(int gridX, int gridY, int gardenSize) {
 		newItem.collisionBox->SetRadius(newItem.x, newItem.y, 12.0f);
 
 		//Create particle trail
-		newItem.trail = new hgeParticleSystem("Data/particle9.psi", resources->GetSprite("particleGraphic5"));
+		newItem.trail = new hgeParticleSystem(&resources->GetParticleSystem("itemTrail")->info);
 		newItem.trail->FireAt(newItem.x, newItem.y);
 
 		//Generate random initial direction

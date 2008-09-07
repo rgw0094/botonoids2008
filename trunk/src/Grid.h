@@ -65,7 +65,7 @@ public:
 	//Objects
 	HGE *hge;
 	hgeParticleManager *dustClouds;
-	hgeSprite *sillyPadSprites[3], *superFlowerSprites[3], *superWallSprites[3], *tileSprites[5];
+	hgeSprite *sillyPadSprites[3], *superFlowerSprites[3], *superWallSprites[3], *tileSprites[5], *specialTiles[3*4];
 
 };
 

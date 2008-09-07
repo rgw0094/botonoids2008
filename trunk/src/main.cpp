@@ -26,7 +26,6 @@ HCHANNEL musicChannel;
 
 //Sprites
 hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
-hgeSprite *specialTiles[3*4];
 
 //Variables
 GameInfo gameInfo;
@@ -41,6 +40,7 @@ bool debugMode;
 
 void loadResources() {
 
+	//Create resource manager
 	hge->Resource_AttachPack("Data/GameData");
 	resources = new hgeResourceManager("Data/resources.res");
 
@@ -64,13 +64,6 @@ void loadResources() {
 		itemAnimations[i]->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
 		itemAnimations[i]->SetHotSpot(16.0f, 16.0f);
 		itemAnimations[i]->Play();
-	}
-
-	//Load special tiles
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 4; j++) {
-			specialTiles[i*4 + j] = new hgeSprite(resources->GetTexture("mainTx1"), 32 + 32*i, 407.0+32*j, 32,32);
-		}
 	}
 
 	//Selectable songs
