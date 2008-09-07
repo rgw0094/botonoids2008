@@ -1,17 +1,17 @@
 ;**************************
 ;******** TEXTURES ********
 ;**************************
-Texture sillypads {
- filename="Data/Graphics/sillypads.png"
- resgroup=1
-}
 Texture particleTex {
  filename="Data/Graphics/particles.png"
- resgroup=1
 }
 Texture mainTx1 {
  filename="Data/Graphics/sprites1.png"
- resgroup=1
+}
+Texture menuGuiTx {
+ filename="Data/Graphics/MenuGUI.png"
+}
+Texture titleScreenTx {
+ filename="Data/Graphics/titlescreen.png"
 }
 
 ;//***********************
@@ -25,7 +25,6 @@ Animation goldBotonoid {
  mode=FORWARD,LOOP
  hotspot=19,20
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 Animation blackBotonoid {
  texture=mainTx1
@@ -35,7 +34,6 @@ Animation blackBotonoid {
  mode=FORWARD,LOOP
  hotspot=16,32
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 Animation silverBotonoid {
  texture=mainTx1
@@ -45,7 +43,6 @@ Animation silverBotonoid {
  mode=FORWARD,LOOP
  hotspot=16,25
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 
 ;//********************************
@@ -56,14 +53,12 @@ Sprite selectGold {
  rect=0,0,281,322
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite selectGoldHighlighted {
  texture="Data/Graphics/botonoidSelect.png"
  rect=281,0,281,322
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 
 Sprite selectBlack {
@@ -71,14 +66,12 @@ Sprite selectBlack {
  rect=0,322,282,354
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite selectBlackHighlighted {
  texture="Data/Graphics/botonoidSelect.png"
  rect=282,322,282,354
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 
 Sprite selectWhite {
@@ -86,171 +79,127 @@ Sprite selectWhite {
  rect=0,676,231,356
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite selectWhiteHighlighted {
  texture="Data/Graphics/botonoidSelect.png"
  rect=231,676,231,356
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 
 Sprite selecter1 {
- texture="Data/Graphics/selecter.png"
- rect=0,0,75,75
+ texture=titleScreenTx
+ rect=752,768,75,75
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite lockedSelecter1 {
- texture="Data/Graphics/selecter.png"
- rect=75,0,75,75
+ texture=titleScreenTx
+ rect=827,768,75,75
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite selecter2 {
- texture="Data/Graphics/selecter.png"
- rect=0,75,75,75
+ texture=titleScreenTx
+ rect=752,843,75,75
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite lockedSelecter2 {
- texture="Data/Graphics/selecter.png"
- rect=75,75,75,75
+ texture=titleScreenTx
+ rect=827,843,75,75
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite selecter3 {
- texture="Data/Graphics/selecter.png"
- rect=0,150,75,75
+ texture=titleScreenTx
+ rect=752,918,75,75
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite lockedSelecter3 {
- texture="Data/Graphics/selecter.png"
- rect=75,150,75,75
+ texture=titleScreenTx
+ rect=827,918,75,75
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 
 ;//*********************
 ;//******** MENU *******
 ;//*********************
 Sprite titlescreen {
- texture="Data/Graphics/titlescreen.png"
+ texture=titleScreenTx
  rect=0,0,1024,768
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
-Sprite minimenu {
- texture="Data/Graphics/minimenu.png"
- rect=0,0,250,225
- hotspot=0,0
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
-}
 Sprite mouse {
- texture="Data/Graphics/mouse.png"
- rect=0,0,32,32
- hotspot=0,0
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
-}
-
-Sprite miniMenuButton {
- texture="Data/Graphics/menuitems.png"
- rect=0,0,248,71
- hotspot=0,0
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
-}
-Sprite miniMenuButtonHighlighted {
- texture="Data/Graphics/menuitems.png"
- rect=248,0,248,71
+ texture=titleScreenTx
+ rect=504,910,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
 
 Sprite buttonGraphic {
- texture="Data/Graphics/menuitems.png"
- rect=0,0,248,71
+ texture=titleScreenTx
+ rect=504,768,248,71
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite highlightedButtonGraphic {
- texture="Data/Graphics/menuitems.png"
- rect=248,0,248,71
+ texture=titleScreenTx
+ rect=504,839,248,71
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 
 ;//Petals
 Sprite petal1 {
- texture="Data/Graphics/petal1.png"
- rect=0,0,201,112
+ texture=titleScreenTx
+ rect=0,768,201,112
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
 Sprite petal2 {
- texture="Data/Graphics/petal2.png"
- rect=0,0,151,198
+ texture=titleScreenTx
+ rect=201,768,151,198
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1 
 }
 Sprite petal3 {
- texture="Data/Graphics/petal3.png"
- rect=0,0,152,191
+ texture=titleScreenTx
+ rect=352,768,152,191
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite petal4 {
- texture="Data/Graphics/petal4.png"
- rect=0,0,200,111
+ texture=titleScreenTx
+ rect=0,880,200,111
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 
-;//*********************************
-;//******** CUSTOMIZE SCREEN *******
-;//*********************************
-Sprite customizeGUI {
- texture="Data/Graphics/TheCustomGui.png"
- rect=0,0,927,511
- hotspot=0,0
- blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
-}
-
-;//*******************************
-;//******** OPTIONS SCREEN *******
-;//*******************************
 Sprite optionsGUI {
- texture="Data/Graphics/optionsGui.png"
+ texture=menuGuiTx
  rect=0,0,927,511
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
 }
 Sprite volumeBlock {
- texture="Data/Graphics/barBlocks.png"
- rect=0,0,59,35
+ texture=menuGuiTx
+ rect=927,0,59,35
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1 
+}
+Sprite customizeGUI {
+ texture=menuGuiTx
+ rect=0,511,927,511
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
 
 ;//**********************
@@ -296,15 +245,22 @@ Font smallBattlefield {
 ;//******** GUI ********
 ;//*********************
 Sprite blackbox {
- texture="Data/Graphics/blackbox.png"
- rect=1,1,8,8
+ texture=mainTx1
+ rect=450,650,16,16
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
-Sprite gui {
+Sprite guiTop {
  texture=mainTx1
- rect=0,604,768,164
+ rect=0,599,164,384
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+ resgroup=1
+}
+Sprite guiBottom {
+ texture=mainTx1
+ rect=164,599,164,384
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
@@ -357,13 +313,9 @@ Sprite silverWindow {
 }
 
 ;//Botonoid face animations
-Texture botofaces {
- filename=Data/Graphics/botofaces.png
- resgroup=1
-}
 Animation goldFace {
- texture=botofaces
- rect=0,0,61,62
+ texture=mainTx1
+ rect=452,408,61,62
  frames=4
  fps=8.0
  mode=PINGPONG,LOOP
@@ -372,8 +324,8 @@ Animation goldFace {
  resgroup=1
 }
 Animation blackFace {
- texture=botofaces
- rect=0,62,61,62
+ texture=mainTx1
+ rect=452,470,61,62
  frames=4
  fps=8.0
  mode=PINGPONG,LOOP
@@ -382,8 +334,8 @@ Animation blackFace {
  resgroup=1
 }
 Animation silverFace {
- texture=botofaces
- rect=0,124,61,62
+ texture=mainTx1
+ rect=452,532,61,62
  frames=4
  fps=8.0
  mode=PINGPONG,LOOP
@@ -439,22 +391,22 @@ Sprite emptySlotWhite {
 
 ;//Count down
 Sprite countdown3 {
- texture="Data/Graphics/countdown.png"
- rect=0,0,111,141
+ texture=mainTx1
+ rect=333,141,111,141
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite countdown2 {
- texture="Data/Graphics/countdown.png"
- rect=111,0,111,142
+ texture=mainTx1
+ rect=444,0,111,142
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite countdown1 {
- texture="Data/Graphics/countdown.png"
- rect=222,0,111,141
+ texture=mainTx1
+ rect=555,0,111,141
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
@@ -514,57 +466,57 @@ Particle slow {
 ;******** STATS PAGE ********
 ;****************************
 Sprite statsPage {
- texture="Data/Graphics/statspage.png"
- rect=0,0,310,630
+ texture=mainTx1
+ rect=328,594,630,310
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite wallIcon {
  texture=mainTx1
- rect=128,120,32,32
+ rect=120,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite gardenIcon {
  texture=mainTx1
- rect=160,120,32,32
+ rect=152,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite biggestComboIcon {
  texture=mainTx1
- rect=192,120,32,32
+ rect=184,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite timeInFirstIcon {
  texture=mainTx1
- rect=224,120,32,32
+ rect=216,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite itemsUsedIcon {
  texture=mainTx1
- rect=256,120,32,32
+ rect=248,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite damageDealtIcon {
  texture=mainTx1
- rect=288,120,32,32
+ rect=280,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
 Sprite damageTakenIcon {
  texture=mainTx1
- rect=320,120,32,32
+ rect=312,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
@@ -574,8 +526,8 @@ Sprite damageTakenIcon {
 ;******** ITEMS ********
 ;***********************
 Sprite itemcursor {
- texture="Data/Graphics/itemcursor.png"
- rect=0,0,16,16
+ texture=mainTx1
+ rect=535,93,16,16
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
@@ -616,12 +568,12 @@ Sprite crosshair {
 }
 
 Animation punchingglove {
- texture="Data/Graphics/punchingglove.png"
- rect=0,0,64,20
+ texture=mainTx1
+ rect=376,121,64,30
  frames=9
  fps=45.0
  mode=FORWARD,PINGPONG,LOOP
- hotspot=0,10
+ hotspot=0,16
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
  resgroup=1
 }
