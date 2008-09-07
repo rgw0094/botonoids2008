@@ -1,12 +1,10 @@
 #include "game.h"
 
 extern HGE *hge;
-extern hgeSprite *tileSprites[NUM_COLORS];
 extern hgeSprite *botonoidSprites[NUM_BOTONOIDS*NUM_PLAYER_GRAPHICS];
 extern hgeSprite *specialTiles[3*4];
 extern Player *players[3];
 extern hgeResourceManager *resources;
-extern hgeFont *debugFont;
 extern StatsPage *statsPage;
 extern ItemManager *itemManager;
 extern float gameTime;
@@ -51,9 +49,14 @@ Grid::Grid(int _width, int _height) {
 
 	//Load special tiles
 	for (int i = 0; i < 3; i++) {
-		sillyPadSprites[i] = new hgeSprite(resources->GetTexture("tiles"), 32.0 + 32.0*i, 96.0, 32.0, 32.0);
-		superFlowerSprites[i] = new hgeSprite(resources->GetTexture("tiles"), 32.0 + 32.0*i, 128.0, 32.0, 32.0);
-		superWallSprites[i] = new hgeSprite(resources->GetTexture("tiles"), 32.0 + 32.0*i, 160.0, 32.0, 32.0);
+		sillyPadSprites[i] = new hgeSprite(resources->GetTexture("mainTx1"), 32.0 + 32.0*i, 407.0+96.0, 32.0, 32.0);
+		superFlowerSprites[i] = new hgeSprite(resources->GetTexture("mainTx1"), 32.0 + 32.0*i, 407.0+128.0, 32.0, 32.0);
+		superWallSprites[i] = new hgeSprite(resources->GetTexture("mainTx1"), 32.0 + 32.0*i, 407.0+160.0, 32.0, 32.0);
+	}
+
+	//Load tile sprites
+	for (int i = 0; i < NUM_COLORS; i++) {
+		tileSprites[i] = new hgeSprite(resources->GetTexture("mainTx1"),0,407.0+i*32,32,32);
 	}
 
 }

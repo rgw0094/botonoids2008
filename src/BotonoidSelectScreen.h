@@ -31,7 +31,6 @@ public:
 
 	Button *buttons[2];
 	hgeSprite *botonoids[3];
-	hgeSprite *highlightedBotonoids[3];
 	hgeSprite *selecterSprites[3];
 	hgeSprite *lockedSelecterSprites[3];
 

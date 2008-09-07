@@ -5,7 +5,6 @@ extern hgeResourceManager *resources;
 extern Grid *grid;
 extern Player *players[3];
 extern GameInfo gameInfo;
-extern hgeSprite *particleSprites[16];
 extern hgeParticleManager *explosionManager;
 extern float gameTime;
 
@@ -134,7 +133,7 @@ void MissileManager::addMissile(int player, int x, int y) {
 	newMissile.y = grid->yOffset + (float)y * 33.0 + 2.0;
 	newMissile.collisionBox = new hgeRect();
 	newMissile.angle = 0.0;
-	newMissile.trail = new hgeParticleSystem("Data/trail.psi", particleSprites[0]);
+	newMissile.trail = new hgeParticleSystem(&resources->GetParticleSystem("itemTrail")->info);
 	newMissile.trail->FireAt(newMissile.x, newMissile.y);
 	newMissile.timeExploded = -10.0;
 

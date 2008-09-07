@@ -4,7 +4,6 @@ extern HGE *hge;
 extern hgeResourceManager *resources;
 extern Grid *grid;
 extern float gameTime;
-extern hgeSprite *particleSprites[16];
 
 /**
  * Constructor.

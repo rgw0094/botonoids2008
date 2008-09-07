@@ -8,8 +8,6 @@ extern Grid *grid;
 extern GUI *gui;
 extern hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
 extern hgeResourceManager *resources;
-extern hgeFont *debugFont;
-extern hgeSprite *particleSprites[16];
 extern hgeAnimation *itemAnimations[NUM_ITEMS-1];
 extern Input *input;
 extern StatsPage *statsPage;

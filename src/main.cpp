@@ -26,7 +26,7 @@ HCHANNEL musicChannel;
 
 //Sprites
 hgeAnimation *botonoidGraphics[NUM_BOTONOIDS];
-hgeSprite *specialTiles[3*4], *tileSprites[NUM_COLORS], *particleSprites[16];
+hgeSprite *specialTiles[3*4];
 
 //Variables
 GameInfo gameInfo;
@@ -41,9 +41,8 @@ bool debugMode;
 
 void loadResources() {
 
-	//Create resource manager from resource script
+	hge->Resource_AttachPack("Data/GameData");
 	resources = new hgeResourceManager("Data/resources.res");
-	hge->Resource_AttachPack("Data/Sounds.zip");
 
 	//Load botonoid sprites
 	botonoidGraphics[0] = resources->GetAnimation("goldBotonoid");
@@ -52,15 +51,6 @@ void loadResources() {
 	botonoidGraphics[1]->Play();
 	botonoidGraphics[2] = resources->GetAnimation("silverBotonoid");
 	botonoidGraphics[2]->Play();
-
-	//Load particle sprites
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			particleSprites[i*4+j] = new hgeSprite(resources->GetTexture("particleTex"), i*32, j*32, 32, 32);
-			particleSprites[i*4+j]->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
-			particleSprites[i*4+j]->SetHotSpot(16,16);
-		}
-	}
 
 	//Load item animations
 	for (int i = 0; i < NUM_ITEMS-1; i++) {
@@ -74,11 +64,6 @@ void loadResources() {
 		itemAnimations[i]->SetMode(HGEANIM_FWD | HGEANIM_LOOP);
 		itemAnimations[i]->SetHotSpot(16.0f, 16.0f);
 		itemAnimations[i]->Play();
-	}
-
-	//Load tile sprites
-	for (int i = 0; i < NUM_COLORS; i++) {
-		tileSprites[i] = new hgeSprite(resources->GetTexture("mainTx1"),0,407.0+i*32,32,32);
 	}
 
 	//Load special tiles
@@ -239,7 +224,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//Set system state
 	hge->System_SetState(HGE_LOGFILE, "BotonoidsLog.txt");
-	hge->System_SetState(HGE_INIFILE, "Data/Botonoids2008.ini");
+	hge->System_SetState(HGE_INIFILE, "Botonoids2008.ini");
 	hge->System_SetState(HGE_FRAMEFUNC, FrameFunc);
 	hge->System_SetState(HGE_RENDERFUNC, RenderFunc);
 	hge->System_SetState(HGE_TITLE, "Botonoids 2008");

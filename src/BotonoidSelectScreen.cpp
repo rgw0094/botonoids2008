@@ -21,15 +21,10 @@ BotonoidSelectScreen::BotonoidSelectScreen() {
 	buttons[BACK_BUTTON] = new Button(100.0f, 650.0f, "Main Menu");
 	buttons[NEXT_BUTTON] = new Button(1024.0f - 100.0f - BUTTON_WIDTH, 650.0f, "Continue");
 
-	//Load botonoid graphics
+	//Get pointers to graphics
 	botonoids[0] = resources->GetSprite("selectGold");
 	botonoids[1] = resources->GetSprite("selectBlack");
 	botonoids[2] = resources->GetSprite("selectWhite");
-	highlightedBotonoids[0] = resources->GetSprite("selectGoldHighlighted");
-	highlightedBotonoids[1] = resources->GetSprite("selectBlackHighlighted");
-	highlightedBotonoids[2] = resources->GetSprite("selectWhiteHighlighted");
-	
-	//Load selecter graphics
 	selecterSprites[0] = resources->GetSprite("selecter1");
 	selecterSprites[1] = resources->GetSprite("selecter2");
 	selecterSprites[2] = resources->GetSprite("selecter3");
@@ -68,12 +63,6 @@ BotonoidSelectScreen::~BotonoidSelectScreen() {
 	for (int i = 0; i < 2; i++) {
 		delete buttons[i];
 	}
-	for (int i = 0; i < 3; i++) {
-		delete botonoids[i];
-		delete highlightedBotonoids[i];
-		delete selecterSprites[i];
-		delete lockedSelecterSprites[i];
-	}
 }
 
 /**
@@ -91,10 +80,10 @@ void BotonoidSelectScreen::draw(float dt) {
 
 	//Draw botonoids
 	for (int i = 0; i < 3; i++) {
+		botonoids[i]->Render(botonoidPoints[i].x, botonoidPoints[i].y);
 		if (botonoidSelected(i)) {
-			highlightedBotonoids[i]->Render(botonoidPoints[i].x, botonoidPoints[i].y);
-		} else {
-			botonoids[i]->Render(botonoidPoints[i].x, botonoidPoints[i].y);
+			resources->GetSprite("check")->Render(botonoidPoints[i].x + botonoids[i]->GetWidth()/2.0, 
+				botonoidPoints[i].y + botonoids[i]->GetHeight()/2.0);
 		}
 	}
 
@@ -102,7 +91,6 @@ void BotonoidSelectScreen::draw(float dt) {
 	resources->GetFont("button")->printf(170.0, 240.0, HGETEXT_CENTER, botonoidNames[0].c_str());
 	resources->GetFont("button")->printf(515.0, 525.0, HGETEXT_CENTER, botonoidNames[1].c_str());
 	resources->GetFont("button")->printf(835.0, 185.0, HGETEXT_CENTER, "herbanoid");
-
 
 	//Draw selecters
 	for (int i = 0; i < gameInfo.numPlayers; i++) {
