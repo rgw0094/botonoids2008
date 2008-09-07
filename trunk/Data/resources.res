@@ -14,7 +14,7 @@ Texture titleScreenTx {
  filename="Data/Graphics/menu1.png"
 }
 Texture botonoidSelectTx {
- filename="Data/Graphics/botonoidSelect.png"
+ filename="Data/Graphics/menu3.png"
 }
 
 ;//***********************
