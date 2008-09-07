@@ -2,7 +2,6 @@
 
 extern HGE *hge;
 extern hgeSprite *botonoidSprites[NUM_BOTONOIDS*NUM_PLAYER_GRAPHICS];
-extern hgeSprite *specialTiles[3*4];
 extern Player *players[3];
 extern hgeResourceManager *resources;
 extern StatsPage *statsPage;
@@ -59,18 +58,17 @@ Grid::Grid(int _width, int _height) {
 		tileSprites[i] = new hgeSprite(resources->GetTexture("mainTx1"),0,407.0+i*32,32,32);
 	}
 
+	//Load special tiles
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 4; j++) {
+			specialTiles[i*4 + j] = new hgeSprite(resources->GetTexture("mainTx1"), 32 + 32*i, 407.0+32*j, 32,32);
+		}
+	}
+
 }
 
-/**
- * Destructor
- */
-Grid::~Grid() {
-	for (int i = 0; i < 3; i++) {
-		delete sillyPadSprites[i];
-		delete superWallSprites[i];
-		delete superFlowerSprites[i];
-	}
-}
+//This object persists
+Grid::~Grid() { }
 
 void Grid::draw(float dt) {
 	

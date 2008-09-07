@@ -373,31 +373,31 @@ Sprite countdown1 {
 ;******** PARTICLE ********
 ;**************************
 Sprite dustParticleSpr {
- texture=particleTex
- rect=0,0,32,32
+ texture=mainTx1
+ rect=700,420,32,32
  hotspot=16,16
 }
 Sprite particleGraphic0 {
- texture=particleTex
- rect=0,0,32,32
+ texture=mainTx1
+ rect=700,420,32,32
  hotspot=16,16
  blendmode=COLORMUL,ALPHAADD,NOZWRITE
 }
 Sprite particleGraphic4 {
- texture=particleTex
- rect=0,32,32,32
+ texture=mainTx1
+ rect=700,452,32,32
  hotspot=16,16
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
 Sprite particleGraphic5 {
- texture=particleTex
- rect=32,32,32,32
+ texture=mainTx1
+ rect=732,452,32,32
  hotspot=16,16
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
 Sprite particleGraphic11 {
- texture=particleTex
- rect=96,64,32,32
+ texture=mainTx1
+ rect=796,484,32,32
  hotspot=16,16
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
@@ -413,9 +413,13 @@ Particle slow {
  filename="slow.psi"
  sprite=particleGraphic11
 }
-Particle itemTrail {
+Particle missileTrail {
  filename="trail.psi"
  sprite=particleGraphic0
+}
+Particle itemTrail {
+ filename="particle9.psi"
+ sprite=particleGraphic5
 }
 
 ;****************************

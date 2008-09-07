@@ -133,7 +133,7 @@ void MissileManager::addMissile(int player, int x, int y) {
 	newMissile.y = grid->yOffset + (float)y * 33.0 + 2.0;
 	newMissile.collisionBox = new hgeRect();
 	newMissile.angle = 0.0;
-	newMissile.trail = new hgeParticleSystem(&resources->GetParticleSystem("itemTrail")->info);
+	newMissile.trail = new hgeParticleSystem(&resources->GetParticleSystem("missileTrail")->info);
 	newMissile.trail->FireAt(newMissile.x, newMissile.y);
 	newMissile.timeExploded = -10.0;
 
