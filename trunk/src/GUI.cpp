@@ -5,7 +5,6 @@ extern HGE *hge;
 extern hgeResourceManager *resources;
 extern Player *players[3];
 extern GameInfo gameInfo;
-extern hgeFont *debugFont;
 extern float timer;
 extern int mode;
 

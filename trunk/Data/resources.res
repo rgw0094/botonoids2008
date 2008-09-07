@@ -493,31 +493,24 @@ Sprite ghost {
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
-
-
-Texture items {
- filename=Data/Graphics/itemTokens.png
- resgroup=1
-}
 Sprite wallbreaker {
- texture="Data/Graphics/items.png"
- rect=0,0,28,28
+ texture=mainTx1
+ rect=328,904,28,28
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
 Sprite missile {
- texture="Data/Graphics/items.png"
- rect=29,0,32,21
+ texture=mainTx1
+ rect=357,904,32,21
  hotspot=16,10
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
 Sprite crosshair {
- texture="Data/Graphics/items.png"
- rect=0,29,32,32
+ texture=mainTx1
+ rect=328,933,32,32
  hotspot=16,16
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
-
 Animation punchingglove {
  texture=mainTx1
  rect=376,121,64,30
