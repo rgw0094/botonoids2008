@@ -267,12 +267,12 @@ void saveItemFrequencies() {
  * Returns the specified integer as a string because the designers of C were too 
  * distracted by their beards to write a language that doESNT SUCK ASS FUCK SHIT
  */
-const char *intToString(int n) {
+std::string intToString(int n) {
 	std::string numberString = "";
 	char number[10];
 	itoa(n, number, 10);
 	numberString += number;
-	return numberString.c_str();
+	return numberString;
 }
 
 /**

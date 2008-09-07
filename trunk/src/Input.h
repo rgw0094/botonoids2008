@@ -8,7 +8,7 @@
 #include <commctrl.h>
 #include <dinput.h>
 #include "resource.h"
-#include <string.h>
+#include <string>
 
 #define SAFE_DELETE(p)  { if(p) { delete (p);     (p)=NULL; } }
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
@@ -67,7 +67,7 @@ public:
 	void setEditMode(int player, int whichInput);
 	void listenForNewInput(int player, int control);
 	void updateJoystickDirection(DIJOYSTATE2 js);
-	char* getInputDescription(int player, int control);
+	std::string getInputDescription(int player, int control);
 
 	//Variables
 	InputStruct inputs[3][NUM_INPUTS];

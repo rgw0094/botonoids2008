@@ -59,7 +59,7 @@ CustomizeScreen::CustomizeScreen() {
 					guiX + 230.0f, 
 					guiY + 207.0f + yOffset*player);
 			strcpy(gay, "pointsPerWall");
-			strcat(gay, intToString(player));
+			strcat(gay, intToString(player).c_str());
 			gameInfo.pointsPerWall[player] = hge->Ini_GetInt("Options", gay, 1);
 		
 		//Gardens
@@ -77,7 +77,7 @@ CustomizeScreen::CustomizeScreen() {
 					guiX + 230.0f, 
 					guiY + 247.0f + yOffset*player);
 			strcpy(gay, "pointsPerGarden");
-			strcat(gay, intToString(player));
+			strcat(gay, intToString(player).c_str());
 			gameInfo.pointsPerGarden[player] = hge->Ini_GetInt("Options", gay, 2);
 
 			player++;
