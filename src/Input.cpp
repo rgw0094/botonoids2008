@@ -552,49 +552,57 @@ void Input::updateJoystickDirection(DIJOYSTATE2 js) {
 /**
  * Returns a short description of a player's control
  */
-char * Input::getInputDescription(int player, int control) {
+std::string Input::getInputDescription(int player, int control) {
 	
+	std::string description;
+
 	//Edit mode
 	if (inputs[player][control].editMode) {
-		return "Press Button";
+		description = "Press Button";
+		return description;
 	
 	//Keyboard - use HGE function
 	} else if (inputs[player][control].whichDevice == DEVICE_KEYBOARD) {
-		return hge->Input_GetKeyName(inputs[player][control].code);
+		description = hge->Input_GetKeyName(inputs[player][control].code);
+		return description;
 	
 	//One of the gamepads - use terrible C string functions
 	} else {
 
-		char * desc = (char*)malloc(25);
-		strcpy(desc, "\0");
-
 		//Gamepad number
 		switch (inputs[player][control].whichDevice) {
 			case DEVICE_GAMEPAD1:
-				strcat(desc, "GP1\0"); break;
+				description = "GP1";
+				break;
 			case DEVICE_GAMEPAD2:
-				strcat(desc, "GP2\0"); break;
+				description = "GP2";
+				break;
 			case DEVICE_GAMEPAD3:
-				strcat(desc, "GP3\0"); break;
+				description = "GP3";
+				break;
 		}
 
 		//Special case - direction pad
 		switch (inputs[player][control].code) {
 			case JOYSTICK_LEFT:
-				strcat(desc, " Left\0"); return desc;
+				description += " Left";
+				return description;
 			case JOYSTICK_RIGHT:
-				strcat(desc, " Right\0"); return desc;
+				description += " Right";
+				return description;
 			case JOYSTICK_UP:
-				strcat(desc, " Up\0"); return desc;
+				description += " Up";
+				return description;
 			case JOYSTICK_DOWN:
-				strcat(desc, " Down\0"); return desc;
+				description += " Down";
+				return description;
 		}
 
 		//Button number
-		strcat(desc, " Button ");
-		strcat(desc, intToString(inputs[player][control].code));
+		description += " Button ";
+		description += intToString(inputs[player][control].code);
 
-		return desc;
+		return description;
 
 	}
 

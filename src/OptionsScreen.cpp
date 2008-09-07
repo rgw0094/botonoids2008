@@ -74,7 +74,7 @@ void OptionsScreen::draw(float dt) {
 			}
 
 			//Display the currently selected control
-			resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, input->getInputDescription(player, control));
+			resources->GetFont("input")->printf(x, y, HGETEXT_CENTER, input->getInputDescription(player, control).c_str());
 
 		}
 	}

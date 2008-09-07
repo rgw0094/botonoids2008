@@ -8,10 +8,10 @@ Texture mainTx1 {
  filename="Data/Graphics/sprites1.png"
 }
 Texture menuGuiTx {
- filename="Data/Graphics/MenuGUI.png"
+ filename="Data/Graphics/menu2.png"
 }
 Texture titleScreenTx {
- filename="Data/Graphics/titlescreen.png"
+ filename="Data/Graphics/menu1.png"
 }
 
 ;//***********************

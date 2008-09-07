@@ -10,6 +10,9 @@ extern Menu *menu;
 extern std::string botonoidNames[3];
 extern Player *players[3];
 
+#define X_OFFSET 300.0
+#define Y_OFFSET 100.0
+
 /**
  * Constructor
  */
@@ -40,10 +43,14 @@ StatsPage::StatsPage() {
 	icons[DAMAGE_TAKEN_ICON].graphic = resources->GetSprite("damageTakenIcon");
 	strcpy(icons[DAMAGE_TAKEN_ICON].tooltip, "Damage Taken");
 
-	//Set icon mouseovers to false
+	//Place icons
 	for (int i = 0; i < NUM_STATS; i++) {
 		icons[i].mouseOver = false;
+		placeIcon(i, X_OFFSET + 15.0f, Y_OFFSET + 110.0f + i*50.0f);
 	}
+	for (int i = NUM_STATS; i < NUM_STATS + gameInfo.numPlayers; i++) {
+		placeIcon(i, X_OFFSET-16 + 100.0f + (i-NUM_STATS)*75.0f, Y_OFFSET-16 + 70.0);
+	}			
 
 	//Init stats
 	for (int i = 0; i < 3; i++) {
@@ -72,20 +79,17 @@ void StatsPage::draw(float dt) {
 
 	if (!active) return;
 
-	float x = 300.0f;
-	float y = 100.0f;
-
 	hgeFont *f = resources->GetFont("timer");
 
 	//Draw window
-	resources->GetSprite("statsPage")->RenderEx(x - 10.0, y - 15.0 + 630.0, -PI/2.0);
+	resources->GetSprite("statsPage")->RenderEx(X_OFFSET - 10.0, Y_OFFSET - 15.0 + 630.0, -PI/2.0);
 
 	//Draw winner
 	if (gameInfo.winner == -1) {
 		//Tie
-		f->printf(x + 280.0/2.0 + 5.0, y + 10.0f, HGETEXT_CENTER, "Tie Game!");
+		f->printf(X_OFFSET + 280.0/2.0 + 5.0, Y_OFFSET + 10.0f, HGETEXT_CENTER, "Tie Game!");
 	} else {
-		f->printf(x + 280.0/2.0 + 5.0, y + 10.0f, HGETEXT_CENTER, "%s Wins!", botonoidNames[players[gameInfo.winner]->whichBotonoid].c_str());
+		f->printf(X_OFFSET + 280.0/2.0 + 5.0, Y_OFFSET + 10.0f, HGETEXT_CENTER, "%s Wins!", botonoidNames[players[gameInfo.winner]->whichBotonoid].c_str());
 	}
 
 	//Draw Icons
@@ -94,7 +98,6 @@ void StatsPage::draw(float dt) {
 		//Statistic icons
 		if (i < NUM_STATS) {
 
-			placeIcon(i, x + 15.0f, y + 110.0f + i*50.0f);
 			icons[i].graphic->Render(icons[i].x, icons[i].y);
 
 			if (icons[i].mouseOver) {
@@ -104,14 +107,13 @@ void StatsPage::draw(float dt) {
 		//Botonoid icons
 		} else {
 
-			placeIcon(i, x-16 + 100.0f + (i-NUM_STATS)*75.0f, y-16 + 70.0f);
 			int oldFrame = botonoidGraphics[i-NUM_STATS]->GetFrame();
 			botonoidGraphics[players[i-NUM_STATS]->whichBotonoid]->SetFrame(0);
 			botonoidGraphics[players[i-NUM_STATS]->whichBotonoid]->Render(icons[i].x+16, icons[i].y+16);
 			botonoidGraphics[players[i-NUM_STATS]->whichBotonoid]->SetFrame(oldFrame);
 
 			if (icons[i].mouseOver) {
-				f->printf(x + 140.0f, y + 87.0f, HGETEXT_CENTER, "%s", botonoidNames[players[i-NUM_STATS]->whichBotonoid].c_str());
+				f->printf(X_OFFSET + 140.0f, Y_OFFSET + 87.0f, HGETEXT_CENTER, "%s", botonoidNames[players[i-NUM_STATS]->whichBotonoid].c_str());
 			}
 
 		}
@@ -125,43 +127,43 @@ void StatsPage::draw(float dt) {
 		if (stats[player].wallsBuilt == maxInt(stats[0].wallsBuilt, stats[1].wallsBuilt, stats[2].wallsBuilt))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, icons[WALL_ICON].y, HGETEXT_CENTER, "%d", stats[player].wallsBuilt);
+		f->printf(X_OFFSET + 100.0f + player*75.0f, icons[WALL_ICON].y, HGETEXT_CENTER, "%d", stats[player].wallsBuilt);
 
 		//Gardens built
 		if (stats[player].gardensBuilt == maxInt(stats[0].gardensBuilt, stats[1].gardensBuilt, stats[2].gardensBuilt))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, icons[GARDEN_ICON].y, HGETEXT_CENTER, "%d", stats[player].gardensBuilt);
+		f->printf(X_OFFSET + 100.0f + player*75.0f, icons[GARDEN_ICON].y, HGETEXT_CENTER, "%d", stats[player].gardensBuilt);
 
 		//Biggest Combo
 		if (stats[player].biggestCombo == maxInt(stats[0].biggestCombo, stats[1].biggestCombo, stats[2].biggestCombo))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, icons[BIGGEST_COMBO_ICON].y, HGETEXT_CENTER, "%d", stats[player].biggestCombo);
+		f->printf(X_OFFSET + 100.0f + player*75.0f, icons[BIGGEST_COMBO_ICON].y, HGETEXT_CENTER, "%d", stats[player].biggestCombo);
 
 		//Time in first
 		if ((int)stats[player].timeWinning == maxInt((int)stats[0].timeWinning, (int)stats[1].timeWinning, (int)stats[2].timeWinning))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, icons[TIME_IN_FIRST_ICON].y, HGETEXT_CENTER, "%s", formatTime((int)stats[player].timeWinning).c_str());
+		f->printf(X_OFFSET + 100.0f + player*75.0f, icons[TIME_IN_FIRST_ICON].y, HGETEXT_CENTER, "%s", formatTime((int)stats[player].timeWinning).c_str());
 		
 		//Items used
 		if (stats[player].numItemsUsed == maxInt(stats[0].numItemsUsed, stats[1].numItemsUsed, stats[2].numItemsUsed))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f,icons[ITEMS_USED_ICON].y, HGETEXT_CENTER, "%d", (int)stats[player].numItemsUsed);
+		f->printf(X_OFFSET + 100.0f + player*75.0f,icons[ITEMS_USED_ICON].y, HGETEXT_CENTER, "%d", (int)stats[player].numItemsUsed);
 		
 		//Damage Dealt
 		if (stats[player].damageDealt == maxInt(stats[0].damageDealt, stats[1].damageDealt, stats[2].damageDealt))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, icons[DAMAGE_DEALT_ICON].y, HGETEXT_CENTER, "%d", (int)stats[player].damageDealt);
+		f->printf(X_OFFSET + 100.0f + player*75.0f, icons[DAMAGE_DEALT_ICON].y, HGETEXT_CENTER, "%d", (int)stats[player].damageDealt);
 		
 		//Damage Taken
 		if (stats[player].damageTaken == minInt(stats[0].damageTaken, stats[1].damageTaken, stats[2].damageTaken))
 			f->SetColor(ARGB(255,0,255,0));
 		else f->SetColor(ARGB(255,255,0,0));
-		f->printf(x + 100.0f + player*75.0f, icons[DAMAGE_TAKEN_ICON].y, HGETEXT_CENTER, "%d", (int)stats[player].damageTaken);
+		f->printf(X_OFFSET + 100.0f + player*75.0f, icons[DAMAGE_TAKEN_ICON].y, HGETEXT_CENTER, "%d", (int)stats[player].damageTaken);
 
 	}
 	f->SetColor(ARGB(255,255,255,255));
