@@ -191,31 +191,31 @@ Sprite customizeGUI {
 ;//******** FONTS *******
 ;//**********************
 Font debug {
- filename="Data/Fonts/debug.fnt"
+ filename="Fonts/debug.fnt"
  tracking=1.0
 }
 Font score {
- filename="Data/Fonts/score.fnt"
+ filename="Fonts/score.fnt"
  tracking=1.0
 }
 Font timer {
- filename="Data/Fonts/timer.fnt"
+ filename="Fonts/timer.fnt"
  tracking=1.0
 }
 Font button {
- filename="Data/Fonts/button.fnt"
+ filename="Fonts/button.fnt"
  tracking=1.0
 }
 Font tooltip {
- filename="Data/Fonts/tooltip.fnt"
+ filename="Fonts/tooltip.fnt"
  tracking=1.0
 }
 Font input {
- filename="Data/Fonts/input.fnt"
+ filename="Fonts/input.fnt"
  tracking=1.0
 }
 Font smallBattlefield {
- filename="Data/Fonts/smallBattlefield.fnt"
+ filename="Fonts/smallBattlefield.fnt"
  tracking=1.0
 }
 
@@ -532,104 +532,89 @@ Animation punchingglove {
 ;******** MUSIC ********
 ;***********************
 Music menu {
- filename="menu.xm"
+ filename="Sounds/menu.xm"
  amplify=50
- resgroup=11
 }
 Music mtalking {
- filename="modernTalking.it"
+ filename="Sounds/modernTalking.it"
  amplify=50
- resgroup=11
 }
 Music her11 {
- filename="song3.mod"
+ filename="Sounds/song3.mod"
  amplify=50
- resgroup=11
 }
 Music noMercy {
- filename="noMercy.mod"
+ filename="Sounds/noMercy.mod"
  amplify=30
- resgroup=11
 }
 Music trainer5 {
- filename="trainer5.mod"
+ filename="Sounds/trainer5.mod"
  amplify=40
- resgroup=11
 }
 Music heidi7 {
- filename="heidi7.xm"
+ filename="Sounds/heidi7.xm"
  amplify=40
- resgroup=11
 }
 Music aSadTouch {
- filename="ASadTouch.xm"
+ filename="Sounds/ASadTouch.xm"
  amplify=60
- resgroup=11
 }
 Music stStyle {
- filename="stStyle.xm"
+ filename="Sounds/stStyle.xm"
  amplify=50
- resgroup=11
 }
 Music saturn {
- filename="Saturn.xm"
+ filename="Sounds/Saturn.xm"
  amplify=50
- resgroup=11
 }
 Music moskito {
- filename="Moskito.xm"
+ filename="Sounds/Moskito.xm"
  amplify=50
- resgroup=11
 }
 Music jttimarsuEdit {
- filename="JttimarsuEdit.xm"
+ filename="Sounds/JttimarsuEdit.xm"
  amplify=50
- resgroup=11
 }
 Music puzzler {
- filename="puzzler.mid"
+ filename="Sounds/puzzler.mid"
  amplify=20
- resgroup=11
 }
 Music demag {
- filename="Demag.xm"
+ filename="Sounds/Demag.xm"
  amplify=40
- resgroup=11
 }
 Music sierain2 {
- filename="Sierain2.xm"
+ filename="Sounds/Sierain2.xm"
  amplify=50
- resgroup=11
 }
 
 ;************************
 ;******** SOUNDS ********
 ;************************
 Sound snd_countdown {
- filename="countDownSound.wav"
- resgroup=1
+ filename="Sounds/countDownSound.wav"
 }
 Sound snd_missile {
- filename="missile.mp3"
+ filename="Sounds/missile.mp3"
  resgroup=1
 }
 Sound snd_explosion1 {
- filename="explosion1.wav"
+ filename="Sounds/explosion1.wav"
  resgroup=1
 }
 Sound snd_explosion2 {
- filename="explosion2.wav"
+ filename="Sounds/explosion2.wav"
  resgroup=1
 }
 Sound snd_alphanoidSelect {
- filename="Alphanoid.wav"
+ filename="Sounds/Alphanoid.wav"
  resgroup=1
 }
 Sound snd_herbanoidSelect {
- filename="Herbanoid.wav"
+ filename="Sounds/Herbanoid.wav"
  resgroup=1
 }
 Sound snd_barvinoidSelect {
- filename="Barvinoid.wav"
+ filename="Sounds/Barvinoid.wav"
  resgroup=1
 }
