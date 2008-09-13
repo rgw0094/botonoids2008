@@ -47,8 +47,8 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	dead = false;
 
 	//Center of the wheel
-	itemWheelX = 928.0f;
-	itemWheelY = 320.0f + playerNum * 185.0f;
+	itemWheelX = 926.0;
+	itemWheelY = 320.0 + playerNum * 183.0;
 
 	//Reset the player's animation to face down
 	botonoidGraphics[whichBotonoid]->SetFrame(0);
