@@ -62,16 +62,17 @@ void MissileManager::update(float dt) {
 			i->y += i->dy * dt;
 
 			//Check for collision with players!!!
-			boolean exploded = false;
+			bool exploded = false;
+			bool playSound = false;
 			int player = 0;
 			i->collisionBox->SetRadius(i->x, i->y, 10.0);
 			while (!exploded && player < gameInfo.numPlayers) {
-				if (player != i->player && i->collisionBox->Intersect(players[player]->collisionBox)) {
+				if (player != i->player && players[player]->testCollision(i->collisionBox)) {
 					
 					//Collided with player
 					i->timeExploded = gameTime;
 					exploded = true;
-					players[player]->dealDamage(1.0);
+					playSound = !players[player]->dealDamage(1.0);
 
 				}
 				player++;
@@ -80,10 +81,10 @@ void MissileManager::update(float dt) {
 			//Check for offscreen - always do this last!!!!!
 			if (!exploded && !isInBounds(i->x, i->y)) {
 				i->timeExploded = gameTime;
-				exploded = true;
+				exploded = playSound = true;
 			}
 
-			if (exploded) createExplosionAt(i->x, i->y);
+			if (exploded) createExplosionAt(i->x, i->y, playSound);
 
 		}
 
@@ -159,7 +160,8 @@ void MissileManager::addMissile(int player, int x, int y) {
 	//Acquire a target the closest other player
 	float shortestDist = 9999999.0;
 	for (int i = 0; i < gameInfo.numPlayers; i++) {
-		if (i != player) {
+		//Ignore the player who launched the missile and dead players if there are 3 players
+		if (i != player && !(gameInfo.numPlayers == 3 && players[i]->isDead())) {
 			float distance = dist(x, y, players[i]->gridX, players[i]->gridY);
 			if (distance < shortestDist) {
 				shortestDist = distance;

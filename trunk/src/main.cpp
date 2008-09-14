@@ -109,7 +109,7 @@ bool FrameFunc() {
 	input->UpdateInput();
 
 	//Toggle debug mode
-	if (hge->Input_KeyDown(HGEK_D)) debugMode = !debugMode;
+	if (hge->Input_KeyDown(HGEK_F1)) debugMode = !debugMode;
 	if (hge->Input_KeyDown(HGEK_T)) timer = 1.0f;
 
 	//Update menu
@@ -164,7 +164,6 @@ bool FrameFunc() {
 
 	}
 
-
 	// Continue execution
 	return false;
 }
@@ -201,7 +200,7 @@ bool RenderFunc() {
 	}
 
 	if (debugMode) {
-		resources->GetFont("timer")->printf(5,5,HGETEXT_LEFT, "%f", 1.0/dt);
+		resources->GetFont("timer")->printf(5,5,HGETEXT_LEFT, "FPS: %d", hge->Timer_GetFPS());
 	}
 
 	// End rendering and update the screen

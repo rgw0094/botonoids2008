@@ -1,9 +1,6 @@
 ;**************************
 ;******** TEXTURES ********
 ;**************************
-Texture particleTex {
- filename="Data/Graphics/particles.png"
-}
 Texture mainTx1 {
  filename="Data/Graphics/sprites1.png"
 }
@@ -15,6 +12,13 @@ Texture titleScreenTx {
 }
 Texture botonoidSelectTx {
  filename="Data/Graphics/menu3.png"
+}
+
+Sprite stunStar {
+ texture=mainTx1
+ rect=552,97,10,10
+ hotspot=5,5
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
 
 ;//***********************
@@ -287,7 +291,7 @@ Animation goldFace {
  rect=452,408,61,62
  frames=4
  fps=8.0
- mode=PINGPONG,LOOP
+ mode=PINGPONG,NOLOOP
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
@@ -296,7 +300,7 @@ Animation blackFace {
  rect=452,470,61,62
  frames=4
  fps=8.0
- mode=PINGPONG,LOOP
+ mode=PINGPONG,NOLOOP
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
@@ -305,7 +309,26 @@ Animation silverFace {
  rect=452,532,61,62
  frames=4
  fps=8.0
- mode=PINGPONG,LOOP
+ mode=PINGPONG,NOLOOP
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+}
+
+Sprite emptyGoldFaceBox {
+ texture=mainTx1
+ rect=840,408,61,62
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+}
+Sprite emptyBlackFaceBox {
+ texture=mainTx1
+ rect=840,470,61,62
+ hotspot=0,0
+ blendmode=COLORMUL,ALPHABLEND,NOZWRITE
+}
+Sprite emptySilverFaceBox {
+ texture=mainTx1
+ rect=840,532,61,62
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
@@ -352,19 +375,19 @@ Sprite emptySlotWhite {
 ;//Count down
 Sprite countdown3 {
  texture=mainTx1
- rect=333,141,111,141
+ rect=128,407,111,119
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
 Sprite countdown2 {
  texture=mainTx1
- rect=444,0,111,142
+ rect=239,407,111,119
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
 Sprite countdown1 {
  texture=mainTx1
- rect=555,0,111,141
+ rect=350,407,100,119
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
 }
@@ -430,56 +453,48 @@ Sprite statsPage {
  rect=328,594,630,310
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 Sprite wallIcon {
  texture=mainTx1
  rect=120,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 Sprite gardenIcon {
  texture=mainTx1
  rect=152,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 Sprite biggestComboIcon {
  texture=mainTx1
  rect=184,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 Sprite timeInFirstIcon {
  texture=mainTx1
  rect=216,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 Sprite itemsUsedIcon {
  texture=mainTx1
  rect=248,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 Sprite damageDealtIcon {
  texture=mainTx1
  rect=280,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 Sprite damageTakenIcon {
  texture=mainTx1
  rect=312,120,32,32
  hotspot=0,0
  blendmode=COLORMUL,ALPHABLEND,NOZWRITE
- resgroup=1
 }
 
 ;***********************
@@ -593,25 +608,22 @@ Sound snd_countdown {
 }
 Sound snd_missile {
  filename="Sounds/missile.mp3"
- resgroup=1
 }
 Sound snd_explosion1 {
  filename="Sounds/explosion1.wav"
- resgroup=1
 }
 Sound snd_explosion2 {
  filename="Sounds/explosion2.wav"
- resgroup=1
+}
+Sound snd_botonoidexplode {
+ filename="Sounds/botonoidexplode.mp3"
 }
 Sound snd_alphanoidSelect {
  filename="Sounds/Alphanoid.wav"
- resgroup=1
 }
 Sound snd_herbanoidSelect {
  filename="Sounds/Herbanoid.wav"
- resgroup=1
 }
 Sound snd_barvinoidSelect {
  filename="Sounds/Barvinoid.wav"
- resgroup=1
 }

@@ -58,12 +58,10 @@ void stopMusic() {
  * Draw a collision box with the specified RGB values.
  */
 void drawCollisionBox(hgeRect *box, int r, int g, int b) {
-
 	hge->Gfx_RenderLine(box->x1, box->y1, box->x2, box->y1, ARGB(255,r,g,b));
 	hge->Gfx_RenderLine(box->x2, box->y1, box->x2, box->y2, ARGB(255,r,g,b));
 	hge->Gfx_RenderLine(box->x2, box->y2, box->x1, box->y2, ARGB(255,r,g,b));
 	hge->Gfx_RenderLine(box->x1, box->y2, box->x1, box->y1, ARGB(255,r,g,b));
-
 }
 
 /**
@@ -75,8 +73,8 @@ void startGame() {
 
 	//Enter game state
 	mode = GAME_MODE;
-	countDown = 1;//4;
-	countDownTimer = 0.0;//1.0
+	countDown = 4;
+	countDownTimer = 0.1;
 	stopMusic();
 
 	//Set board size and time limit
@@ -135,15 +133,8 @@ void startGame() {
  * Called when the timer reaches 0.
  */
 void endGame() {
-
 	timer = 0.0f;
 	statsPage->active = true;
-
-	
-
-	//Play victory music
-	//...
-
 }
 
 /**
@@ -162,8 +153,10 @@ int getGridY(float y) {
 
 /**
  * Returns a time in seconds in MM:SS format
+ * 
+ * showMinutes: true if the minutes should show even if they are 0.
  */
-std::string formatTime(int s) {
+std::string formatTime(int s, bool showMinutes) {
 
 	//Create seconds string
 	int seconds = s % 60;
@@ -184,8 +177,10 @@ std::string formatTime(int s) {
 
 	//Combine minutes and seconds
 	std::string timeString = "";
-	timeString += minString;
-	timeString += ":";
+	if (showMinutes || minutes > 0) {
+		timeString += minString;
+		timeString += ":";
+	}
 	timeString += secondsString;
 
 	return timeString;
@@ -295,11 +290,13 @@ bool isInBounds(float x, float y) {
 /**
  * Creates an explosion at point (x,y) and plays a random explosion sound effect.
  */
-void createExplosionAt(float x, float y) {
+void createExplosionAt(float x, float y, bool playSound) {
 	//Play a random explosion sound
 	explosionManager->SpawnPS(&resources->GetParticleSystem("explosion")->info, x, y);
-	if (rand() % 1000 < 500) hge->Effect_Play(resources->GetEffect("snd_explosion1"));
-	else hge->Effect_Play(resources->GetEffect("snd_explosion2"));
+	if (playSound) {
+		if (rand() % 1000 < 500) hge->Effect_Play(resources->GetEffect("snd_explosion1"));
+		else hge->Effect_Play(resources->GetEffect("snd_explosion2"));
+	}
 }
 
 /**
