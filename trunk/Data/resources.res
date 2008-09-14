@@ -2,16 +2,16 @@
 ;******** TEXTURES ********
 ;**************************
 Texture mainTx1 {
- filename="Data/Graphics/sprites1.png"
+ filename="Graphics/sprites1.png"
 }
 Texture menuGuiTx {
- filename="Data/Graphics/menu2.png"
+ filename="Graphics/menu2.png"
 }
 Texture titleScreenTx {
- filename="Data/Graphics/menu1.png"
+ filename="Graphics/menu1.png"
 }
 Texture botonoidSelectTx {
- filename="Data/Graphics/menu3.png"
+ filename="Graphics/menu3.png"
 }
 
 Sprite stunStar {
