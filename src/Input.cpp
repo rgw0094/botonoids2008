@@ -23,15 +23,8 @@ Input::Input() {
 	g_pDI=NULL;
 	g_pJoystick=NULL;
 	
-	//Initialize input states
-	for (int player = 0; player < 3; player++) {
-		for (int i = 0; i < NUM_INPUTS; i++) {
-			inputs[player][i].pressed = inputs[player][i].prevPressed = false;
-			inputs[player][i].whichDevice = DEVICE_KEYBOARD;
-		}
-	}
-
 	//Load controls from .INI file
+	resetControls();
 	loadInputs();
 
 	//Set control names
@@ -44,13 +37,6 @@ Input::Input() {
 		strcpy(inputs[i][INPUT_ITEM].name, "Use Ability");
 		strcpy(inputs[i][INPUT_NEXT_ITEM].name, "Next Ability");
 		strcpy(inputs[i][INPUT_LAST_ITEM].name, "Previous Ability");
-	}
-
-	//Set edit modes to false
-	for (int j = 0; j < 3; j++) {
-		for (int i = 0; i < NUM_INPUTS; i++) {
-			inputs[j][i].editMode = false;	
-		}
 	}
 
 	//Set game pad button states to unpressed
@@ -427,6 +413,51 @@ void Input::loadInputs() {
 	inputs[2][INPUT_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p3ItemK", 1);
 	inputs[2][INPUT_LAST_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p3PreviousItemK", 1);
 	inputs[2][INPUT_NEXT_ITEM].whichDevice = hge->Ini_GetInt("Controls", "p3NextItemK", 1);
+
+}
+
+//-----------------------------------------------------------------------------
+// Name: resetControls()
+// Desc: Resets the controls to their default values.
+//-----------------------------------------------------------------------------
+void Input::resetControls() {
+
+	for (int i = 0; i < 3; i ++) {
+		for (int j = 0; j < NUM_INPUTS; j++) {
+			inputs[i][j].whichDevice = DEVICE_KEYBOARD;
+			inputs[i][j].pressed = inputs[i][j].editMode = inputs[i][j].prevPressed = false;
+		}
+	}
+
+	//Player 1
+	inputs[0][INPUT_LEFT].code = HGEK_LEFT;
+	inputs[0][INPUT_RIGHT].code = HGEK_RIGHT;
+	inputs[0][INPUT_UP].code = HGEK_UP;
+	inputs[0][INPUT_DOWN].code = HGEK_DOWN;
+	inputs[0][INPUT_ACTION].code = HGEK_CTRL;
+	inputs[0][INPUT_ITEM].code = HGEK_C;
+	inputs[0][INPUT_LAST_ITEM].code = HGEK_Z;
+	inputs[0][INPUT_NEXT_ITEM].code = HGEK_X;
+
+	//Player 2
+	inputs[1][INPUT_LEFT].code = HGEK_A;
+	inputs[1][INPUT_RIGHT].code = HGEK_D;
+	inputs[1][INPUT_UP].code = HGEK_W;
+	inputs[1][INPUT_DOWN].code = HGEK_S;
+	inputs[1][INPUT_ACTION].code = HGEK_SHIFT;
+	inputs[1][INPUT_ITEM].code = HGEK_B;
+	inputs[1][INPUT_LAST_ITEM].code = HGEK_N;
+	inputs[1][INPUT_NEXT_ITEM].code = HGEK_M;
+
+	//Player 3
+	inputs[2][INPUT_LEFT].code = HGEK_NUMPAD4;
+	inputs[2][INPUT_RIGHT].code = HGEK_NUMPAD6;
+	inputs[2][INPUT_UP].code = HGEK_NUMPAD8;
+	inputs[2][INPUT_DOWN].code = HGEK_NUMPAD5;
+	inputs[2][INPUT_ACTION].code = HGEK_NUMPAD1;
+	inputs[2][INPUT_ITEM].code = HGEK_R;
+	inputs[2][INPUT_LAST_ITEM].code = HGEK_T;
+	inputs[2][INPUT_NEXT_ITEM].code = HGEK_Y;
 
 }
 

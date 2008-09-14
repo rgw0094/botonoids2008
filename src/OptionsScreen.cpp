@@ -137,8 +137,7 @@ bool OptionsScreen::update(float dt, float mouseX, float mouseY) {
 
 	//Click Defaults Button
 	if (buttons[DEFAULTS_BUTTON]->isClicked()) {
-		//Restore defaults
-		//...
+		input->resetControls();
 	}
 
 	//Controls

@@ -64,6 +64,7 @@ public:
 	void toggleGamePad();
 	void saveInputs();
 	void loadInputs();
+	void resetControls();
 	void setEditMode(int player, int whichInput);
 	void listenForNewInput(int player, int control);
 	void updateJoystickDirection(DIJOYSTATE2 js);
