@@ -31,9 +31,14 @@
 #define UP 2
 #define RIGHT 3
 #define GRID_SIZE 32
+
 #define COLOR_CHANGE_REFRESH 3.0f	//Time it takes for color change ability to refresh
 #define COLOR_CHANGE_TIME 2.0f		//Time it takes a square to change colors
 #define SILLY_PAD_DURATION 30.0f
+#define GHOST_DURATION 15.0
+#define DEATH_DURATION 20.0
+#define STUN_DURATION 5.0
+#define FLASHING_DURATION 3.0
 
 #define BUTTON_HEIGHT 71.0f
 #define BUTTON_WIDTH 248.0f
@@ -84,7 +89,7 @@ int getGridX(float x);
 int getGridY(float y);
 void startGame();
 void endGame();
-std::string formatTime(int seconds);
+std::string formatTime(int seconds, bool showMinutes = true);
 int maxInt(int num1, int num2, int num3);
 int minFloat(float num1, float num2, float num3, float num4);
 int minInt(int num1, int num2, int num3);
@@ -93,7 +98,7 @@ void saveItemFrequencies();
 float dist(float x1, float y1, float x2, float y2);
 std::string intToString(int num);
 bool isInBounds(float x, float y);
-void createExplosionAt(float x, float y);
+void createExplosionAt(float x, float y, bool playSound);
 float distance(int x1, int y1, int x2, int y2);
 
 #endif

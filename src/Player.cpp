@@ -17,6 +17,7 @@ extern MissileManager *missileManager;
 extern ItemManager *itemManager;
 extern Player *players[3];
 extern float gameTime;
+extern bool debugMode;
 
 /**
  * Constructor
@@ -24,8 +25,8 @@ extern float gameTime;
 Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 
 	//Set initial state
-	gridX = lastGridX = _x;
-	gridY = lastGridY = _y;
+	gridX = startGridX = _x;
+	gridY = startGridY = _y;
 	x = grid->xOffset + gridX*(GRID_SIZE+1) + (GRID_SIZE+1)/2;
 	y = grid->yOffset + gridY*(GRID_SIZE+1) + (GRID_SIZE+1)/2;
 	playerNum = _playerNum;
@@ -33,27 +34,23 @@ Player::Player(int _x, int _y, int _playerNum, int _whichBotonoid) {
 	facing = DOWN;
 	score = 0;
 	health = 3;
-	colorChangeMode = foundationMode = buildWallPressed = false;
+	colorChangeMode = foundationMode = buildWallPressed = slowed = punching = ghostMode 
+		= dead = flashing = stunned = false;
 	startedMoving = -10.0;
 	endedColorChange = -10.0;
-	timePunched = -10.0;
 	timeGhosted = -10.0;
 	collisionBox = new hgeRect();
-	collisionBox->SetRadius(x,y,14.0f);
-	punchingGlove = resources->GetAnimation("punchingglove");
-	slowed = false;
-	punching = false;
-	ghostMode = false;
-	dead = false;
 
-	//Center of the wheel
-	itemWheelX = 926.0;
-	itemWheelY = 320.0 + playerNum * 183.0;
+	punchingGloveBox = new hgeRect();
+	punchingGlove = resources->GetAnimation("punchingglove");
+	punchGloveDelay = (1.0/punchingGlove->GetSpeed()) * (2.0 * punchingGlove->GetFrames() - 1.0);
 
 	//Reset the player's animation to face down
 	botonoidGraphics[whichBotonoid]->SetFrame(0);
 	
-	//Item slots
+	//Set up item wheel
+	itemWheelX = 926.0;
+	itemWheelY = 320.0 + playerNum * 183.0;
 	for (int i = 0; i < 4; i++) {
 		positionAngles[i] = (1.5f*PI) + (0.5f * PI *(float)i);
 		itemSlots[i].position = i;
@@ -103,71 +100,82 @@ void Player::update(float dt) {
 	//Update collision box
 	collisionBox->SetRadius(x, y, 14.0f);
 
-	doColorChanging();
 	doMovement(dt);
 	doStats(dt);
 	updateItemSlots(dt);
 	updatePunchingGlove(dt);
 
-	//Update previous position - this must be done after doColorChanging() is called.
-	lastGridX = gridX;
-	lastGridY = gridY;
-	
-	//Action key - keep track of whether or not the action button has been pressed to
-	// build a wall so that the player build walls by moving and holding down the action
-	// button, but when the last wall is placed it won't automatically enter color change
-	// mode. (Fix for Issue 5)
-	if (!input->buttonDown(INPUT_ACTION, playerNum)) buildWallPressed = false;
-	if (input->buttonDown(INPUT_ACTION, playerNum)) {
-
-		//Start color change mode
-		if (!colorChangeMode && !foundationMode && !buildWallPressed) {
-			if (!foundationMode && !colorChangeMode && hge->Timer_GetTime() > endedColorChange + COLOR_CHANGE_REFRESH) {
-				colorChangeMode = true;
-				numChangesLeft = 5;
-			}
-
-		//Build wall
-		} else if (foundationMode) {
-
-			//Remember that action button was pressed to build a wall (see comment above)
-			buildWallPressed = true;
-
-			//If the player is on a foundation, build a wall.
-			if (grid->buildWall(gridX,gridY,playerNum)) {
-				numWallsLeft--;
-			}
-
-			//No walls left to build
-			if (numWallsLeft == 0 || grid->numFoundations(playerNum) == 0) {
-				numWallsLeft = 0;
-				foundationMode = false;
-				grid->clearFoundations(playerNum);
-			}	 
-		}
-	}
-
-	//Use Item
-	if (input->buttonPressed(INPUT_ITEM, playerNum)) useItem(dt);
-
 	//Update state
-	if (slowed && gameTime > timeSlowed + SLOW_DURATION) slowed = false;
-	if (ghostMode && gameTime > timeGhosted + GHOST_DURATION) {
-		ghostMode = false;
+	if (slowed && gameTime > timeSlowed + SLOW_DURATION) {
+		slowed = false;
+		delete slowEffectParticle;
+	}
+	if (ghostMode && gameTime > timeGhosted + GHOST_DURATION) ghostMode = false;
+	if (stunned && gameTime > timeStartedStun + STUN_DURATION) {
+		stunned = false;
+		flashing = true;
+		timeStartedFlashing = gameTime;
+	}
+	if (flashing && gameTime > timeStartedFlashing + FLASHING_DURATION) flashing = false;
+	if (dead && getTimeUntilRespawn() <= 0.0) {
+		dead = false;
+		health = 3.0;
 		if (dead) {
 			dead = false;
 			health = 3.0;
 		}
 	}
+	
+	if (!dead && !stunned && !ghostMode) {
 
+		//Action key - keep track of whether or not the action button has been pressed to
+		// build a wall so that the player build walls by moving and holding down the action
+		// button, but when the last wall is placed it won't automatically enter color change
+		// mode. (Fix for Issue 5)
+		if (!input->buttonDown(INPUT_ACTION, playerNum)) buildWallPressed = false;
+		if (input->buttonDown(INPUT_ACTION, playerNum)) {
+
+			//Start color change mode
+			if (!colorChangeMode && !foundationMode && !buildWallPressed) {
+				if (!foundationMode && !colorChangeMode && hge->Timer_GetTime() > endedColorChange + COLOR_CHANGE_REFRESH) {
+					colorChangeMode = true;
+					numChangesLeft = 5;
+				}
+
+			//Build wall
+			} else if (foundationMode) {
+
+				//Remember that action button was pressed to build a wall (see comment above)
+				buildWallPressed = true;
+
+				//If the player is on a foundation, build a wall.
+				if (grid->buildWall(gridX,gridY,playerNum)) {
+					numWallsLeft--;
+				}
+
+				//No walls left to build
+				if (numWallsLeft == 0 || grid->numFoundations(playerNum) == 0) {
+					numWallsLeft = 0;
+					foundationMode = false;
+					grid->clearFoundations(playerNum);
+				}	 
+			}
+		}
+
+		//Use Item
+		if (input->buttonPressed(INPUT_ITEM, playerNum)) useItem(dt);
+
+	}
 
 	//----temp debug input------------
-	if (hge->Input_KeyDown(HGEK_G)) {
-		grid->foundations[gridX][gridY] = playerNum;
-		grid->buildWall(gridX, gridY, playerNum);
-	}
-	if (hge->Input_KeyDown(HGEK_F)) {
-		grid->foundations[gridX][gridY] = playerNum;
+	if (debugMode) {
+		if (hge->Input_KeyDown(HGEK_G)) {
+			grid->foundations[gridX][gridY] = playerNum;
+			grid->buildWall(gridX, gridY, playerNum);
+		}
+		if (hge->Input_KeyDown(HGEK_F)) {
+			grid->foundations[gridX][gridY] = playerNum;
+		}
 	}
 	//--------------------------------
 
@@ -175,42 +183,45 @@ void Player::update(float dt) {
 
 void Player::draw(float dt) {
 
-	//Draw the slowed particle effect
+	drawItemWheel(dt);	
+
+	//If the player is dead we don't need to draw anything else
+	if (dead) return;
+
 	if (slowed) {
 		slowEffectParticle->MoveTo(x,y);
 		slowEffectParticle->Update(dt);
 		slowEffectParticle->Render();
 	}
 
-	//Draw Punch glove UP before the botonoid
-	/**
-	if (punching) {
-		if (facing == UP) {
-			punchingGlove->RenderEx(x-10.0, y+5.0, punchingGloveAngle);
-		}
-	}*/
+	//Draw Punch glove up before the botonoid
+	if (punching && punchingGloveAngle > PI) {
+		punchingGlove->RenderEx(x, y, punchingGloveAngle);
+		if (debugMode) drawCollisionBox(punchingGloveBox, 255, 0, 0);
+	}
 
 	//Draw the botonoid animation. Only update the animation if it is not set to the frame
 	// corresponding to the botonoid's correct direction. This makes the botonoid turn to
 	// its current direction then display a still image.
-	if (botonoidGraphics[whichBotonoid]->GetFrame() != facing*4) {
-		botonoidGraphics[whichBotonoid]->Update(dt);
+	if (botonoidGraphics[whichBotonoid]->GetFrame() != facing*4) botonoidGraphics[whichBotonoid]->Update(dt);
+	if ((flashing && int(gameTime * 100) % 20 > 15 || !flashing)) {
+		if (ghostMode) botonoidGraphics[whichBotonoid]->SetColor(ARGB(125.0,255.0,255.0,255.0));
+		botonoidGraphics[whichBotonoid]->Render(x,y);
+		if (ghostMode) botonoidGraphics[whichBotonoid]->SetColor(ARGB(255.0,255.0,255.0,255.0));
 	}
-	if (ghostMode) botonoidGraphics[whichBotonoid]->SetColor(ARGB(125.0,255.0,255.0,255.0));
-	botonoidGraphics[whichBotonoid]->Render(x,y);
-	if (ghostMode) botonoidGraphics[whichBotonoid]->SetColor(ARGB(255.0,255.0,255.0,255.0));
 
-	//Draw Punch glove LEFT, RIGHT, DOWN after the botonoid
-	if (punching) {
+	//Draw punch glove down after the botonoid
+	if (punching && punchingGloveAngle <= PI) {
 		punchingGlove->RenderEx(x,y, punchingGloveAngle);
-		/**
-		if (facing == LEFT ||) {
-			punchingGlove->RenderEx(x, y+10.0, PI);
-		} else if (facing == RIGHT) {
-			punchingGlove->Render(x,y-10.0);
-		} else if (facing == DOWN) {
-			punchingGlove->RenderEx(x+10.0, y+5.0, PI/2.0);
-		}*/
+		if (debugMode) drawCollisionBox(punchingGloveBox, 255, 0, 0);
+	}
+
+	if (stunned) {
+		float angle;
+		for (int n = 0; n < 5; n++) {
+			angle = (float)n * ((2.0*PI) / 5.0) + (gameTime * PI);
+			resources->GetSprite("stunStar")->Render(x + cos(angle)*14 + 2, y + sin(angle)*6 - 20.0);
+		}
 	}
 
 	//Draw the number of color changes remaining to the left of the Botonoid
@@ -218,7 +229,7 @@ void Player::draw(float dt) {
 		resources->GetFont("timer")->printf(x - 16.0f, y-13.0f, HGETEXT_RIGHT, "%d", numChangesLeft);
 	}
 
-	//Drew the number of walls remaining to the right of the Botonoid
+	//Draw the number of walls remaining to the right of the Botonoid
 	if (foundationMode) {
 		resources->GetFont("timer")->printf(x + 16.0f, y-13.0f, HGETEXT_LEFT, "%d", numWallsLeft);
 	}
@@ -236,25 +247,23 @@ void Player::draw(float dt) {
 													  barY,					//y0
 													  x-16.0f+length,		//x1
 													  barY+10.0f);			//y1
-
 	}
 
-	drawItemWheel(dt);
+	if (debugMode) {
+		drawCollisionBox(collisionBox, 255, 0 , 0);
+		if (punching) drawCollisionBox(punchingGloveBox, 255, 0, 0);
+	}
 
 } //end draw()
 
 /**
- * Update color changing stuff. This is called every frame from the update() method.
+ * Performs a color change on the current tile.
  */ 
-void Player::doColorChanging() {
+void Player::doColorChange() {
 
-	//Start a new color change every time the player enters a new square while in
-	// color change mode.
-	if ((gridX != lastGridX || gridY != lastGridY) && colorChangeMode) {
+	if (colorChangeMode && !foundationMode) {
 
-		//Change current square
-		if (!foundationMode && colorChangeMode) {
-
+		if (!foundationMode) {
 			//Decrease color change counter if the player moves onto any colored square, even if its
 			// already changing (meaning not if wall/foundation/gardens)
 			if (grid->walls[gridX][gridY] == -1 && grid->foundations[gridX][gridY] == -1 && grid->gardens[gridX][gridY] == -1) {
@@ -263,7 +272,6 @@ void Player::doColorChanging() {
 
 			//Start changing the color at the current square if its not already changing
 			grid->startColorChangeAt(gridX, gridY, playerNum);
-
 		}
 
 		//End color change mode
@@ -272,7 +280,8 @@ void Player::doColorChanging() {
 			endedColorChange = hge->Timer_GetTime();
 		}
 
-	}
+	}	
+
 } //end doColorChanging()
 
 /**
@@ -339,11 +348,13 @@ void Player::doStats(float dt) {
  */
 void Player::doMovement(float dt) {
 
-	//Update movement
+	if (dead || stunned) return;
+
 	float speed = (slowed ? SLOWED_SPEED : SPEED);
-	float timeToMove = (GRID_SIZE+1) / speed;
-	
-	if (hge->Timer_GetTime() < startedMoving + timeToMove) {
+
+	//Already moving
+	if (moving) {
+
 		switch (movingDirection) {
 			case UP: y -= speed*dt; break;
 			case DOWN: y += speed*dt; break;
@@ -351,11 +362,16 @@ void Player::doMovement(float dt) {
 			case RIGHT: x += speed*dt; break;
 		}
 
-	//Start movement
+		//Done moving
+		if (gameTime - startedMoving > ((GRID_SIZE+1) / speed)) {
+			moving = false;
+			doColorChange();
+		}
+
+	//Not moving - wait for input to start move
 	} else {
 
-		//Make sure the player is centered in their current grid square because 
-		//they are done their last move.
+		//Since the player isn't moving we might as well make sure they are centered in their square!
 		x = grid->xOffset + gridX*(GRID_SIZE+1) + (GRID_SIZE+1)/2;
 		y = grid->yOffset + gridY*(GRID_SIZE+1) + (GRID_SIZE+1)/2;
 
@@ -365,25 +381,29 @@ void Player::doMovement(float dt) {
 		if (input->buttonDown(INPUT_LEFT, playerNum)) {
 			facing = movingDirection = LEFT;
 			if (gridX > 0 && !collisionAt(gridX-1, gridY)) {
-				startedMoving = hge->Timer_GetTime();
+				startedMoving = gameTime;
+				moving = true;
 			}
 		//Right
 		} else if (input->buttonDown(INPUT_RIGHT, playerNum)) {
 			facing = movingDirection =  RIGHT;
 			if (gridX < grid->width-1 && !collisionAt(gridX + 1, gridY)) { 
-				startedMoving = hge->Timer_GetTime();
+				startedMoving = gameTime;
+				moving = true;
 			}
 		//Down
 		} else if (input->buttonDown(INPUT_DOWN, playerNum)) {
 			facing = movingDirection =  DOWN;
 			if (gridY < grid->height-1 && !collisionAt(gridX, gridY+1)) {
-				startedMoving = hge->Timer_GetTime();
+				startedMoving = gameTime;
+				moving = true;
 			}
 		//Up
 		} else if (input->buttonDown(INPUT_UP, playerNum)) {
 			facing = movingDirection =  UP;
 			if (gridY > 0 && !collisionAt(gridX, gridY-1)) {
-				startedMoving = hge->Timer_GetTime();
+				startedMoving = gameTime;
+				moving = true;
 			}
 		}
 
@@ -652,11 +672,14 @@ void Player::useItem(float dt) {
 
 	//Punching Glove
 	} else if (item == ITEM_PUNCH_GLOVE) {
-		punchingGlove->SetFrame(0);
-		punchingGlove->Play();
-		timePunched = gameTime;
-		punchingGloveTarget = findClosestEnemy();
-		itemUsed = true;
+		if (!punching) {
+			punching = true;
+			punchingGlove->SetFrame(0);
+			punchingGlove->Play();
+			timePunched = gameTime;
+			punchingGloveTarget = findClosestEnemy();
+			itemUsed = true;
+		}
 
 	//Missile
 	} else if (item == ITEM_MISSILE) {
@@ -737,17 +760,19 @@ int Player::numEmptyItemSlots() {
 }
 
 /**
- * Deals the specified amount of damage to the player.
+ * Deals the specified amount of damage to the player. Returns true if the damage killed the player.
  */
-void Player::dealDamage(float damage) {
-
-	health -= damage;
-
-	if (health <= 0.0) {
-		health = 0.0;
-		die();
+bool Player::dealDamage(float damage) {
+	if (!dead) {
+		health -= damage;
+		gui->startFaceAnimation(playerNum);
+		if (health <= 0.0) {
+			health = 0.0;
+			die();
+			return true;
+		}
 	}
-
+	return false;
 }
 
 /**
@@ -779,13 +804,11 @@ bool Player::collisionAt(int gX, int gY) {
  * Called when the player's health reached 0.
  */
 void Player::die() {
-
-	//The player turns into a ghost when they die
-	ghostMode = true;
-	dead = true;
-	timeGhosted = gameTime + 15.0;
-
-	//hge->Effect_Play(resources->GetEffect("snd_explosion1"));
+	if (!dead) {
+		dead = true;
+		timeKilled = gameTime;
+		hge->Effect_Play(resources->GetEffect("snd_botonoidexplode"));
+	}
 }
 
 /**
@@ -793,16 +816,13 @@ void Player::die() {
  */
 void Player::updatePunchingGlove(float dt) {
 
-	//First determine if the player is currently punching
-	punching = (gameTime > timePunched  && gameTime < timePunched + PUNCH_DELAY);
+	if (punching && gameTime - timePunched > punchGloveDelay) punching = false;
 	if (!punching) return;
 
 	punchingGlove->Update(dt);
 
 	//Find the angle between the player and his target
-	punchingGloveAngle = atan((y - players[punchingGloveTarget]->y) /
-							  (x - players[punchingGloveTarget]->x));
-
+	punchingGloveAngle = atan((y - players[punchingGloveTarget]->y) / (x - players[punchingGloveTarget]->x));
 	if (x < players[punchingGloveTarget]->x) {
 		//Don't need to change anything!
 	} else if (x > players[punchingGloveTarget]->x) {
@@ -815,10 +835,23 @@ void Player::updatePunchingGlove(float dt) {
 		//Directly below target, angle will be off by PI
 		punchingGloveAngle += PI;
 	}
+
+	float gloveLength = 23.0 + 4.0 * punchingGlove->GetFrame();
+	punchingGloveBox->SetRadius(x + gloveLength * cos(punchingGloveAngle),
+								y + gloveLength * sin(punchingGloveAngle),
+								8.0);
+
+	//Test collision with the other players
+	for (int i = 0; i < gameInfo.numPlayers; i++) {
+		if (i != playerNum && players[i]->testCollision(punchingGloveBox)) {
+			players[i]->hitWithPunchingGlove();
+		}
+	}
+
 }
 
 /**
- * Returns the number of the closest enemy player
+ * Returns the number of the closest enemy player who isn't dead
  */
 int Player::findClosestEnemy() {
 
@@ -839,4 +872,23 @@ int Player::findClosestEnemy() {
 	return closestPlayer;
 
 }
+void Player::hitWithPunchingGlove() {
+	if (!flashing && !stunned) {
+		if (!dealDamage(1.0)) {
+			stunned = true;
+			timeStartedStun = gameTime;
+		}
+	}
+}
 
+bool Player::testCollision(hgeRect *box) {
+	return !flashing && !ghostMode && collisionBox->Intersect(box);
+}
+
+float Player::getTimeUntilRespawn() {
+	return (DEATH_DURATION - (gameTime - timeKilled));
+}
+
+bool Player::isDead() {
+	return dead;
+}

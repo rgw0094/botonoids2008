@@ -68,7 +68,7 @@ void ItemManager::update(float dt) {
 		//Check for collision with player
 		bool itemCollected = false;
 		for (int player = 0; player < gameInfo.numPlayers; player++) {
-			if (players[player]->collisionBox->Intersect(i->collisionBox)) {
+			if (players[player]->testCollision(i->collisionBox)) {
 	
 				//Player attempts to collects this item. If the player has no room in
 				//his item wheel then the item can not be collected!!!!!!!

@@ -185,10 +185,6 @@ HRESULT Input::InitDirectInput( HWND hDlg ) {
 
     // Make sure we got a joystick
 	if( NULL == g_pJoystick ) {
-        MessageBox( NULL, "Input Device not found.", 
-                    "Botonoids 2008", 
-                    MB_ICONERROR | MB_OK );
-        EndDialog( hDlg, 0 );
         return S_OK;
 	}
 

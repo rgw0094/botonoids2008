@@ -21,12 +21,12 @@ GUI::GUI() {
 	faceAnimations[0] = resources->GetAnimation("goldFace");
 	faceAnimations[1] = resources->GetAnimation("blackFace");
 	faceAnimations[2] = resources->GetAnimation("silverFace");
+	emptyFaceBoxes[0] = resources->GetSprite("emptyGoldFaceBox");
+	emptyFaceBoxes[1] = resources->GetSprite("emptyBlackFaceBox");
+	emptyFaceBoxes[2] = resources->GetSprite("emptySilverFaceBox");
 	healthSprites[0] = resources->GetSprite("goldHealth");
 	healthSprites[1] = resources->GetSprite("blackHealth");
 	healthSprites[2] = resources->GetSprite("silverHealth");
-
-	//temp
-	for (int i = 0; i < 3; i++) faceAnimations[i]->Play();
 }
 
 GUI::~GUI() { }
@@ -71,8 +71,15 @@ void GUI::draw(float dt) {
 			windowSprites[players[i]->whichBotonoid]->Render(885, 288 + (85+98)*i);
 
 			//Face animation
-			faceAnimations[players[i]->whichBotonoid]->Update(dt);
-			faceAnimations[players[i]->whichBotonoid]->Render(885, 221 + (85+98)*i);
+			if (players[i]->isDead()) {
+				//If the player is dead, draw the time left until respawn instead of his face
+				emptyFaceBoxes[i]->Render(885, 221 + (85+98)*i);
+				resources->GetFont("timer")->printf(915, 240 + (85+98)*i, HGETEXT_CENTER, 
+					formatTime(players[i]->getTimeUntilRespawn(), false).c_str());
+			} else {
+				faceAnimations[players[i]->whichBotonoid]->Update(dt);
+				faceAnimations[players[i]->whichBotonoid]->Render(885, 221 + (85+98)*i);
+			}
 
 			//Health
 			if (players[i]->health >= 1) 
@@ -126,4 +133,8 @@ void GUI::drawTimer(float dt) {
 	//Output time string
 	resources->GetFont("timer")->printf(940,28,HGETEXT_CENTER, "%s", timeString.c_str());
 
+}
+
+void GUI::startFaceAnimation(int whichPlayer) {
+	faceAnimations[whichPlayer]->Play();
 }

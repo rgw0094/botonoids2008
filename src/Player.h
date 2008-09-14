@@ -15,7 +15,6 @@
 #define SLOWED_SPEED 75.0
 #define SLOW_DURATION 10.0
 #define PUNCH_DELAY 0.4
-#define GHOST_DURATION 25.0
 
 struct ItemSlot {
 	int code;
@@ -35,26 +34,17 @@ public:
 
 	//methods
 	void draw(float dt);
-	void drawItemWheel(float dt);
 	void update(float dt);
-	void updateItemSlots(float dt);
-	void doColorChanging();
-	void startFoundationMode(int numFoundations);
-	void doMovement(float dt);
-	void doStats(float dt);
 	bool addItem(int item);
-	void useItem(float dt);
-	int itemInSlot(int slot);
-	int getItemQuantityPerToken(int item);
-	int numEmptyItemSlots();
-	void dealDamage(float damage);
+	bool dealDamage(float damage);
 	void slowPlayer();
-	void die();
-	void updatePunchingGlove(float dt);
-	int findClosestEnemy();
+	void startFoundationMode(int numFoundations);
+	bool isDead();
+	float getTimeUntilRespawn();
+	bool testCollision(hgeRect *box);
+	void hitWithPunchingGlove();
 
-	//Variables
-	int gridX, gridY, lastGridX, lastGridY;
+	int gridX, gridY, startGridX, startGridY;
 	float x,y;
 	int score;
 	int whichBotonoid;		//Which botonoid character
@@ -64,10 +54,27 @@ public:
 	int numChangesLeft;		//Number of changes left in color change mode
 	int numWallsLeft;
 	int health;
+	
+
+private:
+
+	void drawItemWheel(float dt);
+	bool collisionAt(int x, int y);
+	void updateItemSlots(float dt);
+	void doColorChange();
+	void doMovement(float dt);
+	void doStats(float dt);
+	void useItem(float dt);
+	int itemInSlot(int slot);
+	int getItemQuantityPerToken(int item);
+	int numEmptyItemSlots();
+	void die();
+	void updatePunchingGlove(float dt);
+	int findClosestEnemy();
+	float punchGloveDelay;
+
 	float positionAngles[4];	//angles corresponding to position in item wheel
 	float itemWheelX, itemWheelY;
-	bool collisionAt(int x, int y);
-
 	float punchingGloveAngle;
 	int punchingGloveTarget;
 
@@ -77,8 +84,12 @@ public:
 	float timeSlowed;
 	float timePunched;
 	float timeGhosted;
+	float timeKilled;
+	float timeStartedFlashing;
+	float timeStartedStun;
 
 	//State variables
+	bool moving;
 	bool colorChangeMode;
 	bool foundationMode;
 	bool buildWallPressed;
@@ -87,9 +98,11 @@ public:
 	bool punching;
 	bool ghostMode;
 	bool dead;
+	bool flashing;
+	bool stunned;
 
-	//Objects
 	hgeRect *collisionBox;
+	hgeRect *punchingGloveBox;
 	hgeSprite *emptyItemSlot;
 	hgeParticleSystem *slowEffectParticle;
 	hgeAnimation *punchingGlove;

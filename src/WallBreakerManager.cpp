@@ -42,7 +42,7 @@ void WallBreakerManager::update(float dt) {
 		
 		//Explode after a couple seconds
 		if (gameTime > i->timeCreated + 2.0) {
-			createExplosionAt(i->x + 14.0, i->y + 14.0);
+			createExplosionAt(i->x + 14.0, i->y + 14.0, true);
 			grid->breakWallAt(i->gridX, i->gridY);
 			i = wallBreakerList.erase(i);
 		}
