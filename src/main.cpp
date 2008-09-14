@@ -41,8 +41,8 @@ bool debugMode;
 void loadResources() {
 
 	//Create resource manager
-	hge->Resource_AttachPack("Data/GameData");
-	resources = new hgeResourceManager("Data/resources.res");
+	hge->Resource_AttachPack("GameData");
+	resources = new hgeResourceManager("resources.res");
 
 	//Load botonoid sprites
 	botonoidGraphics[0] = resources->GetAnimation("goldBotonoid");
