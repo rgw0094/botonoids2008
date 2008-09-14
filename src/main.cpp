@@ -225,6 +225,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	hge->System_SetState(HGE_SCREENHEIGHT, 768);
 	hge->System_SetState(HGE_SCREENBPP, 32);
 	hge->System_SetState(HGE_SHOWSPLASH, false);
+	hge->System_SetState(HGE_ICON, MAKEINTRESOURCE (102));
 
 	if(hge->System_Initiate()) {
 
