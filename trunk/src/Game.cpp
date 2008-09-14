@@ -97,14 +97,6 @@ void startGame() {
 		distFromEdge = 4;
 	}
 
-	//Create new players
-	if (gameInfo.numPlayers >= 1) 
-		players[0] = new Player(0 + distFromEdge, 0 + distFromEdge, 0, gameInfo.selectedBotonoid[0]);
-	if (gameInfo.numPlayers >= 2) 
-		players[1] = new Player(grid->width - distFromEdge - 1, 0 + distFromEdge, 1 , gameInfo.selectedBotonoid[1]);
-	if (gameInfo.numPlayers >= 3) 
-		players[2] = new Player(grid->width/2, grid->height - distFromEdge - 1, 2, gameInfo.selectedBotonoid[2]);
-
 	//Reset game info
 	timer = gameInfo.timeLimit;
 	gameInfo.winner = -1;
@@ -122,6 +114,15 @@ void startGame() {
 	missileManager = new MissileManager();
 	if (explosionManager) delete explosionManager;
 	explosionManager = new hgeParticleManager();
+
+	//Create new players
+	if (gameInfo.numPlayers >= 1) 
+		players[0] = new Player(0 + distFromEdge, 0 + distFromEdge, 0, gameInfo.selectedBotonoid[0]);
+	if (gameInfo.numPlayers >= 2) 
+		players[1] = new Player(grid->width - distFromEdge - 1, 0 + distFromEdge, 1 , gameInfo.selectedBotonoid[1]);
+	if (gameInfo.numPlayers >= 3) 
+		players[2] = new Player(grid->width/2, grid->height - distFromEdge - 1, 2, gameInfo.selectedBotonoid[2]);
+	for (int i = 0; i < gameInfo.numPlayers; i++) players[i]->update(0.0);
 
 	for (int i = 0; i < 3; i++) {
 		botonoidGraphics[i]->SetSpeed(20);
