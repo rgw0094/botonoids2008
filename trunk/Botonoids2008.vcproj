@@ -108,44 +108,21 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 			<File
-				RelativePath=".\src\Game.cpp">
+				RelativePath=".\Botonoids.rc">
 			</File>
 			<File
-				RelativePath=".\src\Grid.cpp">
+				RelativePath=".\icon1.ico">
 			</File>
-			<File
-				RelativePath=".\src\GUI.cpp">
-			</File>
-			<File
-				RelativePath=".\src\Input.cpp">
-			</File>
-			<File
-				RelativePath=".\src\ItemManager.cpp">
-			</File>
-			<File
-				RelativePath=".\src\main.cpp">
-			</File>
-			<File
-				RelativePath=".\src\minimenu.cpp">
-			</File>
-			<File
-				RelativePath=".\src\MissileManager.cpp">
-			</File>
-			<File
-				RelativePath=".\src\Player.cpp">
-			</File>
-			<File
-				RelativePath=".\src\StatsPage.cpp">
-			</File>
-			<File
-				RelativePath=".\src\WallBreakerManager.cpp">
-			</File>
+		</Filter>
+		<Filter
+			Name="Menu"
+			Filter="">
 			<Filter
-				Name="Menu"
+				Name="Source"
 				Filter="">
 				<File
 					RelativePath=".\src\BotonoidSelectScreen.cpp">
@@ -166,49 +143,8 @@
 					RelativePath=".\src\TitleScreen.cpp">
 				</File>
 			</Filter>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
-			<File
-				RelativePath=".\src\Game.h">
-			</File>
-			<File
-				RelativePath=".\src\Grid.h">
-			</File>
-			<File
-				RelativePath=".\src\GUI.h">
-			</File>
-			<File
-				RelativePath=".\src\Input.h">
-			</File>
-			<File
-				RelativePath=".\src\ItemManager.h">
-			</File>
-			<File
-				RelativePath=".\src\minimenu.h">
-			</File>
-			<File
-				RelativePath=".\src\MissileManager.h">
-			</File>
-			<File
-				RelativePath=".\src\Player.h">
-			</File>
-			<File
-				RelativePath=".\src\resource.h">
-			</File>
-			<File
-				RelativePath=".\resource1.h">
-			</File>
-			<File
-				RelativePath=".\src\StatsPage.h">
-			</File>
-			<File
-				RelativePath=".\src\WallBreakerManager.h">
-			</File>
 			<Filter
-				Name="Menu"
+				Name="Header"
 				Filter="">
 				<File
 					RelativePath=".\src\BotonoidSelectScreen.h">
@@ -234,16 +170,86 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
-			<File
-				RelativePath=".\Botonoids.rc">
-			</File>
-			<File
-				RelativePath=".\icon1.ico">
-			</File>
+			Name="Game"
+			Filter="">
+			<Filter
+				Name="Source"
+				Filter="">
+				<File
+					RelativePath=".\src\Game.cpp">
+				</File>
+				<File
+					RelativePath=".\src\Grid.cpp">
+				</File>
+				<File
+					RelativePath=".\src\GUI.cpp">
+				</File>
+				<File
+					RelativePath=".\src\Input.cpp">
+				</File>
+				<File
+					RelativePath=".\src\ItemManager.cpp">
+				</File>
+				<File
+					RelativePath=".\src\minimenu.cpp">
+				</File>
+				<File
+					RelativePath=".\src\MissileManager.cpp">
+				</File>
+				<File
+					RelativePath=".\src\Player.cpp">
+				</File>
+				<File
+					RelativePath=".\src\StatsPage.cpp">
+				</File>
+				<File
+					RelativePath=".\src\WallBreakerManager.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="Header"
+				Filter="">
+				<File
+					RelativePath=".\src\Game.h">
+				</File>
+				<File
+					RelativePath=".\src\Grid.h">
+				</File>
+				<File
+					RelativePath=".\src\GUI.h">
+				</File>
+				<File
+					RelativePath=".\src\Input.h">
+				</File>
+				<File
+					RelativePath=".\src\ItemManager.h">
+				</File>
+				<File
+					RelativePath=".\src\minimenu.h">
+				</File>
+				<File
+					RelativePath=".\src\MissileManager.h">
+				</File>
+				<File
+					RelativePath=".\src\Player.h">
+				</File>
+				<File
+					RelativePath=".\src\resource.h">
+				</File>
+				<File
+					RelativePath=".\resource1.h">
+				</File>
+				<File
+					RelativePath=".\src\StatsPage.h">
+				</File>
+				<File
+					RelativePath=".\src\WallBreakerManager.h">
+				</File>
+			</Filter>
 		</Filter>
+		<File
+			RelativePath=".\src\main.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
